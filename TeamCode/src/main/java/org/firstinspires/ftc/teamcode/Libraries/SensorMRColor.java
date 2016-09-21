@@ -10,6 +10,11 @@ public class SensorMRColor {
 	//color sensor object
 	ColorSensor RGB;
 
+	public SensorMRColor() {
+
+		//Initialize color sensor
+	}
+
 	//returns the R, G, and B values that the color sensor senses in a list
 	public int[] getColor() {
 		int[] color = new int[3];

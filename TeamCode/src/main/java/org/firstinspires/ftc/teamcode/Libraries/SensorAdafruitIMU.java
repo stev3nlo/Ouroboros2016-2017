@@ -35,6 +35,11 @@ public class SensorAdafruitIMU
     Orientation angles;
     Acceleration accels;
 
+    public SensorAdafruitIMU()
+    {
+        //Initialize IMU
+    }
+
     public double[] getOrientation()
     {
         double[] yawrollpitch = new double[3];
