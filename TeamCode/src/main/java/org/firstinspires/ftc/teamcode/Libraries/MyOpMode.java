@@ -29,6 +29,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	DcMotor L2;
 
+	DcMotor motorSpinner;
+
+
 	//sensors
 	/**
 	 * Adafruit IMU Object
@@ -271,5 +274,15 @@ public abstract class MyOpMode extends LinearOpMode {
 		R2.setPower(0);
 		L1.setPower(0);
 		L2.setPower(0);
+	}
+	@Override
+	public void runOpMode()
+	{
+		initialize(); //Sets up motors, servos, and gyros
+		/**if(isRedSide)
+			basketInitRed();
+		else
+			basketInitBlue();
+		 */
 	}
 }
