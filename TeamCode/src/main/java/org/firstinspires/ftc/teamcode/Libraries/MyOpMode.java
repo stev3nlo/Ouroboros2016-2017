@@ -15,19 +15,23 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * DcMotor variable for the first motor on the right
 	 */
-	DcMotor R1;
+	DcMotor motorR1;
 	/**
 	 * DcMotor variable for the second motor on the right
 	 */
-	DcMotor R2;
+	DcMotor motorR2;
 	/**
 	 * DcMotor variable for the first motor on the left
 	 */
-	DcMotor L1;
+	DcMotor motorL1;
 	/**
 	 * DcMotor variable for the second motor on the left
 	 */
-	DcMotor L2;
+	DcMotor motorL2;
+	/**
+	 * DcMotor variable for the motor on the manipulator
+	 */
+	DcMotor motorManip;
 
 	DcMotor motorSpinner;
 
@@ -39,19 +43,21 @@ public abstract class MyOpMode extends LinearOpMode {
 	SensorAdafruitIMU gyro;
 
 	/**
-	 * First Modern Robotics Color Sensor object
+	 * Middle Modern Robotics Color Sensor object
 	 */
-	SensorMRColor color1;
+	SensorMRColor colorC;
 	/**
-	 * Second Modern Robotics Color Sensor object
+	 * Rear Modern Robotics Color Sensor object
 	 */
-	SensorMRColor color2;
+	SensorMRColor colorR;
 
 	//color values for the white line
 	public static int redValue = 0;
 	public static int greenValue = 0;
 	public static int blueValue = 0;
 	public static int alphaValue = 0;
+
+	public long spinnerEncoderOffset = 0;
 
 	//constructor
 	public MyOpMode() {
@@ -68,15 +74,16 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	public void initialize() {
 		//hardware maps the drive motors
-		R1 = hardwareMap.dcMotor.get("R1");
-		R2 = hardwareMap.dcMotor.get("R2");
-		L1 = hardwareMap.dcMotor.get("L1");
-		L2 = hardwareMap.dcMotor.get("L2");
+		motorR1 = hardwareMap.dcMotor.get("motorR1");
+		motorR2 = hardwareMap.dcMotor.get("motorR2");
+		motorL1 = hardwareMap.dcMotor.get("motorL1");
+		motorL2 = hardwareMap.dcMotor.get("motorL2");
+		motorManip = hardwareMap.dcMotor.get("motorManip");
 
 		//initialize sensors
 		gyro = new SensorAdafruitIMU();
-		color1 = new SensorMRColor();
-		color2 = new SensorMRColor();
+		colorC = new SensorMRColor();
+		colorR = new SensorMRColor();
 
 		reset();
 	}
@@ -92,10 +99,25 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speedL
 	 */
 	public void move(double speedR, double speedL) {
-		R1.setPower(speedR);
-		R2.setPower(speedR);
-		L1.setPower(speedL);
-		L2.setPower(speedL);
+		motorR1.setPower(speedR);
+		motorR2.setPower(speedR);
+		motorL1.setPower(speedL);
+		motorL2.setPower(speedL);
+	}
+
+	public void moveManip(double speed)
+	{
+		motorManip.setPower(speed);
+	}
+
+	public void runSpinner(double speed)
+	{
+		motorSpinner.setPower(speed);
+	}
+
+	public long getSpinnerEncoderVal()
+	{
+		return motorSpinner.getCurrentPosition();
 	}
 
 	/**
@@ -105,10 +127,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * </p>
 	 */
 	public void stopMotors() {
-		R1.setPower(0);
-		R2.setPower(0);
-		L1.setPower(0);
-		L2.setPower(0);
+		motorR1.setPower(0);
+		motorR2.setPower(0);
+		motorL1.setPower(0);
+		motorL2.setPower(0);
 	}
 
 	/**
@@ -204,10 +226,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void moveToWhiteLine(double speed) {
-		int red = color1.getRed();
-		int green = color1.getGreen();
-		int blue = color1.getBlue();
-		int alpha = color1.getAlpha();
+		int red = colorC.getRed();
+		int green = colorC.getGreen();
+		int blue = colorC.getBlue();
+		int alpha = colorC.getAlpha();
 
 		boolean isWhite = false;
 		moveForwards(speed);
@@ -215,10 +237,10 @@ public abstract class MyOpMode extends LinearOpMode {
 			if ((red <= redValue) && (green <= greenValue) && (blue <= blueValue) && (alpha <= alphaValue)) {	//need to test values for white
 				isWhite = true;
 			}
-			red = color1.getRed();
-			green = color1.getGreen();
-			blue = color1.getBlue();
-			alpha = color1.getAlpha();
+			red = colorC.getRed();
+			green = colorC.getGreen();
+			blue = colorC.getBlue();
+			alpha = colorC.getAlpha();
 		}
 		stopMotors();
 	}
@@ -233,10 +255,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void turnRightToWhiteLine(double speed) {
-		int red = color2.getRed();
-		int green = color2.getGreen();
-		int blue = color2.getBlue();
-		int alpha = color2.getAlpha();
+		int red = colorR.getRed();
+		int green = colorR.getGreen();
+		int blue = colorR.getBlue();
+		int alpha = colorR.getAlpha();
 
 		boolean isWhite = false;
 		turnRight(speed);
@@ -244,10 +266,10 @@ public abstract class MyOpMode extends LinearOpMode {
 			if ((red <= redValue) && (green <= greenValue) && (blue <= blueValue) && (alpha <= alphaValue)) {
 				isWhite = true;
 			}
-			red = color2.getRed();
-			green = color2.getGreen();
-			blue = color2.getBlue();
-			alpha = color2.getAlpha();
+			red = colorR.getRed();
+			green = colorR.getGreen();
+			blue = colorR.getBlue();
+			alpha = colorR.getAlpha();
 		}
 		stopMotors();
 	}
@@ -270,10 +292,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * This method will reset all the values to the default (stopped, initial positions)
 	 */
 	public void reset() {
-		R1.setPower(0);
-		R2.setPower(0);
-		L1.setPower(0);
-		L2.setPower(0);
+		motorR1.setPower(0);
+		motorR2.setPower(0);
+		motorL1.setPower(0);
+		motorL2.setPower(0);
 	}
 	@Override
 	public void runOpMode()

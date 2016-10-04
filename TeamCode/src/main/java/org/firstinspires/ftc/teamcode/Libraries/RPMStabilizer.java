@@ -10,12 +10,12 @@ public class RPMStabilizer
 
     }
 
-    public double returnPowerToTry(double curPower, double curRPM, double goalRPM)
+    public static double returnPowerToTry(double curPower, double curRPM, double goalRPM)
     {
-        double scaledPower = MotorScaler.reverseScale(curPower);
-        double maxRPM = curRPM / scaledPower;
-        double percentage = goalRPM / maxRPM;
-        double newPower = MotorScaler.scaleSimple(percentage);
+        double scaledPower = MotorScaler.reverseScale(curPower); //Estimates actual power %
+        double maxRPM = curRPM / scaledPower; //Estimates maximum RPM
+        double percentage = goalRPM / maxRPM; //Percentage of total speed the motor should be run at
+        double newPower = MotorScaler.scaleSimple(percentage); //
         return newPower;
     }
 }
