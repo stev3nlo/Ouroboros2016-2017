@@ -129,7 +129,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		setServoDropperPosition(1.0);
 	}
 
-	public void closeServoPosition()
+	public void closeServoDropper()
 	{
 		setServoDropperPosition(0.0);
 	}

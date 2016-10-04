@@ -40,7 +40,7 @@ public class TeleOp extends MyOpMode
     long timeAtEndOfLastCycle;
 
     double timeSinceLastStabilization;
-    double timeSinceBallsDropped;
+    double timeBallsFinishDropping;
 
     double curPowerOfSpinner = 0.7;
 
@@ -87,6 +87,7 @@ public class TeleOp extends MyOpMode
             updateTimeVars();
             move(g1y1, g1y2); // moves drive wheels
             moveManip(g2y1);
+
             if(timeSinceLastStabilization>0.5)
             {
                 double estimatedCurRPM = getSpinnerEncoderVal() - spinnerEncoderOffset;
@@ -95,10 +96,18 @@ public class TeleOp extends MyOpMode
                 curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner,estimatedCurRPM,1000);
                 runSpinner(curPowerOfSpinner);
             }
-            if(g2APressed)
-            {
 
+            if (g2APressed && curTime > timeBallsFinishDropping)
+            {
+                timeBallsFinishDropping = curTime + 5;
+                openServoDropper();
             }
+            if (curTime > timeBallsFinishDropping))
+            {
+                closeServoDropper();
+            }
+
+
             timeAtEndOfLastCycle = System.nanoTime()/1000000000;
         }
     }
