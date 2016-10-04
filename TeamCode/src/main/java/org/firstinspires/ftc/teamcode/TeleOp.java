@@ -44,6 +44,8 @@ public class TeleOp extends MyOpMode
 
     double curPowerOfSpinner = 0.7;
 
+    double curTime;
+
     public void updateControllerVals()
     {
         g1y1 = gamepad1.left_stick_y;
@@ -75,7 +77,7 @@ public class TeleOp extends MyOpMode
 
     public void updateTimeVars()
     {
-
+        curTime = System.nanoTime()/1000000000;
     }
 
     public void runOpMode()
@@ -83,7 +85,6 @@ public class TeleOp extends MyOpMode
         while (opModeIsActive()) {
             updateControllerVals();
             updateTimeVars();
-            double curTime = System.nanoTime()/1000000000;
             move(g1y1, g1y2); // moves drive wheels
             moveManip(g2y1);
             if(timeSinceLastStabilization>0.5)
