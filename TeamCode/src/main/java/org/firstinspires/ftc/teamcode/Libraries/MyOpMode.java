@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Libraries;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * @author 		Steven Lo
@@ -34,6 +35,8 @@ public abstract class MyOpMode extends LinearOpMode {
 	DcMotor motorManip;
 
 	DcMotor motorSpinner;
+
+	Servo servoDropper;	// servo for manipulator
 
 
 	//sensors
@@ -79,6 +82,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorL1 = hardwareMap.dcMotor.get("motorL1");
 		motorL2 = hardwareMap.dcMotor.get("motorL2");
 		motorManip = hardwareMap.dcMotor.get("motorManip");
+		servoDropper = hardwareMap.servo.get("servoDropper");
 
 		//initialize sensors
 		gyro = new SensorAdafruitIMU();
@@ -113,6 +117,21 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void runSpinner(double speed)
 	{
 		motorSpinner.setPower(speed);
+	}
+
+	public void setServoDropperPosition(double position)
+	{
+		servoDropper.setPosition(position);
+	}
+
+	public void openServoDropper()
+	{
+		setServoDropperPosition(1.0);
+	}
+
+	public void closeServoPosition()
+	{
+		setServoDropperPosition(0.0);
 	}
 
 	public long getSpinnerEncoderVal()

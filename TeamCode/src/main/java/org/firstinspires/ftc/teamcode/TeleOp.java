@@ -68,7 +68,7 @@ public class TeleOp extends MyOpMode
         g2Ltrig = gamepad2.left_trigger;
         g2Rtrig = gamepad2.right_trigger;
         g2XPressed = gamepad2.x;
-        g2APressed = gamepad2.a;
+        g2APressed = gamepad2.a;    //toggle servo dropper
         g2YPressed = gamepad2.y;
         g2BPressed = gamepad2.b;
     }
