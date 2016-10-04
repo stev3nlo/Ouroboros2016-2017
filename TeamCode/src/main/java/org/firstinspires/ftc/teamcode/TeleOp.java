@@ -102,7 +102,7 @@ public class TeleOp extends MyOpMode
                 timeBallsFinishDropping = curTime + 5;
                 openServoDropper();
             }
-            if (curTime > timeBallsFinishDropping))
+            if (curTime > timeBallsFinishDropping)
             {
                 closeServoDropper();
             }
