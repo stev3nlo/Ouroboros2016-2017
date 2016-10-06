@@ -42,6 +42,8 @@ public class TeleOp extends MyOpMode
     double timeAtLastStabilization;
     double timeBallsFinishDropping;
 
+    boolean firstCycleOfSpinner;
+
     double curPowerOfSpinner = 0.7;
 
     double curTime;
@@ -75,6 +77,11 @@ public class TeleOp extends MyOpMode
         g2BPressed = gamepad2.b;
     }
 
+    public void initVars()
+    {
+        firstCycleOfSpinner = true;
+    }
+
 
     //gets real time (timer)
     public void updateTimeVars()
@@ -84,6 +91,7 @@ public class TeleOp extends MyOpMode
 
     public void runOpMode()
     {
+        initVars();
         while (opModeIsActive()) {
             updateControllerVals();
             updateTimeVars();
@@ -91,18 +99,32 @@ public class TeleOp extends MyOpMode
             moveManip(g2y1);
 
             //creates contant speed of spinner throughout game
-            if(curTime - timeAtLastStabilization >0.5)
+            if(g2XPressed)
             {
-                double estimatedCurRPM = getSpinnerEncoderVal() - spinnerEncoderOffset; // gets current ticks
-                spinnerEncoderOffset = getSpinnerEncoderVal();
+                if(firstCycleOfSpinner)
+                {
+                    firstCycleOfSpinner = false;
+                    timeAtLastStabilization = curTime;
+                    spinnerEncoderOffset = getSpinnerEncoderVal();
+                    runSpinner(curPowerOfSpinner);
+                }
+                else if (curTime - timeAtLastStabilization > 0.5)
+                {
+                    double estimatedCurRPM = getSpinnerEncoderVal() - spinnerEncoderOffset; // gets current ticks
+                    spinnerEncoderOffset = getSpinnerEncoderVal();
 
+                    estimatedCurRPM /= curTime - timeAtLastStabilization;   // gets time
+                    timeAtLastStabilization = curTime;
+                    estimatedCurRPM /= 1140;
 
-                estimatedCurRPM /= curTime - timeAtLastStabilization;   // gets time
-                timeAtLastStabilization = curTime;
-                estimatedCurRPM /= 1140;
-
-                curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner,estimatedCurRPM,1000);
-                runSpinner(curPowerOfSpinner);
+                    curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 1000);
+                    runSpinner(curPowerOfSpinner);
+                }
+            }
+            else
+            {
+                firstCycleOfSpinner = true;
+                runSpinner(0.0);
             }
 
             //releases balls from basket into spinner
