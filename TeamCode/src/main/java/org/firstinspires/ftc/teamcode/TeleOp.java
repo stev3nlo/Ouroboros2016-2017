@@ -75,6 +75,8 @@ public class TeleOp extends MyOpMode
         g2BPressed = gamepad2.b;
     }
 
+
+    //gets real time (timer)
     public void updateTimeVars()
     {
         curTime = System.nanoTime()/1000000000;
@@ -88,6 +90,7 @@ public class TeleOp extends MyOpMode
             move(g1y1, g1y2); // moves drive wheels
             moveManip(g2y1);
 
+            //creates contant speed of spinner throughout game
             if(curTime - timeAtLastStabilization >0.5)
             {
                 double estimatedCurRPM = getSpinnerEncoderVal() - spinnerEncoderOffset; // gets current ticks
@@ -97,11 +100,12 @@ public class TeleOp extends MyOpMode
                 estimatedCurRPM /= curTime - timeAtLastStabilization;   // gets time
                 timeAtLastStabilization = curTime;
                 estimatedCurRPM /= 1140;
-                
+
                 curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner,estimatedCurRPM,1000);
                 runSpinner(curPowerOfSpinner);
             }
 
+            //releases balls from basket into spinner
             if (g2APressed && curTime > timeBallsFinishDropping)
             {
                 timeBallsFinishDropping = curTime + 5;
