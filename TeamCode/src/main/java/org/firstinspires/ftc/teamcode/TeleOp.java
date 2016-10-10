@@ -39,7 +39,6 @@ public class TeleOp extends MyOpMode
 
     long timeAtEndOfLastCycle;
 
-    double timeAtLastStabilization;
     double timeBallsFinishDropping;
 
     boolean firstCycleOfSpinner;
