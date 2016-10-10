@@ -14,7 +14,9 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 public class ColorSensorTest extends MyOpMode{
 
     SensorMRColor colorTest;
+
     public void initialize(){
+
         colorTest = new SensorMRColor("colorTest");
     }
     public void runOpMode() {

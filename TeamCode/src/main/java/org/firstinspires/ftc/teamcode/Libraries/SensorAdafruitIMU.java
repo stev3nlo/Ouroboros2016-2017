@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 
+
 import java.util.Locale;
 
 
@@ -26,7 +27,7 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-public class SensorAdafruitIMU
+public class SensorAdafruitIMU extends MyOpMode
 {
     // The IMU sensor object
     BNO055IMU imu;
@@ -37,7 +38,7 @@ public class SensorAdafruitIMU
 
     public SensorAdafruitIMU()
     {
-        //Initialize IMU
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
     }
 
     public double[] getOrientation()
