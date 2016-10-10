@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 public class AutoOpRed extends MyOpMode {
 
 public void runOpMode() {
-    moveForwards(1.0);
+
     moveToWhiteLine(1.0);
     turnRightToWhiteLine(1.0);
     setServoDropperPosition(1.0);

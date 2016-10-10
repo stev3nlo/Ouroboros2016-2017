@@ -1,0 +1,19 @@
+package org.firstinspires.ftc.teamcode;
+
+/**
+ * Created by Morgannanez on 10/10/16.
+ */
+
+import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
+
+public class AutoOpBlue extends MyOpMode {
+
+    public void runOpMode() {
+        moveToWhiteLine(1.0);
+        turnRightToWhiteLine(1.0);
+        setServoDropperPosition(1.0);
+        openServoDropper();
+        closeServoDropper();
+    }
+}
