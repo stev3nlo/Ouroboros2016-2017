@@ -32,8 +32,8 @@ public class TeleOp extends MyOpMode
     boolean g2Rbump;    //release cap ball
     double g2Ltrig;
     double g2Rtrig;
-    boolean g2XPressed;     //start spinner
-    boolean g2YPressed;     //stop spinner
+    boolean g2XPressed;     //start shooter spinner
+    boolean g2YPressed;     //stop shooter spinner
     boolean g2APressed;     //toggle servo dropper
     boolean g2BPressed;
 
@@ -77,53 +77,34 @@ public class TeleOp extends MyOpMode
         g2BPressed = gamepad2.b;
     }
 
-    public void initVars()
-    {
-        firstCycleOfSpinner = true;
-    }
 
 
-    //gets real time (timer)
-    public void updateTimeVars()
-    {
-        curTime = System.nanoTime()/1000000000;
-    }
+
+
 
     public void runOpMode()
     {
-        initVars();
         while (opModeIsActive()) {
             updateControllerVals();
-            updateTimeVars();
+            initShooter();
+            initCurtime(); //gets real time timer
             move(g1y1, g1y2); // moves drive wheels
             moveManip(g2y1);
 
             //creates contant speed of spinner throughout game
             if(g2XPressed)
             {
-                if(firstCycleOfSpinner)
-                {
-                    firstCycleOfSpinner = false;
-                    timeAtLastStabilization = curTime;
-                    spinnerEncoderOffset = getSpinnerEncoderVal();
-                    runSpinner(curPowerOfSpinner);
-                }
-                else if (curTime - timeAtLastStabilization > 0.5)
-                {
-                    double estimatedCurRPM = getSpinnerEncoderVal() - spinnerEncoderOffset; // gets current ticks
-                    spinnerEncoderOffset = getSpinnerEncoderVal();
-
-                    estimatedCurRPM /= curTime - timeAtLastStabilization;   // gets time
-                    timeAtLastStabilization = curTime;
-                    estimatedCurRPM /= 1140;
-
-                    curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 1000);
-                    runSpinner(curPowerOfSpinner);
-                }
+                shoot();
             }
             else
             {
                 firstCycleOfSpinner = true;
+                runSpinner(0.0);
+            }
+
+            // stops spinner
+            if (g2YPressed)
+            {
                 runSpinner(0.0);
             }
 

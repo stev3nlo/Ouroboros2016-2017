@@ -62,6 +62,18 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public long spinnerEncoderOffset = 0;
 
+
+	long timeAtEndOfLastCycle;
+
+	double timeAtLastStabilization;
+	double timeBallsFinishDropping;
+
+	boolean firstCycleOfSpinner;
+
+	double curPowerOfSpinner = 0.7;
+
+	double curTime;
+
 	//constructor
 	public MyOpMode() {
 		super();
@@ -310,6 +322,38 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * This method will reset all the values to the default (stopped, initial positions)
 	 */
+	public void initShooter()
+	{
+		firstCycleOfSpinner = true;
+	}
+
+	public void initCurtime()
+	{
+		curTime = System.nanoTime()/1000000000;
+	}
+
+	public void shoot() {
+		if(firstCycleOfSpinner)
+		{
+			firstCycleOfSpinner = false;
+			timeAtLastStabilization = curTime;
+			spinnerEncoderOffset = getSpinnerEncoderVal();
+			runSpinner(curPowerOfSpinner);
+		}
+		else if (curTime - timeAtLastStabilization > 0.5)
+		{
+			double estimatedCurRPM = getSpinnerEncoderVal() - spinnerEncoderOffset; // gets current ticks
+			spinnerEncoderOffset = getSpinnerEncoderVal();
+
+			estimatedCurRPM /= curTime - timeAtLastStabilization;   // gets time
+			timeAtLastStabilization = curTime;
+			estimatedCurRPM /= 1140;
+
+			curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 1000);
+			runSpinner(curPowerOfSpinner);
+		}
+
+	}
 	public void reset() {
 		motorR1.setPower(0);
 		motorR2.setPower(0);

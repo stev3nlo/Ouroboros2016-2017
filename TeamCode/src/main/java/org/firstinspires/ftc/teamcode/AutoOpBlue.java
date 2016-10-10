@@ -12,8 +12,16 @@ public class AutoOpBlue extends MyOpMode {
     public void runOpMode() {
         moveToWhiteLine(1.0);
         turnRightToWhiteLine(1.0);
+
         setServoDropperPosition(1.0);
         openServoDropper();
         closeServoDropper();
+
+        initCurtime();
+        initShooter();
+        shoot();
+
+        runSpinner(0.0);
+
     }
 }
