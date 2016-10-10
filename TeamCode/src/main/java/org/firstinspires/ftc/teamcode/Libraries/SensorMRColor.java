@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 /**
  * Created by Steven on 9/20/2016.
  */
-public class SensorMRColor {
+public class SensorMRColor extends MyOpMode {
 
 	//color sensor object
 	ColorSensor RGB;
@@ -13,6 +13,11 @@ public class SensorMRColor {
 	public SensorMRColor() {
 
 		//Initialize color sensor
+		RGB = hardwareMap.colorSensor.get("");
+	}
+
+	public SensorMRColor(String name) {
+		RGB = hardwareMap.colorSensor.get(name);
 	}
 
 	//returns the R, G, and B values that the color sensor senses in a list
@@ -94,6 +99,4 @@ public class SensorMRColor {
 	public int getGreen() {
 		return RGB.green();
 	}
-
-
 }
