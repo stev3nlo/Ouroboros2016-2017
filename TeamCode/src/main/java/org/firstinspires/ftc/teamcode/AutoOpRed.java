@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 
 public class AutoOpRed extends MyOpMode {
 
+
     public void runOpMode() {
 
         moveToWhiteLine(1.0);
@@ -18,6 +19,8 @@ public class AutoOpRed extends MyOpMode {
         closeServoDropper();
 
         //runs shooter
+
+        // need loop for time
         initCurtime();
         initShooter();
         shoot();
