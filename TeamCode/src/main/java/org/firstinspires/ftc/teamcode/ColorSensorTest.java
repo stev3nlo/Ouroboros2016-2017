@@ -15,12 +15,13 @@ public class ColorSensorTest extends MyOpMode{
 
     SensorMRColor colorTest;
     public void initialize(){
-        colorTest = hardwareMap.colorSensor.get("colorTest");
+        colorTest = new SensorMRColor("colorTest");
     }
-    public void runOpMode(){
+    public void runOpMode() {
 
-
-        telemetry.addData("RGB", colorTest.);
+        while (true) {
+            telemetry.addData("RGB", colorTest.getColorAndAlpha());
+        }
     }
 
 }

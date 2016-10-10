@@ -332,6 +332,11 @@ public abstract class MyOpMode extends LinearOpMode {
 		curTime = System.nanoTime()/1000000000;
 	}
 
+	public double getCurTime()
+	{
+		return curTime;
+	}
+
 	public void shoot() {
 		if(firstCycleOfSpinner)
 		{

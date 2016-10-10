@@ -20,10 +20,11 @@ public class AutoOpRed extends MyOpMode {
 
         //runs shooter
 
-        // need loop for time
-        initCurtime();
-        initShooter();
-        shoot();
+        while (getCurTime() < 3) {
+            initCurtime();
+            initShooter();
+            shoot();
+        }
 
         runSpinner(0.0);
 
