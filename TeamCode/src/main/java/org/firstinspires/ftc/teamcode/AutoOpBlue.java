@@ -15,7 +15,8 @@ public class AutoOpBlue extends MyOpMode {
 
         initCurtime();
         double timeAtSpinnerStart = getCurTime();
-        while(getCurTime()<timeAtSpinnerStart+1.0) {
+        while(getCurTime()<timeAtSpinnerStart+1.0)
+        {
             initCurtime();
             shoot();
             idle();
@@ -23,7 +24,8 @@ public class AutoOpBlue extends MyOpMode {
         openServoDropper();
         initCurtime();
         double timeAtBallDrop = getCurTime();
-        while(getCurTime()<timeAtBallDrop+5.0) {
+        while(getCurTime()<timeAtBallDrop+5.0)
+        {
             initCurtime();
             shoot();
             idle();

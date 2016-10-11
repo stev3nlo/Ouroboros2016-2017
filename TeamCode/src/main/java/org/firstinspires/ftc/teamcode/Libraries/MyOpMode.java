@@ -337,7 +337,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		return curTime;
 	}
 
-	public void shoot() {
+	public void shoot()
+	{
 		if(firstCycleOfSpinner)
 		{
 			firstCycleOfSpinner = false;
@@ -357,8 +358,8 @@ public abstract class MyOpMode extends LinearOpMode {
 			curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 700);
 			runSpinner(curPowerOfSpinner);
 		}
-
 	}
+
 	public void reset() {
 		motorR1.setPower(0);
 		motorR2.setPower(0);

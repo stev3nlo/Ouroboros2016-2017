@@ -74,11 +74,6 @@ public class TeleOp extends MyOpMode
         g2BPressed = gamepad2.b;
     }
 
-
-
-
-
-
     public void runOpMode()
     {
         while (opModeIsActive()) {
