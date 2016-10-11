@@ -97,9 +97,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		servoDropper = hardwareMap.servo.get("servoDropper");
 
 		//initialize sensors
-		gyro = new SensorAdafruitIMU();
-		colorC = new SensorMRColor();
-		colorR = new SensorMRColor();
+		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
+		//colorR = new SensorMRColor();
 
 		reset();
 	}

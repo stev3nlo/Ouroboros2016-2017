@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Libraries;
 
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.util.Hardware;
 
 /**
  * Created by Steven on 9/20/2016.
@@ -10,10 +11,10 @@ public class SensorMRColor extends MyOpMode {
 	//color sensor object
 	ColorSensor RGB;
 
-	public SensorMRColor() {
+	public SensorMRColor(ColorSensor colorSensor) {
 
 		//Initialize color sensor
-		RGB = hardwareMap.colorSensor.get("");
+		RGB = colorSensor;
 	}
 
 	public SensorMRColor(String name) {
