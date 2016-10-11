@@ -43,8 +43,6 @@ public class TeleOp extends MyOpMode
 
     boolean firstCycleOfSpinner;
 
-    double curPowerOfSpinner = 0.7;
-
     double curTime;
 
     public void updateControllerVals()
@@ -95,15 +93,11 @@ public class TeleOp extends MyOpMode
             {
                 shoot();
             }
-            else
-            {
-                firstCycleOfSpinner = true;
-                runSpinner(0.0);
-            }
 
             // stops spinner
             if (g2YPressed)
             {
+                firstCycleOfSpinner = true;
                 runSpinner(0.0);
             }
 

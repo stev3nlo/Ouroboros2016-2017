@@ -354,7 +354,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			timeAtLastStabilization = curTime;
 			estimatedCurRPM /= 1140;
 
-			curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 1000);
+			curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 700);
 			runSpinner(curPowerOfSpinner);
 		}
 
@@ -366,13 +366,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorL2.setPower(0);
 	}
 	@Override
-	public void runOpMode()
+	public void runOpMode() throws InterruptedException
 	{
 		initialize(); //Sets up motors, servos, and gyros
-		/**if(isRedSide)
-			basketInitRed();
-		else
-			basketInitBlue();
-		 */
 	}
 }

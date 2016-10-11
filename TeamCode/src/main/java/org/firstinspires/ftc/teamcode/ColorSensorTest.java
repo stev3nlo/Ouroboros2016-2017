@@ -21,7 +21,7 @@ public class ColorSensorTest extends MyOpMode{
     }
     public void runOpMode() {
 
-        while (true) {
+        while (opModeIsActive()) {
             telemetry.addData("RGB", colorTest.getColorAndAlpha());
         }
     }

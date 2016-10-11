@@ -17,7 +17,8 @@ public class GyroTest extends MyOpMode {
     }
 
     public void runOpMode(){
-    //data being outputted
+        telemetry.addData("Yaw", gyroTest.getYaw());
+        telemetry.addData("Roll",gyroTest.getRoll());
+        telemetry.addData("Pitch", gyroTest.getPitch());
     }
-
 }

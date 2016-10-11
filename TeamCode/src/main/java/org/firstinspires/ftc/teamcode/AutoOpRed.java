@@ -9,26 +9,27 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 public class AutoOpRed extends MyOpMode {
 
 
-    public void runOpMode() {
-
+    public void runOpMode() throws InterruptedException {
         moveToWhiteLine(1.0);
         turnRightToWhiteLine(1.0);
 
-        setServoDropperPosition(1.0);
+        initCurtime();
+        double timeAtSpinnerStart = getCurTime();
+        while(getCurTime()< timeAtSpinnerStart+1.0) {
+            initCurtime();
+            shoot();
+            idle();
+        }
         openServoDropper();
+        initCurtime();
+        double timeAtBallDrop = getCurTime();
+        while(getCurTime()<timeAtBallDrop+5.0) {
+            initCurtime();
+            shoot();
+            idle();
+        }
         closeServoDropper();
 
-        //runs shooter
-
-        while (getCurTime() < 3) {
-            initCurtime();
-            initShooter();
-            shoot();
-        }
-
         runSpinner(0.0);
-
-
-
     }
 }
