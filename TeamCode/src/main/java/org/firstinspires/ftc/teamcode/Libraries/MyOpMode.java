@@ -98,8 +98,8 @@ public abstract class MyOpMode extends LinearOpMode {
 
 		//initialize sensors
 		gyro = new SensorAdafruitIMU();
-		colorC = new SensorMRColor();
-		colorR = new SensorMRColor();
+		colorC = new SensorMRColor("colorC");
+		colorR = new SensorMRColor("colorR");
 
 		reset();
 	}
