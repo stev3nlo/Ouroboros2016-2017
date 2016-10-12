@@ -13,11 +13,11 @@ public class SensorMRColor extends MyOpMode {
 	ColorSensor RGB;
 
 	public SensorMRColor(ColorSensor colorSensor) {
-
 		//Initialize color sensor
 		RGB = colorSensor;
 	}
 
+	//doesn't work
 	public SensorMRColor(String name) {
 		RGB = hardwareMap.colorSensor.get(name);
 	}
@@ -45,7 +45,7 @@ public class SensorMRColor extends MyOpMode {
 
 	//converts RGB values to HSV (hue-saturation-value)
 	//(method from stackoverflow.com/questions/2399150/convert-rgb-value-to-hsv)
-	public double[] RGBtoHSV(double r, double g, double b){
+	public double[] RGBtoHSV(double r, double g, double b) {
 
 		double h, s, v;
 		double min, max, delta;
@@ -100,5 +100,32 @@ public class SensorMRColor extends MyOpMode {
 	//gets the green value
 	public int getGreen() {
 		return RGB.green();
+	}
+
+	//returns the approximate color
+	public String getApproxColor() {
+		String[] colors = new String[4];
+		colors[0] = "Gray/Other";
+		colors[1] = "White";
+		colors[2] = "Red";
+		colors[3] = "Blue";
+
+		if (getRed() > 100) { //needs to be tested
+			return colors[2];
+		} else if (getBlue() > 100) { //needs to be tested
+			return colors[3];
+		} else if (getAlpha() > 100) {
+			return colors[1];
+		} else {
+			return colors[0];
+		}
+	}
+
+	//formats the output with all the color values and the alpha value
+	@Override
+	public String toString() {
+		String output = "Red: " + getRed() + "\n" + "Green: " + getGreen() + "\n" + "Blue: " + getBlue() +
+				"Alpha: " + getAlpha();
+		return output;
 	}
 }

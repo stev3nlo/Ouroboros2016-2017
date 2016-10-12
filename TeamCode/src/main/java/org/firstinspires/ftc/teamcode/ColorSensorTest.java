@@ -14,24 +14,22 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 @Autonomous(name = "ColorSensorTest", group = "Test")
 public class ColorSensorTest extends MyOpMode{
 
-    ColorSensor colorTest;
+    SensorMRColor colorTest;
+
 
     public void initialize(){
-
-        colorTest = hardwareMap.colorSensor.get("colorTest");
+		colorTest = new SensorMRColor(hardwareMap.colorSensor.get("colorTest"));
     }
+
     public void runOpMode() throws InterruptedException {
 		initialize();
 		waitForStart();
         while (opModeIsActive()) {
-			telemetry.addData("Test", "worked");
-            telemetry.addData("Red", colorTest.red());
-			telemetry.addData("Green", colorTest.green());
-			telemetry.addData("Blue", colorTest.blue());
-			telemetry.addData("Alpha", colorTest.alpha());
+            telemetry.addData("Color Values\n", colorTest.toString());
+			telemetry.addData("Approx Color", colorTest.getApproxColor());
 			telemetry.update();
+
 			idle();
 		}
     }
-
 }
