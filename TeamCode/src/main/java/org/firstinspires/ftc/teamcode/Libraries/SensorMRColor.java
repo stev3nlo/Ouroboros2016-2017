@@ -121,6 +121,22 @@ public class SensorMRColor extends MyOpMode {
 		}
 	}
 
+	//returns whether the color of the ground is Gray or White
+	public String groundColor() {
+		if (getAlpha() > 100) {
+			return "White";
+		} else
+			return "Gray";
+	}
+
+	//returns whether the color of the beacon is Red or Blue
+	public String beaconColor() {
+		if (getRed() > 100) {
+			return "Red";
+		} else
+			return "Blue";
+	}
+
 	//formats the output with all the color values and the alpha value
 	@Override
 	public String toString() {
