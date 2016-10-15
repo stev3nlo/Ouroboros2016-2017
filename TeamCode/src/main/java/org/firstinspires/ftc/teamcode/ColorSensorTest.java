@@ -14,19 +14,23 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 @Autonomous(name = "ColorSensorTest", group = "Test")
 public class ColorSensorTest extends MyOpMode{
 
-    SensorMRColor colorTest;
+    SensorMRColor groundSensor;
+	SensorMRColor beaconSensor;
 
 
     public void initialize(){
-		colorTest = new SensorMRColor(hardwareMap.colorSensor.get("colorTest"));
+		groundSensor = new SensorMRColor(hardwareMap.colorSensor.get("groundSensor"));
+		beaconSensor = new SensorMRColor(hardwareMap.colorSensor.get("beaconSensor"));
     }
 
     public void runOpMode() throws InterruptedException {
 		initialize();
 		waitForStart();
         while (opModeIsActive()) {
-            telemetry.addData("Color Values\n", colorTest.toString());
-			telemetry.addData("Approx Color", colorTest.getApproxColor());
+            telemetry.addData("Ground Sensor\n", groundSensor.toString());
+			telemetry.addData("Beacon Sensor\n", beaconSensor.toString());
+			telemetry.addData("Ground Color", groundSensor.groundColor());
+			telemetry.addData("Beacon Color", beaconSensor.beaconColor());
 			telemetry.update();
 
 			idle();
