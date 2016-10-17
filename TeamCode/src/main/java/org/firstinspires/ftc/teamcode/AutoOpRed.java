@@ -8,11 +8,14 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 
 public class AutoOpRed extends MyOpMode {
 
-
+/* NEED TO ADD BEACON PRESS METHOD*/
+    
     public void runOpMode() throws InterruptedException {
+        //moves towards white line in front of beacon
         moveToWhiteLine(1.0);
         turnRightToWhiteLine(1.0);
 
+        //runs spinner
         initCurtime();
         double timeAtSpinnerStart = getCurTime();
         while(getCurTime()< timeAtSpinnerStart+1.0) {
@@ -20,6 +23,8 @@ public class AutoOpRed extends MyOpMode {
             shoot();
             idle();
         }
+
+        //drops preplaced balls into spinner
         openServoDropper();
         initCurtime();
         double timeAtBallDrop = getCurTime();
@@ -30,6 +35,7 @@ public class AutoOpRed extends MyOpMode {
         }
         closeServoDropper();
 
+        //turns off spinner
         runSpinner(0.0);
     }
 }
