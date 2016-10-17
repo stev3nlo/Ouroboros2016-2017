@@ -21,6 +21,12 @@ public class ColorSensorTest extends MyOpMode{
     public void initialize(){
 		groundSensor = new SensorMRColor(hardwareMap.colorSensor.get("groundSensor"));
 		beaconSensor = new SensorMRColor(hardwareMap.colorSensor.get("beaconSensor"));
+
+		groundSensor.sensorSetup(0x2a);
+		beaconSensor.sensorSetup(0x20);
+
+		groundSensor.lightOn();
+		beaconSensor.lightOff();
     }
 
     public void runOpMode() throws InterruptedException {
@@ -28,8 +34,8 @@ public class ColorSensorTest extends MyOpMode{
 		waitForStart();
         while (opModeIsActive()) {
             telemetry.addData("Ground Sensor\n", groundSensor.toString());
-			telemetry.addData("Beacon Sensor\n", beaconSensor.toString());
-			telemetry.addData("Ground Color", groundSensor.groundColor());
+			telemetry.addData("\nGround Color", groundSensor.groundColor());
+			telemetry.addData("\n\nBeacon Sensor\n", beaconSensor.toString());
 			telemetry.addData("Beacon Color", beaconSensor.beaconColor());
 			telemetry.update();
 

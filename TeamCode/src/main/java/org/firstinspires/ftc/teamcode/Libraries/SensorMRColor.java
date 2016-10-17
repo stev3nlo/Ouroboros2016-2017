@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Libraries;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.util.Hardware;
 
 /**
@@ -123,7 +124,7 @@ public class SensorMRColor extends MyOpMode {
 
 	//returns whether the color of the ground is Gray or White
 	public String groundColor() {
-		if (getAlpha() > 100) {
+		if (getAlpha() > 30) {
 			return "White";
 		} else
 			return "Gray";
@@ -131,17 +132,29 @@ public class SensorMRColor extends MyOpMode {
 
 	//returns whether the color of the beacon is Red or Blue
 	public String beaconColor() {
-		if (getRed() > 100) {
-			return "Red";
-		} else
+		if (getBlue() > 5) {
 			return "Blue";
+		} else
+			return "Red";
+	}
+
+	public void sensorSetup(int i) {
+		RGB.setI2cAddress(I2cAddr.create8bit(i));
+	}
+
+	public void lightOff() {
+		RGB.enableLed(false);
+	}
+
+	public void lightOn() {
+		RGB.enableLed(true);
 	}
 
 	//formats the output with all the color values and the alpha value
 	@Override
 	public String toString() {
 		String output = "Red: " + getRed() + "\n" + "Green: " + getGreen() + "\n" + "Blue: " + getBlue() +
-				"Alpha: " + getAlpha();
+				"\nAlpha: " + getAlpha();
 		return output;
 	}
 }
