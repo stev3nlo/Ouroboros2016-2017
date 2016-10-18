@@ -22,7 +22,8 @@ public class ColorSensorTest extends MyOpMode{
 		colorCenter = new SensorMRColor(hardwareMap.colorSensor.get("colorCenter"));
 		colorRear = new SensorMRColor(hardwareMap.colorSensor.get("colorRear"));
 
-		colorCenter.sensorSetup(0x20);
+		//colorCenter.sensorSetup(0x20);
+		colorCenter.sensorSetup(0x3c);
 		colorRear.sensorSetup(0x2a);
 
 		colorCenter.lightOn();
@@ -37,11 +38,11 @@ public class ColorSensorTest extends MyOpMode{
             telemetry.addData("Color Center Color", colorCenter.groundColor());
 			telemetry.addData("Color Rear Values", colorRear);
 			telemetry.addData("Color Rear Color", colorRear.groundColor());
-//			if (colorCenter.groundColor().equals("White") && colorRear.groundColor().equals("White")) {
-//				telemetry.addData("Aligned", "Yes");
-//			} else {
-//				telemetry.addData("Aligned", "No");
-//			}
+			if (colorCenter.groundColor().equals("White") && colorRear.groundColor().equals("White")) {
+				telemetry.addData("Aligned", "Yes");
+			} else {
+				telemetry.addData("Aligned", "No");
+			}
 			telemetry.update();
 
 			idle();

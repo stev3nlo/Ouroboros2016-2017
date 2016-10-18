@@ -124,7 +124,7 @@ public class SensorMRColor extends MyOpMode {
 
 	//returns whether the color of the ground is Gray or White
 	public String groundColor() {
-		if (getAlpha() > 30) {
+		if (getAlpha() > 10) {
 			return "White";
 		} else
 			return "Gray";
