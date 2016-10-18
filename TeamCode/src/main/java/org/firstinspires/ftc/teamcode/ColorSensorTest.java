@@ -14,29 +14,34 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 @Autonomous(name = "ColorSensorTest", group = "Test")
 public class ColorSensorTest extends MyOpMode{
 
-    SensorMRColor groundSensor;
-	SensorMRColor beaconSensor;
+    SensorMRColor colorCenter;
+	SensorMRColor colorRear;
 
 
     public void initialize(){
-		groundSensor = new SensorMRColor(hardwareMap.colorSensor.get("groundSensor"));
-		beaconSensor = new SensorMRColor(hardwareMap.colorSensor.get("beaconSensor"));
+		colorCenter = new SensorMRColor(hardwareMap.colorSensor.get("colorCenter"));
+		colorRear = new SensorMRColor(hardwareMap.colorSensor.get("colorRear"));
 
-		groundSensor.sensorSetup(0x2a);
-		beaconSensor.sensorSetup(0x20);
+		colorCenter.sensorSetup(0x20);
+		colorRear.sensorSetup(0x2a);
 
-		groundSensor.lightOn();
-		beaconSensor.lightOff();
+		colorCenter.lightOn();
+		colorRear.lightOn();
     }
 
     public void runOpMode() throws InterruptedException {
 		initialize();
 		waitForStart();
         while (opModeIsActive()) {
-            telemetry.addData("Ground Sensor\n", groundSensor.toString());
-			telemetry.addData("\nGround Color", groundSensor.groundColor());
-			telemetry.addData("\n\nBeacon Sensor\n", beaconSensor.toString());
-			telemetry.addData("Beacon Color", beaconSensor.beaconColor());
+			telemetry.addData("Color Center Values", colorCenter);
+            telemetry.addData("Color Center Color", colorCenter.groundColor());
+			telemetry.addData("Color Rear Values", colorRear);
+			telemetry.addData("Color Rear Color", colorRear.groundColor());
+//			if (colorCenter.groundColor().equals("White") && colorRear.groundColor().equals("White")) {
+//				telemetry.addData("Aligned", "Yes");
+//			} else {
+//				telemetry.addData("Aligned", "No");
+//			}
 			telemetry.update();
 
 			idle();

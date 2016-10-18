@@ -256,22 +256,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * </p>
 	 * @param speed
 	 */
-	public void moveToWhiteLine(double speed) {
-		int red = colorC.getRed();
-		int green = colorC.getGreen();
-		int blue = colorC.getBlue();
-		int alpha = colorC.getAlpha();
-
-		boolean isWhite = false;
-		moveForwards(speed);
-		while (!isWhite) {
-			if ((red <= redValue) && (green <= greenValue) && (blue <= blueValue) && (alpha <= alphaValue)) {	//need to test values for white
-				isWhite = true;
-			}
-			red = colorC.getRed();
-			green = colorC.getGreen();
-			blue = colorC.getBlue();
-			alpha = colorC.getAlpha();
+	public void moveToWhiteLine(double speed) throws InterruptedException {
+		moveForwards(1);
+		while (!colorC.groundColor().equals("White")) {
+			idle();
 		}
 		stopMotors();
 	}
@@ -285,22 +273,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * </p>
 	 * @param speed
 	 */
-	public void turnRightToWhiteLine(double speed) {
-		int red = colorR.getRed();
-		int green = colorR.getGreen();
-		int blue = colorR.getBlue();
-		int alpha = colorR.getAlpha();
-
-		boolean isWhite = false;
-		turnRight(speed);
-		while (!isWhite) {
-			if ((red <= redValue) && (green <= greenValue) && (blue <= blueValue) && (alpha <= alphaValue)) {
-				isWhite = true;
-			}
-			red = colorR.getRed();
-			green = colorR.getGreen();
-			blue = colorR.getBlue();
-			alpha = colorR.getAlpha();
+	public void turnRightToWhiteLine(double speed) throws InterruptedException {
+		turnRight(1);
+		while (!colorR.groundColor().equals("White")) {
+			idle();
 		}
 		stopMotors();
 	}
@@ -315,7 +291,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * </p>
 	 * @param speed
 	 */
-	public void turnLeftToWhiteLine(double speed) {
+	public void turnLeftToWhiteLine(double speed) throws InterruptedException {
 		turnRightToWhiteLine(-speed);
 	}
 
