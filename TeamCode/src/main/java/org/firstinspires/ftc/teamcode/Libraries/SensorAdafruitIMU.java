@@ -27,10 +27,11 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-public class SensorAdafruitIMU
+public class SensorAdafruitIMU extends MyOpMode
 {
     // The IMU sensor object
     BNO055IMU imu;
+	BNO055IMU.Parameters parameters;
 
     // State used for updating telemetry
     Orientation angles;
@@ -40,6 +41,25 @@ public class SensorAdafruitIMU
     {
         //imu = hardwareMap.get(BNO055IMU.class, "imu");
     }
+
+	public SensorAdafruitIMU(BNO055IMU gyro) {
+		imu = gyro;
+	}
+
+	public void initializeParams() {
+		parameters = new BNO055IMU.Parameters();
+		parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+		parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+		parameters.calibrationDataFile = "AdafruitIMUCalibration.json";
+		parameters.loggingEnabled = true;
+		parameters.loggingTag = "Gyro";
+		parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+		imu.initialize(parameters);
+
+		telemetry.addData("Gyro", "Initialized");
+		telemetry.update();
+	}
 
     public double[] getOrientation()
     {
@@ -96,4 +116,8 @@ public class SensorAdafruitIMU
         accels = imu.getLinearAcceleration();
         return accels.xAccel;
     }
+
+	public void resetGyro() {
+		imu.initialize(parameters);
+	}
 }
