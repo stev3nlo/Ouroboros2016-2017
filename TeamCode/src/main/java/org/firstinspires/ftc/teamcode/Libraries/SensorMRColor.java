@@ -18,11 +18,6 @@ public class SensorMRColor extends MyOpMode {
 		RGB = colorSensor;
 	}
 
-	//doesn't work
-	public SensorMRColor(String name) {
-		RGB = hardwareMap.colorSensor.get(name);
-	}
-
 	//returns the R, G, and B values that the color sensor senses in a list
 	public int[] getColor() {
 		int[] color = new int[3];

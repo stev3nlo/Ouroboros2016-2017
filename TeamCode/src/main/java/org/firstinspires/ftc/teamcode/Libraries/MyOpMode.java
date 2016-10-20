@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Libraries;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.hardware.adafruit.BNO055IMU;
 
 /**
  * @author 		Steven Lo
@@ -53,15 +54,12 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * Rear Modern Robotics Color Sensor object
 	 */
 	SensorMRColor colorR;
-
-	//color values for the white line
-	public static int redValue = 0;
-	public static int greenValue = 0;
-	public static int blueValue = 0;
-	public static int alphaValue = 0;
+	/**
+	 * Modern Robotics Color Sensor for beacon
+	 */
+	SensorMRColor colorB;
 
 	public long spinnerEncoderOffset = 0;
-
 
 	long timeAtEndOfLastCycle;
 
@@ -97,14 +95,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		servoDropper = hardwareMap.servo.get("servoDropper");
 
 		//initialize sensors
-		gyro = new SensorAdafruitIMU();
+		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
 		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
-		//colorR = new SensorMRColor();
+		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
+		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 
 		reset();
 	}
-
-	//method used for any base movement
 
 	/**
 	 * Moves all the drive motors with given speed for the left and right sides
@@ -244,7 +241,24 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param targetAngle
 	 */
 	public void gyroTurnLeft(double speed, double targetAngle) {
-		gyroTurnRight(-speed, targetAngle);
+		gyroTurnRight(-speed, -targetAngle);
+	}
+
+	public void gyroTurnRightCorrection(double speed, double targetAngle) {
+		double startAngle = gyro.getYaw();
+		double newAngle = gyro.getYaw();
+		turnRight(speed);
+		while(Math.abs(newAngle - startAngle) < targetAngle) {
+			newAngle = gyro.getYaw();
+		}
+		turnLeft(speed / 2);
+		while(Math.abs(newAngle - startAngle) > targetAngle) {
+			newAngle = gyro.getYaw();
+		}
+	}
+
+	public void gyroTurnLeftCorrection(double speed, double targetAngle) {
+		gyroTurnRightCorrection(-speed, -targetAngle);
 	}
 
 	/**
@@ -313,8 +327,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		return curTime;
 	}
 
-	public void shoot()
-	{
+	public void shoot() {
 		if(firstCycleOfSpinner)
 		{
 			firstCycleOfSpinner = false;
@@ -334,6 +347,22 @@ public abstract class MyOpMode extends LinearOpMode {
 			curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 700);
 			runSpinner(curPowerOfSpinner);
 		}
+	}
+
+	public void pushButton(String side) {
+		if (colorB.beaconColor().equals(side)) {
+			pushButtonLeft();
+		} else {
+			pushButtonRight();
+		}
+	}
+
+	public void pushButtonRight() {
+
+	}
+
+	public void pushButtonLeft() {
+
 	}
 
 	public void reset() {
