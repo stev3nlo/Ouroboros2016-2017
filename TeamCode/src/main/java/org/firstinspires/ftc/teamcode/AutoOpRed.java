@@ -15,6 +15,12 @@ public class AutoOpRed extends MyOpMode {
         moveToWhiteLine(1.0);
         turnRightToWhiteLine(1.0);
 
+        //need beacon press method
+
+        //turns robot to shooting position
+        gyroTurnRight(1.0, 90.0);
+        gyroTurnRightCorrection(1.0,90.0);
+
         //runs spinner
         initCurtime();
         double timeAtSpinnerStart = getCurTime();
