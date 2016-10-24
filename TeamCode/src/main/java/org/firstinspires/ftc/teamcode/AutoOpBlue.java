@@ -12,7 +12,7 @@ public class AutoOpBlue extends MyOpMode {
     public void runOpMode() throws InterruptedException {
         moveToWhiteLine(1.0);
         turnRightToWhiteLine(1.0);
-
+        
         initCurtime();
         double timeAtSpinnerStart = getCurTime();
         while(getCurTime()<timeAtSpinnerStart+1.0)
