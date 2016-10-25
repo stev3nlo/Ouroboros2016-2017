@@ -16,21 +16,25 @@ public class GyroTest extends MyOpMode {
     SensorAdafruitIMU gyroTest;
 
     public void initialize(){
+		telemetry.addData("Gyro", "Initializing");
+		telemetry.update();
         gyroTest = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
 		gyroTest.initializeParams();
+        telemetry.addData("Gyro", "Initialized");
+		telemetry.update();
     }
 
     public void runOpMode() throws InterruptedException {
         initialize();
         waitForStart();
-        telemetry.addData("Gyro", "Initialized");
 
 		while (opModeIsActive()) {
-
 			telemetry.addData("Yaw", gyroTest.getYaw());
 			telemetry.addData("Roll", gyroTest.getRoll());
 			telemetry.addData("Pitch", gyroTest.getPitch());
             telemetry.update();
+
+			idle();
 		}
     }
 }
