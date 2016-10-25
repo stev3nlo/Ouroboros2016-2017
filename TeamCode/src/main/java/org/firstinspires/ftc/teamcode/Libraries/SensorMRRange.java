@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Libraries;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
@@ -10,13 +11,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class SensorMRRange extends MyOpMode {
 
-	ModernRoboticsI2cRangeSensor rangeSensor;
+	I2cDevice rangeSensor;
 
-	public SensorMRRange(ModernRoboticsI2cRangeSensor rangeSensor) {
+	public SensorMRRange(I2cDevice rangeSensor) {
 		this.rangeSensor = rangeSensor;
 	}
 
 	public double getDistance() {
-		return rangeSensor.getDistance(DistanceUnit.INCH);
+		//	return rangeSensor.getDistance(DistanceUnit.INCH);
+		return 0;
 	}
 }
