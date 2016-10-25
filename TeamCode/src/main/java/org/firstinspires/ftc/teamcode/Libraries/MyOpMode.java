@@ -92,6 +92,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorL1 = hardwareMap.dcMotor.get("motorL1");
 		motorL2 = hardwareMap.dcMotor.get("motorL2");
 		motorManip = hardwareMap.dcMotor.get("motorManip");
+		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
+
 		servoDropper = hardwareMap.servo.get("servoDropper");
 
 		//initialize sensors
@@ -319,7 +321,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void initCurtime()
 	{
-		curTime = System.nanoTime()/1000000000;
+		curTime = ((double)System.nanoTime())/1000000000;
 	}
 
 	public double getCurTime()
@@ -375,5 +377,6 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void runOpMode() throws InterruptedException
 	{
 		initialize(); //Sets up motors, servos, and gyros
+		waitForStart();
 	}
 }

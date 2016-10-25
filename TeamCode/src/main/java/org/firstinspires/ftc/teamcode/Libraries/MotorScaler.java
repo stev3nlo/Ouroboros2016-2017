@@ -122,6 +122,7 @@ public class MotorScaler {
         }
     }
 
+    //Parameter of motor value, returns % of max power
     public static double reverseScale(double percentage)
     {
         return new Double(1);
