@@ -56,10 +56,7 @@ public class SensorAdafruitIMU extends MyOpMode
 		parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
 		imu.initialize(parameters);
-
-		telemetry.addData("Gyro", "Initialized");
-		telemetry.update();
-	}
+    }
 
     public double[] getOrientation()
     {
@@ -85,12 +82,14 @@ public class SensorAdafruitIMU extends MyOpMode
 
     public double getPitch()
     {
+
         angles = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
         return angles.thirdAngle;
     }
 
     public double[] getAcceleration()
     {
+
         double[] accelRay = new double[3];
         accels = imu.getLinearAcceleration();
         accelRay[0] = accels.xAccel;
@@ -101,18 +100,20 @@ public class SensorAdafruitIMU extends MyOpMode
 
     public double getXAccel()
     {
-        accels = imu.getLinearAcceleration();
+        initializeParams();accels = imu.getLinearAcceleration();
         return accels.xAccel;
     }
 
     public double getYAccel()
     {
+
         accels = imu.getLinearAcceleration();
         return accels.yAccel;
     }
 
     public double getZAccel()
     {
+
         accels = imu.getLinearAcceleration();
         return accels.xAccel;
     }

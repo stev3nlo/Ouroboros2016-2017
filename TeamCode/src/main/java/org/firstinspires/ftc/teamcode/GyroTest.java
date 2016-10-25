@@ -21,12 +21,16 @@ public class GyroTest extends MyOpMode {
     }
 
     public void runOpMode() throws InterruptedException {
-		initialize();
-		waitForStart();
+        initialize();
+        waitForStart();
+        telemetry.addData("Gyro", "Initialized");
+
 		while (opModeIsActive()) {
+
 			telemetry.addData("Yaw", gyroTest.getYaw());
 			telemetry.addData("Roll", gyroTest.getRoll());
 			telemetry.addData("Pitch", gyroTest.getPitch());
+            telemetry.update();
 		}
     }
 }
