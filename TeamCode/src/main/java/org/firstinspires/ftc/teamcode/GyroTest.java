@@ -20,7 +20,9 @@ public class GyroTest extends MyOpMode {
 		gyroTest.initializeParams();
     }
 
-    public void runOpMode(){
+    public void runOpMode() throws InterruptedException {
+		initialize();
+		waitForStart();
 		while (opModeIsActive()) {
 			telemetry.addData("Yaw", gyroTest.getYaw());
 			telemetry.addData("Roll", gyroTest.getRoll());
