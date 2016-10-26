@@ -125,6 +125,13 @@ public class SensorMRColor extends MyOpMode {
 			return "Gray";
 	}
 
+	public boolean onWhite() {
+		if (groundColor().equals("White")) {
+			return true;
+		}
+		return false;
+	}
+
 	//returns whether the color of the beacon is Red or Blue
 	public String beaconColor() {
 		if (getBlue() > 5) {
