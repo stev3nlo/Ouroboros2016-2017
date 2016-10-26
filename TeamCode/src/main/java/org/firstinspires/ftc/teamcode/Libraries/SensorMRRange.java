@@ -29,9 +29,12 @@ public class SensorMRRange extends MyOpMode {
 	I2cDevice rangeSensor;
 	I2cDeviceSynch rangeReader;
 
+	int ultraSonicDistanceValue;
+
 	public SensorMRRange(I2cDevice rangeSensor) {
 		this.rangeSensor = rangeSensor;
 		initReader();
+		ultraSonicDistanceValue = 255;
 	}
 
 	public void initReader() {
@@ -41,6 +44,12 @@ public class SensorMRRange extends MyOpMode {
 
 	public int getUltraSonicDistance() {
 		return rangeCache[0] & 0xFF;
+	}
+
+	public void filterUltraSonicValues() {
+		if (getUltraSonicDistance() != 255) {
+			ultraSonicDistanceValue = getUltraSonicDistance();
+		}
 	}
 
 	public int getOpticDistance() {
@@ -62,14 +71,23 @@ public class SensorMRRange extends MyOpMode {
 		return output;
 	}
 
+	public boolean inFrontOfBeacon() {
+		if (getUltraSonicDistance() < 8) {		//value needs to be tested/calculated
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public String toString() {
 		ArrayList<String> cache = getRangeCache();
 		String output = "";
 
-		output += "Ultra Sonic" + cache.get(0);
-		output += "\nODS" + cache.get(1);
-		output += "\nStatus: " + cache.get(2);
+		//output += "Ultra Sonic " + String.valueOf(cache.get(0));
+		filterUltraSonicValues();
+		output += "Ultra Sonic " + ultraSonicDistanceValue;
+		output += "\nODS " + String.valueOf(cache.get(1));
+		output += "\nStatus: " + String.valueOf(cache.get(2));
 
 		return output;
 	}

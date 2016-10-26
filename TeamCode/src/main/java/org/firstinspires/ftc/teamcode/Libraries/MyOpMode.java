@@ -311,6 +311,11 @@ public abstract class MyOpMode extends LinearOpMode {
 		turnRightToWhiteLine(-speed);
 	}
 
+	public void followLineToBeacon(double speed) {
+		moveForwards(speed);
+
+	}
+
 	/**
 	 * This method will reset all the values to the default (stopped, initial positions)
 	 */
