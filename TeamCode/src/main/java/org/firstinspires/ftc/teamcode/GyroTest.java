@@ -19,7 +19,6 @@ public class GyroTest extends MyOpMode {
 		telemetry.addData("Gyro", "Initializing");
 		telemetry.update();
         gyroTest = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
-		gyroTest.initializeParams();
         telemetry.addData("Gyro", "Initialized");
 		telemetry.update();
     }

@@ -44,6 +44,7 @@ public class SensorAdafruitIMU extends MyOpMode
 
 	public SensorAdafruitIMU(BNO055IMU gyro) {
 		imu = gyro;
+        initializeParams();
 	}
 
 	public void initializeParams() {

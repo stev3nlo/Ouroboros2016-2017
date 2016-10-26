@@ -1,13 +1,15 @@
 package org.firstinspires.ftc.teamcode.Libraries;
 
+
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynch;
 import com.qualcomm.robotcore.hardware.I2cDeviceSynchImpl;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
 import java.util.ArrayList;
 
 /**
@@ -18,22 +20,35 @@ import java.util.ArrayList;
 public class SensorMRRange extends MyOpMode {
 
 	private ElapsedTime runtime = new ElapsedTime();
-	byte[] rangeCache;
+	byte[] rangeCache; //The read will return an array of bytes.
 
-	I2cAddr rangeAddress = new I2cAddr(0x14);
-	public static final int RANGE_REG_START = 0x04;
-	public static final int RANGE_READ_LENGTH = 2;
+	I2cAddr rangeAddress = new I2cAddr(0x14); //Default I2C address for MR Range (7-bit)
+	public static final int RANGE_REG_START = 0x04; //Register to start reading
+	public static final int RANGE_READ_LENGTH = 2; //Number of byte to read
 
 	I2cDevice rangeSensor;
 	I2cDeviceSynch rangeReader;
 
 	public SensorMRRange(I2cDevice rangeSensor) {
 		this.rangeSensor = rangeSensor;
+		initReader();
 	}
 
 	public void initReader() {
 		rangeReader = new I2cDeviceSynchImpl(rangeSensor, rangeAddress, false);
 		rangeReader.engage();
+	}
+
+	public int getUltraSonicDistance() {
+		return rangeCache[0] & 0xFF;
+	}
+
+	public int getOpticDistance() {
+		return rangeCache[1] & 0xFF;
+	}
+
+	public String getRunTime() {
+		return runtime.toString();
 	}
 
 	public ArrayList<String> getRangeCache() {
