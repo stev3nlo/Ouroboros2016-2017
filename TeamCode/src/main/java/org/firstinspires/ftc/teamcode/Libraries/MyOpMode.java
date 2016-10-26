@@ -35,7 +35,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	DcMotor motorManip;
 
-	DcMotor motorSpinner;
+	protected DcMotor motorSpinner;
 
 	Servo servoDropper;	// servo for manipulator
 
@@ -321,7 +321,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void initCurtime()
 	{
-		curTime = ((double)System.nanoTime())/1000000000;
+		curTime = ((double)System.nanoTime())/1000000000.0;
 	}
 
 	public double getCurTime()

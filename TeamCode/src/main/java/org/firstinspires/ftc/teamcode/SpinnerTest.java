@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 /**
  * Created by Spencer on 10/20/2016.
  */
-@Autonomous(name="RPM Stabilizer Test", group="Test")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Spinner Test", group="Test")
 public class SpinnerTest extends TeleOp {
 
     double curFactor;
@@ -23,14 +23,14 @@ public class SpinnerTest extends TeleOp {
     double timeAtLastButtonPress;
     double timeAtLastTriggerPress;
 
-    DcMotor motorSpinner;
+    //DcMotor motorSpinner;
 
     public void initialize()
     {
         motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
         curFactor = 0.1;
         curRPM = 0.0;
-        curPower = 0.1;
+        curPower = 0.8;
 
     }
 
@@ -40,6 +40,10 @@ public class SpinnerTest extends TeleOp {
         telemetry.addData("curPower",curPower);
         telemetry.addData("scaledPower", MotorScaler.reverseScale(curPower));
         telemetry.addData("curRPM",curRPM);
+        telemetry.addData("timeSinceLastButtonPress",curTime-timeAtLastButtonPress);
+        telemetry.addData("timeSinceLastTriggerPress",curTime-timeAtLastTriggerPress);
+        telemetry.addData("curTime",curTime);
+        telemetry.update();
     }
 
     public double getCurRPM()
@@ -109,11 +113,16 @@ public class SpinnerTest extends TeleOp {
             curPower += curFactor;
             timeAtLastTriggerPress = curTime;
         }
-        else if(g1Lbump && timeAtLastTriggerPress - curTime > 0.2)
+        else if(g1Rbump && curTime - timeAtLastTriggerPress > 0.2)
         {
             curPower -= curFactor;
             timeAtLastTriggerPress = curTime;
         }
+    }
+
+    public void initCurtime()
+    {
+        curTime = ((double)System.nanoTime())/1000000000.0;
     }
 
     public void runOpMode()
@@ -133,7 +142,7 @@ public class SpinnerTest extends TeleOp {
             checkTriggers();
             curRPM = getCurRPM();
             capPower();
-            runSpinner(curPower);
+            motorSpinner.setPower(-curPower);
             runTelemetry();
 
         }

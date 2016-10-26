@@ -60,6 +60,7 @@ public class TeleOp extends MyOpMode
         g1YPressed = gamepad1.y;
         g1BPressed = gamepad1.b;
 
+        /*
         g2y1 = gamepad2.left_stick_y;
         g2y2 = gamepad2.right_stick_y;
         g2x1 = gamepad2.left_stick_x;
@@ -72,6 +73,7 @@ public class TeleOp extends MyOpMode
         g2APressed = gamepad2.a;    //toggle servo dropper
         g2YPressed = gamepad2.y;
         g2BPressed = gamepad2.b;
+        */
     }
 
     public void runOpMode()
