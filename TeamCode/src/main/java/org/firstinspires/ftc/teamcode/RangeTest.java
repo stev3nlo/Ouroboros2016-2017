@@ -17,7 +17,8 @@ public class RangeTest extends MyOpMode {
 
     public void initialize()
     {
-        //rangeTest = new SensorMRRange(hardwareMap.)
+        rangeTest = new SensorMRRange(hardwareMap.i2cDevice.get("rangeTest"));
+
     }
 
 }
