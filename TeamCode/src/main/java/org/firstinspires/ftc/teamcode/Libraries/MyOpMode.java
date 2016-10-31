@@ -38,6 +38,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected DcMotor motorSpinner;
 
 	Servo servoDropper;	// servo for manipulator
+	Servo servoBeaconPusher;
 
 
 	//sensors
@@ -98,6 +99,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorManip = hardwareMap.dcMotor.get("motorManip");
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
 		servoDropper = hardwareMap.servo.get("servoDropper");
+		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 
 		//initialize sensors
 		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));

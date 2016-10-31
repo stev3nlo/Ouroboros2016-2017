@@ -23,7 +23,7 @@ public class ColorSensorTest extends MyOpMode{
 		colorRear = new SensorMRColor(hardwareMap.colorSensor.get("colorRear"));
 
 		//colorCenter.sensorSetup(0x20);
-		colorCenter.sensorSetup(0x20);
+		colorCenter.sensorSetup(0x2c);
 		colorRear.sensorSetup(0x2a);
 
 		colorCenter.lightOn();

@@ -13,9 +13,12 @@ public class SensorMRColor extends MyOpMode {
 	//color sensor object
 	ColorSensor RGB;
 
+	public int grayAlpha;
+
 	public SensorMRColor(ColorSensor colorSensor) {
 		//Initialize color sensor
 		RGB = colorSensor;
+		getGrayAlpha();
 	}
 
 	//returns the R, G, and B values that the color sensor senses in a list
@@ -83,6 +86,10 @@ public class SensorMRColor extends MyOpMode {
 		return RGB.alpha();
 	}
 
+	public int getGrayAlpha() {
+		return getAlpha();
+	}
+
 	//gets the red value
 	public int getRed() {
 		return RGB.red();
@@ -119,7 +126,7 @@ public class SensorMRColor extends MyOpMode {
 
 	//returns whether the color of the ground is Gray or White
 	public String groundColor() {
-		if (getAlpha() > 10) {
+		if ((getAlpha() - grayAlpha) > 10) {	//need to retest value3
 			return "White";
 		} else
 			return "Gray";
