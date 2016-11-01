@@ -380,17 +380,19 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void pushButton(String side) {
 		if (colorB.beaconColor().equals(side)) {
-			pushButtonLeft();
-		} else {
 			pushButtonRight();
+		} else {
+			pushButtonLeft();
 		}
 	}
 
 	public void pushButtonRight() {
+		servoBeaconPusher(double v);
 
 	}
 
 	public void pushButtonLeft() {
+		servoBeaconPusher(double v);
 
 	}
 
