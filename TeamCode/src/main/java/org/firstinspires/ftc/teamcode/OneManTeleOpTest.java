@@ -5,9 +5,13 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 
 import java.io.IOException;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop", group="Teleop")  // @Autonomous(...) is the other common choice
-public class TeleOp extends MyOpMode
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="OneManTeleOpTest", group="Teleop")  // @Autonomous(...) is the other common choice
+public class OneManTeleOpTest extends MyOpMode
 {
+    public static final int dropTime = 5;
+
+    boolean isInBeaconMode = false;
+    public double minTimeForNextBeaconModeSwitch = 0.0;
     //Controller values
 
     double g1y1;    //left drive
@@ -59,6 +63,7 @@ public class TeleOp extends MyOpMode
         g1YPressed = gamepad1.y;
         g1BPressed = gamepad1.b;
 
+        /*
         g2y1 = gamepad2.left_stick_y;
         g2y2 = gamepad2.right_stick_y;
         g2x1 = gamepad2.left_stick_x;
@@ -71,35 +76,68 @@ public class TeleOp extends MyOpMode
         g2APressed = gamepad2.a;    //toggle servo dropper
         g2YPressed = gamepad2.y;
         g2BPressed = gamepad2.b;
+        */
     }
 
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
+        initCurtime();
+        minTimeForNextBeaconModeSwitch = curTime;
         while (opModeIsActive())
         {
             updateControllerVals();
             initCurtime(); //gets real time timer
             move(g1y1, -g1y2); // moves drive wheels
-            moveManip(g2y1);
+
+            if(isInBeaconMode)
+            {
+                if(g1Ltrig > 0.1)
+                {
+                    pushButtonLeft();
+                }
+                else if(g1Rtrig > 0.1)
+                {
+                    pushButtonRight();
+                }
+                else if(g1Rbump || g2Lbump)
+                {
+                    resetButtonPress();
+                }
+            }
+            else
+            {
+                if (g1Ltrig > 0.1)
+                    moveManip(1.0);
+                else if (g1Lbump)
+                    moveManip(-1.0);
+                else
+                    moveManip(0.0);
+            }
+
+            if(g1BPressed && minTimeForNextBeaconModeSwitch > curTime)
+            {
+                isInBeaconMode = !isInBeaconMode;
+                minTimeForNextBeaconModeSwitch = curTime + 0.5;
+            }
 
             //creates constant speed of spinner throughout game
-            if(g2XPressed)
+            if(g1XPressed)
             {
                 shoot();
             }
-
             // stops spinner
-            else if (g2YPressed)
+            else if (g1YPressed)
             {
                 curPowerOfMotorSpinner = 0.0;
                 firstCycleOfSpinner = true;
             }
+            runSpinner(curPowerOfMotorSpinner);
 
             //releases balls from basket into spinner
-            if (g2APressed && curTime > timeBallsFinishDropping)
+            if (g1APressed && curTime > timeBallsFinishDropping)
             {
-                timeBallsFinishDropping = curTime + 5;
+                timeBallsFinishDropping = curTime + dropTime;
                 openServoDropper();
             }
             else if (curTime > timeBallsFinishDropping)
@@ -107,20 +145,21 @@ public class TeleOp extends MyOpMode
                 closeServoDropper();
             }
 
-            if(g2Ltrig > 0.1)
+            if(g1Ltrig > 0.1)
             {
                 pushButtonLeft();
             }
-            else if(g2Rtrig > 0.1)
+            else if(g1Rtrig > 0.1)
             {
                 pushButtonRight();
             }
-            else if(g2Rbump || g2Lbump)
+            else if(g1Rbump || g2Lbump)
             {
                 resetButtonPress();
             }
 
             timeAtEndOfLastCycle = System.nanoTime()/1000000000;
+            updateMotorSpeeds();
         }
     }
 }

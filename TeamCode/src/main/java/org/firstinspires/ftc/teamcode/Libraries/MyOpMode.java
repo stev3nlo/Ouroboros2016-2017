@@ -64,6 +64,15 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	SensorMRRange range;
 
+	//Speed values for motors
+	protected double curPowerOfMotorR1 = 0.0;
+	protected double curPowerOfMotorL1 = 0.0;
+	protected double curPowerOfMotorManip = 0.0;
+	protected double curPowerOfMotorSpinner = 0.0;
+
+	public static final double initPowerOfMotorSpinner = 0.5;
+	public static final double targetRPM = 700;
+
 	public long spinnerEncoderOffset = 0;
 
 	long timeAtEndOfLastCycle;
@@ -73,12 +82,12 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	boolean firstCycleOfSpinner;
 
-	double curPowerOfSpinner = 0.7;
 
 	double curTime;
 
 	//constructor
-	public MyOpMode() {
+	public MyOpMode()
+	{
 		super();
 	}
 
@@ -90,7 +99,8 @@ public abstract class MyOpMode extends LinearOpMode {
 	 *     Sets up all the motors and sensors and sets their initial values
 	 * </p>
 	 */
-	public void initialize() {
+	public void initialize()
+	{
 		//hardware maps the drive motors
 		motorR1 = hardwareMap.dcMotor.get("motorR1");
 		//motorR2 = hardwareMap.dcMotor.get("motorR2");
@@ -99,7 +109,9 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorManip = hardwareMap.dcMotor.get("motorManip");
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
 		servoDropper = hardwareMap.servo.get("servoDropper");
+		closeServoDropper();
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
+
 
 		//initialize sensors
 		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
@@ -107,6 +119,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
+
+
 
 		reset();
 	}
@@ -370,7 +384,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			firstCycleOfSpinner = false;
 			timeAtLastStabilization = curTime;
 			spinnerEncoderOffset = getSpinnerEncoderVal();
-			runSpinner(curPowerOfSpinner);
+			curPowerOfMotorSpinner = initPowerOfMotorSpinner;
 		}
 		else if (curTime - timeAtLastStabilization > 0.5)
 		{
@@ -381,8 +395,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			timeAtLastStabilization = curTime;
 			estimatedCurRPM /= 1140;
 
-			curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 700);
-			runSpinner(curPowerOfSpinner);
+			curPowerOfMotorSpinner = RPMStabilizer.returnPowerToTry(curPowerOfMotorSpinner, estimatedCurRPM, targetRPM);
 		}
 	}
 
@@ -408,20 +421,42 @@ public abstract class MyOpMode extends LinearOpMode {
 	}
 
 	public void pushButtonRight() {
-		servoBeaconPusher(double v);
-
+		double v = 1.0;
+		servoBeaconPusher.setPosition(v);
 	}
 
 	public void pushButtonLeft() {
-		servoBeaconPusher(double v);
-
+		double v = 0.0;
+		servoBeaconPusher.setPosition(v);
 	}
+
+	public void resetButtonPress()
+	{
+		double v = 0.5;
+		servoBeaconPusher.setPosition(v);
+	}
+
 
 	public void reset() {
 		motorR1.setPower(0);
 		//motorR2.setPower(0);
 		motorL1.setPower(0);
 		//motorL2.setPower(0);
+	}
+
+	public void updateMotorSpeeds()
+	{
+		//motorSpinner.setPower(curPowerOfMotorSpinner);
+	}
+
+	public void updateServoPositions()
+	{
+
+	}
+
+	public void update()
+	{
+
 	}
 	@Override
 	public void runOpMode() throws InterruptedException
