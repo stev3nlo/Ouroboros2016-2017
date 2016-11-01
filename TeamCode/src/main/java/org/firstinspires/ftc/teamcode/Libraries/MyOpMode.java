@@ -394,7 +394,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			estimatedCurRPM /= curTime - timeAtLastStabilization;   // gets time
 			timeAtLastStabilization = curTime;
 			estimatedCurRPM /= 1140;
-
+			telemetry.addData("Cur RPM",estimatedCurRPM);
 			curPowerOfMotorSpinner = RPMStabilizer.returnPowerToTry(curPowerOfMotorSpinner, estimatedCurRPM, targetRPM);
 		}
 	}

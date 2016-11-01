@@ -11,16 +11,16 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 /**
  * Created by Morgannanez on 10/10/16.
  */
-@Autonomous(name = "ColorSensorTest", group = "Test")
-public class ColorSensorTest extends MyOpMode{
+@Autonomous(name = "GroundColorSensorTest", group = "Test")
+public class GroundColorSensorTest extends MyOpMode{
 
     SensorMRColor colorCenter;
 	SensorMRColor colorRear;
 
 
     public void initialize(){
-		colorCenter = new SensorMRColor(hardwareMap.colorSensor.get("colorCenter"));
-		colorRear = new SensorMRColor(hardwareMap.colorSensor.get("colorRear"));
+		colorCenter = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
+		colorRear = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 
 		//colorCenter.sensorSetup(0x20);
 		colorCenter.sensorSetup(0x2c);

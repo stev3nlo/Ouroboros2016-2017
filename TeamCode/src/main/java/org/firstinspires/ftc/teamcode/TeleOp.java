@@ -8,6 +8,7 @@ import java.io.IOException;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop", group="Teleop")  // @Autonomous(...) is the other common choice
 public class TeleOp extends MyOpMode
 {
+    boolean shooterIsRunning = false;
     //Controller values
 
     double g1y1;    //left drive
@@ -83,18 +84,21 @@ public class TeleOp extends MyOpMode
             move(g1y1, -g1y2); // moves drive wheels
             moveManip(g2y1);
 
-            //creates constant speed of spinner throughout game
-            if(g2XPressed)
+            if (g2YPressed)
             {
+                curPowerOfMotorSpinner = 0.0;
+                shooterIsRunning = false;
+                firstCycleOfSpinner = true;
+            }
+            //creates constant speed of spinner throughout game
+            if(g2XPressed || shooterIsRunning)
+            {
+                shooterIsRunning = true;
                 shoot();
             }
 
             // stops spinner
-            else if (g2YPressed)
-            {
-                curPowerOfMotorSpinner = 0.0;
-                firstCycleOfSpinner = true;
-            }
+
 
             //releases balls from basket into spinner
             if (g2APressed && curTime > timeBallsFinishDropping)
@@ -119,7 +123,6 @@ public class TeleOp extends MyOpMode
             {
                 resetButtonPress();
             }
-
             timeAtEndOfLastCycle = System.nanoTime()/1000000000;
         }
     }
