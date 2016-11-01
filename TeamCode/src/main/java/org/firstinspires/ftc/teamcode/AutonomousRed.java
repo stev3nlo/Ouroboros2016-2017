@@ -3,20 +3,20 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 
 /**
- * Created by Steven on 10/20/2016.
+ * Created by Steven on 10/31/2016.
  */
-public class AutonomousBlue extends MyOpMode {
+public class AutonomousRed extends MyOpMode {
 	@Override
 	public void runOpMode() throws InterruptedException {
 		initialize();
 		waitForStart();
 
 		moveToWhiteLine(1);
-		turnRightToWhiteLine(.25);
+		turnLeftToWhiteLine(.25);
 		moveForwardToBeacon(.25);
-		pushButton("Blue");
+		pushButton("Red");
 		moveAwayFromBeacon(.5, 25);		//needs to be tested
-		gyroTurnRightCorrection(.25, 90);
+		gyroTurnLeftCorrection(.25, 90);
 		shoot();
 	}
 }

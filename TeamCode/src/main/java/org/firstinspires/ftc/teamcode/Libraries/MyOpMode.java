@@ -329,6 +329,15 @@ public abstract class MyOpMode extends LinearOpMode {
 		stopMotors();
 	}
 
+	public void moveAwayFromBeacon(double speed, int distance) throws InterruptedException {
+		moveBackwards(speed);
+		while (!(range.getUltraSonicDistance() > distance)) {
+			range.filterUltraSonicValues();
+			idle();
+		}
+		stopMotors();
+	}
+
 	/**
 	 * This method will reset all the values to the default (stopped, initial positions)
 	 */
