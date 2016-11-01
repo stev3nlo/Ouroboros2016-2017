@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TestFiles;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -27,6 +27,9 @@ public class RangeTest extends MyOpMode {
         while (opModeIsActive())
         {
             telemetry.addData("", rangeTest);
+            telemetry.update();
+
+			idle();
         }
     }
 }

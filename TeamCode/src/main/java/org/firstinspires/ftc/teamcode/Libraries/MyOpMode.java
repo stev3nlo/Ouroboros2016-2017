@@ -38,6 +38,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected DcMotor motorSpinner;
 
 	Servo servoDropper;	// servo for manipulator
+	Servo servoBeaconPusher;
 
 
 	//sensors
@@ -58,6 +59,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * Modern Robotics Color Sensor for beacon
 	 */
 	SensorMRColor colorB;
+	/**
+	 * Modern Robotics Range Sensor that uses ultraSonic and Optical Distance
+	 */
+	SensorMRRange range;
 
 	public long spinnerEncoderOffset = 0;
 
@@ -93,14 +98,15 @@ public abstract class MyOpMode extends LinearOpMode {
 		//motorL2 = hardwareMap.dcMotor.get("motorL2");
 		motorManip = hardwareMap.dcMotor.get("motorManip");
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
-
 		servoDropper = hardwareMap.servo.get("servoDropper");
+		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 
 		//initialize sensors
 		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
 		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
 		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
+		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
 
 		reset();
 	}
@@ -223,12 +229,13 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 * @param targetAngle
 	 */
-	public void gyroTurnRight(double speed, double targetAngle) {
+	public void gyroTurnRight(double speed, double targetAngle) throws InterruptedException {
 		double startAngle = gyro.getYaw();		//angle of the robot before the turn
 		double newAngle = gyro.getYaw();		//angle of the robot during the turn
 		turnRight(speed);		//starts the turn
 		while (Math.abs(newAngle - startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
 			newAngle = gyro.getYaw();		//updates the new angle constantly
+			idle();
 		}
 		stopMotors();
 	}
@@ -242,24 +249,26 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 * @param targetAngle
 	 */
-	public void gyroTurnLeft(double speed, double targetAngle) {
+	public void gyroTurnLeft(double speed, double targetAngle) throws InterruptedException {
 		gyroTurnRight(-speed, -targetAngle);
 	}
 
-	public void gyroTurnRightCorrection(double speed, double targetAngle) {
+	public void gyroTurnRightCorrection(double speed, double targetAngle) throws InterruptedException {
 		double startAngle = gyro.getYaw();
 		double newAngle = gyro.getYaw();
 		turnRight(speed);
 		while(Math.abs(newAngle - startAngle) < targetAngle) {
 			newAngle = gyro.getYaw();
+			idle();
 		}
 		turnLeft(speed / 2);
 		while(Math.abs(newAngle - startAngle) > targetAngle) {
 			newAngle = gyro.getYaw();
+			idle();
 		}
 	}
 
-	public void gyroTurnLeftCorrection(double speed, double targetAngle) {
+	public void gyroTurnLeftCorrection(double speed, double targetAngle) throws InterruptedException {
 		gyroTurnRightCorrection(-speed, -targetAngle);
 	}
 
@@ -314,11 +323,29 @@ public abstract class MyOpMode extends LinearOpMode {
 
 
 
+	//Moving to and from beacon methods	
+	public void moveForwardToBeacon(double speed) throws InterruptedException {
+		moveForwards(speed);
+		while (!range.inFrontOfBeacon()) {
+			range.filterUltraSonicValues();
+			idle();
+		}
+		stopMotors();
+	}
 
-
-
+	public void moveAwayFromBeacon(double speed, int distance) throws InterruptedException {
+		moveBackwards(speed);
+		while (!(range.getUltraSonicDistance() > distance)) {
+			range.filterUltraSonicValues();
+			idle();
+		}
+		stopMotors();
+	}
+	
+	
+	
+	
 	//Essential shooter methods
-
 	/**
 	 * This method will reset all the values to the default (stopped, initial positions)
 	 */
@@ -374,17 +401,19 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void pushButton(String side) {
 		if (colorB.beaconColor().equals(side)) {
-			pushButtonLeft();
-		} else {
 			pushButtonRight();
+		} else {
+			pushButtonLeft();
 		}
 	}
 
 	public void pushButtonRight() {
+		servoBeaconPusher(double v);
 
 	}
 
 	public void pushButtonLeft() {
+		servoBeaconPusher(double v);
 
 	}
 
