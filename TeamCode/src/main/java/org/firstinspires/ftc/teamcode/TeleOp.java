@@ -3,9 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 
-/**
- * Created by Morgannanez on 9/27/16.
- */
+import java.io.IOException;
+
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop", group="Teleop")  // @Autonomous(...) is the other common choice
 public class TeleOp extends MyOpMode
 {
@@ -60,7 +59,7 @@ public class TeleOp extends MyOpMode
         g1YPressed = gamepad1.y;
         g1BPressed = gamepad1.b;
 
-        /*
+
         g2y1 = gamepad2.left_stick_y;
         g2y2 = gamepad2.right_stick_y;
         g2x1 = gamepad2.left_stick_x;
@@ -73,26 +72,26 @@ public class TeleOp extends MyOpMode
         g2APressed = gamepad2.a;    //toggle servo dropper
         g2YPressed = gamepad2.y;
         g2BPressed = gamepad2.b;
-        */
     }
 
-    public void runOpMode()
+    public void runOpMode() throws InterruptedException
     {
-        while (opModeIsActive()) {
+        super.runOpMode();
+        while (opModeIsActive())
+        {
             updateControllerVals();
-            initShooter();
             initCurtime(); //gets real time timer
-            move(g1y1, g1y2); // moves drive wheels
+            move(g1y1, -g1y2); // moves drive wheels
             moveManip(g2y1);
 
-            //creates contant speed of spinner throughout game
+            //creates constant speed of spinner throughout game
             if(g2XPressed)
             {
                 shoot();
             }
 
             // stops spinner
-            if (g2YPressed)
+            else if (g2YPressed)
             {
                 firstCycleOfSpinner = true;
                 runSpinner(0.0);
@@ -108,7 +107,6 @@ public class TeleOp extends MyOpMode
             {
                 closeServoDropper();
             }
-
 
             timeAtEndOfLastCycle = System.nanoTime()/1000000000;
         }

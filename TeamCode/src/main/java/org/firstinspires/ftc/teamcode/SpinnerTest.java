@@ -40,7 +40,7 @@ public class SpinnerTest extends TeleOp {
         telemetry.addData("curPower",curPower);
         telemetry.addData("scaledPower", MotorScaler.reverseScale(curPower));
         telemetry.addData("curRPM",curRPM);
-        telemetry.addData("timeSinceLastButtonPress",curTime-timeAtLastButtonPress);
+        telemetry.addData(" ",curTime-timeAtLastButtonPress);
         telemetry.addData("timeSinceLastTriggerPress",curTime-timeAtLastTriggerPress);
         telemetry.addData("curTime",curTime);
         telemetry.update();
@@ -142,7 +142,7 @@ public class SpinnerTest extends TeleOp {
             checkTriggers();
             curRPM = getCurRPM();
             capPower();
-            motorSpinner.setPower(-curPower);
+            motorSpinner.setPower(curPower);
             runTelemetry();
 
         }

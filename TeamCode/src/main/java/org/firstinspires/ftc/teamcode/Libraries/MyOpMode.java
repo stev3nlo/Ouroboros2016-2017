@@ -17,23 +17,23 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * DcMotor variable for the first motor on the right
 	 */
-	DcMotor motorR1;
+	protected DcMotor motorR1;
 	/**
 	 * DcMotor variable for the second motor on the right
 	 */
-	DcMotor motorR2;
+	//protected DcMotor motorR2;
 	/**
 	 * DcMotor variable for the first motor on the left
 	 */
-	DcMotor motorL1;
+	protected DcMotor motorL1;
 	/**
 	 * DcMotor variable for the second motor on the left
 	 */
-	DcMotor motorL2;
+	//protected DcMotor motorL2;
 	/**
 	 * DcMotor variable for the motor on the manipulator
 	 */
-	DcMotor motorManip;
+	protected DcMotor motorManip;
 
 	protected DcMotor motorSpinner;
 
@@ -88,9 +88,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void initialize() {
 		//hardware maps the drive motors
 		motorR1 = hardwareMap.dcMotor.get("motorR1");
-		motorR2 = hardwareMap.dcMotor.get("motorR2");
+		//motorR2 = hardwareMap.dcMotor.get("motorR2");
 		motorL1 = hardwareMap.dcMotor.get("motorL1");
-		motorL2 = hardwareMap.dcMotor.get("motorL2");
+		//motorL2 = hardwareMap.dcMotor.get("motorL2");
 		motorManip = hardwareMap.dcMotor.get("motorManip");
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
 
@@ -115,9 +115,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	public void move(double speedR, double speedL) {
 		motorR1.setPower(speedR);
-		motorR2.setPower(speedR);
+		//motorR2.setPower(speedR);
 		motorL1.setPower(speedL);
-		motorL2.setPower(speedL);
+		//motorL2.setPower(speedL);
 	}
 
 	public void moveManip(double speed)
@@ -158,9 +158,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	public void stopMotors() {
 		motorR1.setPower(0);
-		motorR2.setPower(0);
+		//motorR2.setPower(0);
 		motorL1.setPower(0);
-		motorL2.setPower(0);
+		//motorL2.setPower(0);
 	}
 
 	/**
@@ -311,6 +311,14 @@ public abstract class MyOpMode extends LinearOpMode {
 		turnRightToWhiteLine(-speed);
 	}
 
+
+
+
+
+
+
+	//Essential shooter methods
+
 	/**
 	 * This method will reset all the values to the default (stopped, initial positions)
 	 */
@@ -351,6 +359,19 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+
+
+
+
+
+
+
+
+
+
+
+	//Methods to control button pushing
+
 	public void pushButton(String side) {
 		if (colorB.beaconColor().equals(side)) {
 			pushButtonLeft();
@@ -369,9 +390,9 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void reset() {
 		motorR1.setPower(0);
-		motorR2.setPower(0);
+		//motorR2.setPower(0);
 		motorL1.setPower(0);
-		motorL2.setPower(0);
+		//motorL2.setPower(0);
 	}
 	@Override
 	public void runOpMode() throws InterruptedException
