@@ -8,6 +8,7 @@ import java.io.IOException;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop", group="Teleop")  // @Autonomous(...) is the other common choice
 public class TeleOp extends MyOpMode
 {
+    public static final int timeToDropBalls = 5;
     boolean shooterIsRunning = false;
     //Controller values
 
@@ -103,7 +104,7 @@ public class TeleOp extends MyOpMode
             //releases balls from basket into spinner
             if (g2APressed && curTime > timeBallsFinishDropping)
             {
-                timeBallsFinishDropping = curTime + 5;
+                timeBallsFinishDropping = curTime + timeToDropBalls;
                 openServoDropper();
             }
             else if (curTime > timeBallsFinishDropping)
