@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Libraries;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.adafruit.BNO055IMU;
 
@@ -12,6 +13,9 @@ import com.qualcomm.hardware.adafruit.BNO055IMU;
  * @date 		9/21/2016.
  */
 public abstract class MyOpMode extends LinearOpMode {
+
+	public static final int encoderTicksPerRotation = 1140;
+	public static final int goalRPM = 700;
 
 	//drive train motors
 	/**
@@ -39,6 +43,8 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	Servo servoDropper;	// servo for manipulator
 	Servo servoBeaconPusher;
+
+
 
 
 	//sensors
@@ -120,7 +126,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
 
-
+		motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+		motorSpinner.setMaxSpeed(encoderTicksPerRotation * goalRPM);
 
 		reset();
 	}

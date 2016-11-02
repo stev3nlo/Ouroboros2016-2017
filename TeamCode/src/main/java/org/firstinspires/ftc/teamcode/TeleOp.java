@@ -78,6 +78,7 @@ public class TeleOp extends MyOpMode
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
+
         while (opModeIsActive())
         {
             updateControllerVals();
@@ -95,7 +96,7 @@ public class TeleOp extends MyOpMode
             if(g2XPressed || shooterIsRunning)
             {
                 shooterIsRunning = true;
-                shoot();
+                curPowerOfMotorSpinner = 1.0;
             }
 
             // stops spinner
