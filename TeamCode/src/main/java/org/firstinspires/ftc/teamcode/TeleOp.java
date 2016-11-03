@@ -98,6 +98,7 @@ public class TeleOp extends MyOpMode
                 shooterIsRunning = true;
                 curPowerOfMotorSpinner = 1.0;
             }
+            runSpinner(curPowerOfMotorSpinner);
 
             // stops spinner
 

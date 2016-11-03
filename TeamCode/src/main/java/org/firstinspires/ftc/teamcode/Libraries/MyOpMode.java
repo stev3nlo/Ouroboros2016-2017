@@ -117,6 +117,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		servoDropper = hardwareMap.servo.get("servoDropper");
 		closeServoDropper();
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
+		resetButtonPress();
 
 
 		//initialize sensors

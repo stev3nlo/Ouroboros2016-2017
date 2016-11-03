@@ -11,6 +11,7 @@ public class OneManTeleOpTest extends MyOpMode
     public static final int dropTime = 5;
 
     boolean isInBeaconMode = false;
+    boolean shooterIsRunning = false;
     public double minTimeForNextBeaconModeSwitch = 0.0;
     //Controller values
 
@@ -122,15 +123,17 @@ public class OneManTeleOpTest extends MyOpMode
             }
 
             //creates constant speed of spinner throughout game
-            if(g1XPressed)
-            {
-                shoot();
-            }
-            // stops spinner
-            else if (g1YPressed)
+            if (g2YPressed)
             {
                 curPowerOfMotorSpinner = 0.0;
+                shooterIsRunning = false;
                 firstCycleOfSpinner = true;
+            }
+            //creates constant speed of spinner throughout game
+            if(g2XPressed || shooterIsRunning)
+            {
+                shooterIsRunning = true;
+                curPowerOfMotorSpinner = 1.0;
             }
             runSpinner(curPowerOfMotorSpinner);
 
@@ -144,22 +147,7 @@ public class OneManTeleOpTest extends MyOpMode
             {
                 closeServoDropper();
             }
-
-            if(g1Ltrig > 0.1)
-            {
-                pushButtonLeft();
-            }
-            else if(g1Rtrig > 0.1)
-            {
-                pushButtonRight();
-            }
-            else if(g1Rbump || g2Lbump)
-            {
-                resetButtonPress();
-            }
-
             timeAtEndOfLastCycle = System.nanoTime()/1000000000;
-            updateMotorSpeeds();
         }
     }
 }
