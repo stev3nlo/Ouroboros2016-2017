@@ -12,8 +12,6 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 @Autonomous(name = "BeaconColorSensorTest", group = "Test")
 public class BeaconColorSensorTest extends MyOpMode {
 
-	public void initialize() {
-
 	public void initialize(){
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 
@@ -24,7 +22,7 @@ public class BeaconColorSensorTest extends MyOpMode {
 		servoDropper = hardwareMap.servo.get("servoDropper");
 		while (true)
 		{
-			resetButtonPress();
+			pushButtonLeft();
 			initCurtime();
 			double startTime = getCurTime();
 			while(getCurTime() < startTime + 0.5)
@@ -53,8 +51,5 @@ public class BeaconColorSensorTest extends MyOpMode {
 			telemetry.update();
 			idle();
 		}
-
-		pushButton("Blue");
-		resetButtonPress();
 	}
 }
