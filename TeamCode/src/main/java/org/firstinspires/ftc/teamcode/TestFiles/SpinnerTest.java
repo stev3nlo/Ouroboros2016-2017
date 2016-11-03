@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.TestFiles;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareDevice;
 import org.firstinspires.ftc.teamcode.Libraries.MotorScaler;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
+import org.firstinspires.ftc.teamcode.TeleOp;
 
 /**
  * Created by Spencer on 10/20/2016.
@@ -16,35 +17,37 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Spinner Test", group="Test")
 public class SpinnerTest extends TeleOp {
 
+    double targetRPM = 700;
     double curFactor;
-    double curPower;
-    double curRPM;
     double timeAtLastRPMUpdate;
     double timeAtLastButtonPress;
     double timeAtLastTriggerPress;
+    double curPower;
+    boolean isStopped = true;
 
     //DcMotor motorSpinner;
 
     public void initialize()
     {
         motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
-        curFactor = 0.1;
-        curRPM = 0.0;
-        curPower = 0.8;
-
+        motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorSpinner.setMaxSpeed((int)(encoderTicksPerRotation * targetRPM)/60);
+        curFactor = 100;
+        curPower = 1.0;
     }
 
     public void runTelemetry()
     {
         telemetry.addData("curFactor",curFactor);
+        telemetry.addData("targetRPM",targetRPM);
         telemetry.addData("curPower",curPower);
-        telemetry.addData("scaledPower", MotorScaler.reverseScale(curPower));
-        telemetry.addData("curRPM",curRPM);
-        telemetry.addData(" ",getCurTime()-timeAtLastButtonPress);
-        telemetry.addData("timeSinceLastTriggerPress",getCurTime()-timeAtLastTriggerPress);
-        telemetry.addData("curTime",getCurTime());
+        telemetry.addData("timeSinceLastTimeButtonPress ", curTime - timeAtLastButtonPress);
+        telemetry.addData("timeSinceLastTriggerPress", curTime - timeAtLastTriggerPress);
+        telemetry.addData("curTime",curTime);
         telemetry.update();
     }
+
+    /*
 
     public double getCurRPM()
     {
@@ -81,8 +84,9 @@ public class SpinnerTest extends TeleOp {
             curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 700);
             runSpinner(curPowerOfSpinner);
         }
-        */
+
     }
+    */
 
     public void checkButtons()
     {
@@ -96,8 +100,19 @@ public class SpinnerTest extends TeleOp {
             timeAtLastButtonPress = curTime;
             curFactor /= 10;
         }
+        else if(isStopped && g1BPressed && curTime - timeAtLastButtonPress > 0.2)
+        {
+            timeAtLastButtonPress = curTime;
+            curPower = 1.0;
+        }
+        else if(!isStopped && g1BPressed && curTime - timeAtLastButtonPress > 0.2)
+        {
+            timeAtLastButtonPress = curTime;
+            curPower = 0.0;
+        }
     }
 
+    /*
     public void capPower()
     {
         if(curPower < -1.0)
@@ -105,17 +120,18 @@ public class SpinnerTest extends TeleOp {
         else if(curPower > 1.0)
             curPower = 1.0;
     }
+    */
 
     public void checkTriggers()
     {
         if(g1Rtrig > 0.1 && curTime - timeAtLastTriggerPress > 0.2)
         {
-            curPower += curFactor;
+            targetRPM += curFactor;
             timeAtLastTriggerPress = curTime;
         }
         else if(g1Rbump && curTime - timeAtLastTriggerPress > 0.2)
         {
-            curPower -= curFactor;
+            targetRPM -= curFactor;
             timeAtLastTriggerPress = curTime;
         }
     }
@@ -133,18 +149,15 @@ public class SpinnerTest extends TeleOp {
         timeAtLastRPMUpdate = curTime;
         timeAtLastButtonPress = curTime;
         timeAtLastTriggerPress = curTime;
-        while(opModeIsActive()) {
+        while(opModeIsActive())
+        {
             updateControllerVals();
-            if(g1BPressed)
-                curPower = 0;
             initCurtime();
             checkButtons();
             checkTriggers();
-            curRPM = getCurRPM();
-            capPower();
+            motorSpinner.setMaxSpeed((int)(encoderTicksPerRotation * targetRPM)/60);
             motorSpinner.setPower(curPower);
             runTelemetry();
-
         }
     }
 }

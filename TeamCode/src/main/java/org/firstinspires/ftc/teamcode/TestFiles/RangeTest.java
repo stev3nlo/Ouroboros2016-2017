@@ -14,11 +14,9 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 @Autonomous(name="RangeTest", group="Test")
 public class RangeTest extends MyOpMode {
 
-    SensorMRRange rangeTest;
-
     public void initialize()
     {
-        rangeTest = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
+        range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
     }
 
     public void runOpMode() throws InterruptedException {
@@ -26,7 +24,7 @@ public class RangeTest extends MyOpMode {
         waitForStart();
         while (opModeIsActive())
         {
-            telemetry.addData("", rangeTest);
+            telemetry.addData("", range);
             telemetry.update();
 
 			idle();

@@ -13,12 +13,10 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorAdafruitIMU;
 @Autonomous(name="GyroTest", group="Test")
 public class GyroTest extends MyOpMode {
 
-    SensorAdafruitIMU gyroTest;
-
     public void initialize(){
 		telemetry.addData("Gyro", "Initializing");
 		telemetry.update();
-        gyroTest = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
+        gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
         telemetry.addData("Gyro", "Initialized");
 		telemetry.update();
     }
@@ -28,9 +26,9 @@ public class GyroTest extends MyOpMode {
         waitForStart();
 
 		while (opModeIsActive()) {
-			telemetry.addData("Yaw", gyroTest.getYaw());
-			telemetry.addData("Roll", gyroTest.getRoll());
-			telemetry.addData("Pitch", gyroTest.getPitch());
+			telemetry.addData("Yaw", gyro.getYaw());
+			telemetry.addData("Roll", gyro.getRoll());
+			telemetry.addData("Pitch", gyro.getPitch());
             telemetry.update();
 
 			idle();
