@@ -12,18 +12,18 @@ public class TeleOp extends MyOpMode
     boolean shooterIsRunning = false;
     //Controller values
 
-    double g1y1;    //left drive
-    double g1y2;    //right drive
-    double g1x1;
-    double g1x2;
-    boolean g1Lbump;
-    boolean g1Rbump;
-    double g1Ltrig;
-    double g1Rtrig;
-    boolean g1XPressed;
-    boolean g1YPressed;
-    boolean g1APressed;
-    boolean g1BPressed;
+    public double g1y1;    //left drive
+    public double g1y2;    //right drive
+    public double g1x1;
+    public double g1x2;
+    public boolean g1Lbump;
+    public boolean g1Rbump;
+    public double g1Ltrig;
+    public double g1Rtrig;
+    public boolean g1XPressed;
+    public boolean g1YPressed;
+    public boolean g1APressed;
+    public boolean g1BPressed;
 
     double g2y1;    //lift
     double g2y2;    //manipulator
@@ -44,7 +44,7 @@ public class TeleOp extends MyOpMode
 
     boolean firstCycleOfSpinner;
 
-    double curTime;
+    public double curTime;
 
     public void updateControllerVals()
     {

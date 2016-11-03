@@ -51,16 +51,16 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * Adafruit IMU Object
 	 */
-	SensorAdafruitIMU gyro;
+	protected SensorAdafruitIMU gyro;
 
 	/**
 	 * Middle Modern Robotics Color Sensor object
 	 */
-	SensorMRColor colorC;
+	protected SensorMRColor colorC;
 	/**
 	 * Rear Modern Robotics Color Sensor object
 	 */
-	SensorMRColor colorR;
+	protected SensorMRColor colorR;
 	/**
 	 * Modern Robotics Color Sensor for beacon
 	 */
@@ -68,16 +68,13 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * Modern Robotics Range Sensor that uses ultraSonic and Optical Distance
 	 */
-	SensorMRRange range;
+	protected SensorMRRange range;
 
 	//Speed values for motors
 	protected double curPowerOfMotorR1 = 0.0;
 	protected double curPowerOfMotorL1 = 0.0;
 	protected double curPowerOfMotorManip = 0.0;
 	protected double curPowerOfMotorSpinner = 0.0;
-
-	public static final double initPowerOfMotorSpinner = 0.5;
-	public static final double targetRPM = 700;
 
 	public long spinnerEncoderOffset = 0;
 
@@ -386,6 +383,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		return curTime;
 	}
 
+	/*
 	public void shoot() {
 		if(firstCycleOfSpinner)
 		{
@@ -406,6 +404,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			curPowerOfMotorSpinner = RPMStabilizer.returnPowerToTry(curPowerOfMotorSpinner, estimatedCurRPM, targetRPM);
 		}
 	}
+	*/
 
 
 
