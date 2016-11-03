@@ -135,14 +135,15 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * separately. This is the base method used for all movement with the base,
 	 * i.e. moving and backwards and turning left and right.
 	 *
-	 * @param speedR
 	 * @param speedL
+	 * @param speedR
 	 */
-	public void move(double speedR, double speedL) {
-		motorR1.setPower(speedR);
-		//motorR2.setPower(speedR);
+	public void move(double speedL, double speedR)
+	{
 		motorL1.setPower(speedL);
 		//motorL2.setPower(speedL);
+		motorR1.setPower(speedR);
+		//motorR2.setPower(speedR);
 	}
 
 	public void moveManip(double speed)
@@ -383,28 +384,12 @@ public abstract class MyOpMode extends LinearOpMode {
 		return curTime;
 	}
 
-	/*
-	public void shoot() {
-		if(firstCycleOfSpinner)
-		{
-			firstCycleOfSpinner = false;
-			timeAtLastStabilization = curTime;
-			spinnerEncoderOffset = getSpinnerEncoderVal();
-			curPowerOfMotorSpinner = initPowerOfMotorSpinner;
-		}
-		else if (curTime - timeAtLastStabilization > 0.5)
-		{
-			double estimatedCurRPM = getSpinnerEncoderVal() - spinnerEncoderOffset; // gets current ticks
-			spinnerEncoderOffset = getSpinnerEncoderVal();
 
-			estimatedCurRPM /= curTime - timeAtLastStabilization;   // gets time
-			timeAtLastStabilization = curTime;
-			estimatedCurRPM /= 1140;
-			telemetry.addData("Cur RPM",estimatedCurRPM);
-			curPowerOfMotorSpinner = RPMStabilizer.returnPowerToTry(curPowerOfMotorSpinner, estimatedCurRPM, targetRPM);
-		}
+	public void shoot() {
+		runSpinner(1.0);
+
 	}
-	*/
+
 
 
 
