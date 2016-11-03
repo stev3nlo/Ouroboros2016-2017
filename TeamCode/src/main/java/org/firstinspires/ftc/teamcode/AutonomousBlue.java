@@ -17,6 +17,6 @@ public class AutonomousBlue extends MyOpMode {
 		pushButton("Blue");
 		moveAwayFromBeacon(.5, 25);		//needs to be tested
 		gyroTurnRightCorrection(.25, 90);
-		shoot();
+		//shoot();
 	}
 }

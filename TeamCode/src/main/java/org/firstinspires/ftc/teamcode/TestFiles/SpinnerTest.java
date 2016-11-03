@@ -41,9 +41,9 @@ public class SpinnerTest extends TeleOp {
         telemetry.addData("curFactor",curFactor);
         telemetry.addData("targetRPM",targetRPM);
         telemetry.addData("curPower",curPower);
-        telemetry.addData("timeSinceLastTimeButtonPress ", curTime - timeAtLastButtonPress);
-        telemetry.addData("timeSinceLastTriggerPress", curTime - timeAtLastTriggerPress);
-        telemetry.addData("curTime",curTime);
+        telemetry.addData("timeSinceLastTimeButtonPress ", getCurTime() - timeAtLastButtonPress);
+        telemetry.addData("timeSinceLastTriggerPress", getCurTime() - timeAtLastTriggerPress);
+        telemetry.addData("curTime",getCurTime());
         telemetry.update();
     }
 
@@ -90,24 +90,24 @@ public class SpinnerTest extends TeleOp {
 
     public void checkButtons()
     {
-        if(g1YPressed && curTime - timeAtLastButtonPress > 0.2)
+        if(g1YPressed && getCurTime() - timeAtLastButtonPress > 0.2)
         {
-            timeAtLastButtonPress = curTime;
+            timeAtLastButtonPress = getCurTime();
             curFactor *= 10;
         }
-        else if(g1APressed && curTime - timeAtLastButtonPress > 0.2)
+        else if(g1APressed && getCurTime() - timeAtLastButtonPress > 0.2)
         {
-            timeAtLastButtonPress = curTime;
+            timeAtLastButtonPress = getCurTime();
             curFactor /= 10;
         }
-        else if(isStopped && g1BPressed && curTime - timeAtLastButtonPress > 0.2)
+        else if(isStopped && g1BPressed && getCurTime() - timeAtLastButtonPress > 0.2)
         {
-            timeAtLastButtonPress = curTime;
+            timeAtLastButtonPress = getCurTime();
             curPower = 1.0;
         }
-        else if(!isStopped && g1BPressed && curTime - timeAtLastButtonPress > 0.2)
+        else if(!isStopped && g1BPressed && getCurTime() - timeAtLastButtonPress > 0.2)
         {
-            timeAtLastButtonPress = curTime;
+            timeAtLastButtonPress = getCurTime();
             curPower = 0.0;
         }
     }
@@ -124,21 +124,16 @@ public class SpinnerTest extends TeleOp {
 
     public void checkTriggers()
     {
-        if(g1Rtrig > 0.1 && curTime - timeAtLastTriggerPress > 0.2)
+        if(g1Rtrig > 0.1 && getCurTime() - timeAtLastTriggerPress > 0.2)
         {
             targetRPM += curFactor;
-            timeAtLastTriggerPress = curTime;
+            timeAtLastTriggerPress = getCurTime();
         }
-        else if(g1Rbump && curTime - timeAtLastTriggerPress > 0.2)
+        else if(g1Rbump && getCurTime() - timeAtLastTriggerPress > 0.2)
         {
             targetRPM -= curFactor;
-            timeAtLastTriggerPress = curTime;
+            timeAtLastTriggerPress = getCurTime();
         }
-    }
-
-    public void initCurtime()
-    {
-        curTime = ((double)System.nanoTime())/1000000000.0;
     }
 
     public void runOpMode()
@@ -146,9 +141,9 @@ public class SpinnerTest extends TeleOp {
         initialize();
         try{waitForStart();}catch(InterruptedException e){}
         initCurtime();
-        timeAtLastRPMUpdate = curTime;
-        timeAtLastButtonPress = curTime;
-        timeAtLastTriggerPress = curTime;
+        timeAtLastRPMUpdate = getCurTime();
+        timeAtLastButtonPress = getCurTime();
+        timeAtLastTriggerPress = getCurTime();
         while(opModeIsActive())
         {
             updateControllerVals();
