@@ -400,18 +400,6 @@ public abstract class MyOpMode extends LinearOpMode {
 		runSpinner(0.0);
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
 	//Methods to control button pushing
 
 	public void pushButton(String side) {
@@ -428,7 +416,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	}
 
 	public void pushButtonLeft() {
-		double v = 0.0;
+		double v = 0.15;
 		servoBeaconPusher.setPosition(v);
 	}
 
