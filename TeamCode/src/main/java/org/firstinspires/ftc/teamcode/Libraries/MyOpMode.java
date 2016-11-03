@@ -41,8 +41,8 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	protected DcMotor motorSpinner;
 
-	protected Servo servoDropper;	// servo for manipulator
-	protected Servo servoBeaconPusher;
+	Servo servoDropper;	// servo for manipulator
+	Servo servoBeaconPusher;
 
 
 
@@ -64,7 +64,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * Modern Robotics Color Sensor for beacon
 	 */
-	protected SensorMRColor colorB;
+	SensorMRColor colorB;
 	/**
 	 * Modern Robotics Range Sensor that uses ultraSonic and Optical Distance
 	 */

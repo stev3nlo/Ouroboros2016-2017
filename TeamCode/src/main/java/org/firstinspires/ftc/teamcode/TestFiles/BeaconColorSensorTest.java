@@ -12,7 +12,14 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 @Autonomous(name = "BeaconColorSensorTest", group = "Test")
 public class BeaconColorSensorTest extends MyOpMode {
 
+<<<<<<< HEAD
 	public void initialize() {
+=======
+	SensorMRColor colorB;
+	Servo servoBeaconPusher;
+
+	public void initialize(){
+>>>>>>> parent of 2470509... Fixed test error
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 
 		colorB.sensorSetup(0x2c);
