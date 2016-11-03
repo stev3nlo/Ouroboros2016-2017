@@ -12,9 +12,6 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 @Autonomous(name = "BeaconColorSensorTest", group = "Test")
 public class BeaconColorSensorTest extends MyOpMode {
 
-	SensorMRColor colorB;
-	Servo servoBeaconPusher;
-
 	public void initialize(){
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 
