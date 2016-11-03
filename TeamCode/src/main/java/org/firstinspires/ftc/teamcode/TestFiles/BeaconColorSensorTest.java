@@ -25,9 +25,13 @@ public class BeaconColorSensorTest extends MyOpMode {
 	public void runOpMode() throws InterruptedException {
 		initialize();
 		waitForStart();
-		telemetry.addData("Color Center Values", colorB);
-		telemetry.addData("Color Center Beacon", colorB.beaconColor());
-		telemetry.update();
+		while(opModeIsActive())
+		{
+			telemetry.addData("Color Center Values", colorB);
+			telemetry.addData("Color Center Beacon", colorB.beaconColor());
+			telemetry.update();
+			idle();
+		}
 
 //		pushButton("Blue");
 //		resetButtonPress();
