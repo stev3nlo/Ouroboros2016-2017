@@ -127,7 +127,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
 
 		motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		motorSpinner.setMaxSpeed(encoderTicksPerRotation * goalRPM);
+		motorSpinner.setMaxSpeed((encoderTicksPerRotation * goalRPM)/60);
 
 		reset();
 	}
