@@ -44,8 +44,6 @@ public class TeleOp extends MyOpMode
 
     boolean firstCycleOfSpinner;
 
-    double curTime;
-
     public void updateControllerVals()
     {
         g1y1 = gamepad1.left_stick_y;
@@ -104,12 +102,12 @@ public class TeleOp extends MyOpMode
 
 
             //releases balls from basket into spinner
-            if (g2APressed && curTime > timeBallsFinishDropping)
+            if (g2APressed && getCurTime() > timeBallsFinishDropping)
             {
-                timeBallsFinishDropping = curTime + timeToDropBalls;
+                timeBallsFinishDropping = getCurTime() + timeToDropBalls;
                 openServoDropper();
             }
-            else if (curTime > timeBallsFinishDropping)
+            else if (getCurTime() > timeBallsFinishDropping)
             {
                 closeServoDropper();
             }

@@ -12,14 +12,36 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 @Autonomous(name = "BeaconColorSensorTest", group = "Test")
 public class BeaconColorSensorTest extends MyOpMode {
 
-	public void initialize(){
+	public void initialize() {
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 
 		colorB.sensorSetup(0x2c);
 		colorB.lightOff();
 
-		servoBeaconPusher = hardwareMap.servo.get(("servoBeaconPusher"));
-		resetButtonPress();		//this is where it returns null pointer exception
+		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
+		servoDropper = hardwareMap.servo.get("servoDropper");
+		while (true)
+		{
+			resetButtonPress();
+			initCurtime();
+			double startTime = getCurTime();
+			while(getCurTime() < startTime + 0.5)
+			{
+				initCurtime();
+				try{idle();}catch(InterruptedException e){}
+			}
+			pushButtonRight();
+			initCurtime();
+			startTime = getCurTime();
+			while(getCurTime() < startTime + 0.5)
+			{
+				initCurtime();
+				try{idle();}catch(InterruptedException e){}
+			}
+		}
+				//this is where it returns null pointer exception
+
+		//servoDropper.setPosition(1);
 	}
 
 	public void runOpMode() throws InterruptedException {
@@ -29,7 +51,7 @@ public class BeaconColorSensorTest extends MyOpMode {
 		telemetry.addData("Color Center Beacon", colorB.beaconColor());
 		telemetry.update();
 
-//		pushButton("Blue");
-//		resetButtonPress();
+		pushButton("Blue");
+		resetButtonPress();
 	}
 }
