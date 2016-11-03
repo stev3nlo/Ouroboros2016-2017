@@ -8,7 +8,6 @@ import java.io.IOException;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop", group="Teleop")  // @Autonomous(...) is the other common choice
 public class TeleOp extends MyOpMode
 {
-    public static final int timeToDropBalls = 5;
     boolean shooterIsRunning = false;
     //Controller values
 

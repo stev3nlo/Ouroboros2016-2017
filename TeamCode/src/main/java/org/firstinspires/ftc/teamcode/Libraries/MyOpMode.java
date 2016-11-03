@@ -16,6 +16,8 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public static final int encoderTicksPerRotation = 1140;
 	public static final int goalRPM = 700;
+	protected static final int timeToDropBalls = 5;
+
 
 	//drive train motors
 	/**
@@ -387,7 +389,15 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void shoot() {
 		runSpinner(1.0);
-
+		initCurtime();
+		double startTime = getCurTime();
+		openServoDropper();
+		while(startTime - startTime > timeToDropBalls)
+		{
+			try{idle();}catch(InterruptedException e){}
+		}
+		closeServoDropper();
+		runSpinner(0.0);
 	}
 
 
