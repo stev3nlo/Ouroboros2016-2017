@@ -20,7 +20,8 @@ public class BeaconColorSensorTest extends MyOpMode {
 
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 		servoDropper = hardwareMap.servo.get("servoDropper");
-		while (true)
+		/*
+		while (opModeIsActive())
 		{
 			pushButtonLeft();
 			initCurtime();
@@ -39,6 +40,7 @@ public class BeaconColorSensorTest extends MyOpMode {
 				try{idle();}catch(InterruptedException e){}
 			}
 		}
+		*/
 	}
 
 	public void runOpMode() throws InterruptedException {
