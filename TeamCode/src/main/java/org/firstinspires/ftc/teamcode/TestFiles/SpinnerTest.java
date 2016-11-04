@@ -17,11 +17,12 @@ import org.firstinspires.ftc.teamcode.TeleOp;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Spinner Test", group="Test")
 public class SpinnerTest extends TeleOp {
 
-    double targetRPM = 700;
+    double targetRPM = 55;
     double curFactor;
     double timeAtLastRPMUpdate;
     double timeAtLastButtonPress;
     double timeAtLastTriggerPress;
+    int targetTicksPerSecond;
     double curPower;
     boolean isStopped = true;
 
@@ -29,9 +30,10 @@ public class SpinnerTest extends TeleOp {
 
     public void initialize()
     {
+        targetTicksPerSecond = ((int)(((double)(encoderTicksPerRotation*targetRPM))/60.0));
         motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
         motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorSpinner.setMaxSpeed((int)(encoderTicksPerRotation * targetRPM)/60);
+        motorSpinner.setMaxSpeed(targetTicksPerSecond);
         curFactor = 100;
         curPower = 1.0;
     }
@@ -39,6 +41,8 @@ public class SpinnerTest extends TeleOp {
     public void runTelemetry()
     {
         telemetry.addData("curFactor",curFactor);
+        telemetry.addData("targetTicksPerSecond",targetTicksPerSecond);
+        telemetry.addData("encoderTicks",getSpinnerEncoderVal());
         telemetry.addData("targetRPM",targetRPM);
         telemetry.addData("curPower",curPower);
         telemetry.addData("timeSinceLastTimeButtonPress ", getCurTime() - timeAtLastButtonPress);
@@ -150,7 +154,8 @@ public class SpinnerTest extends TeleOp {
             initCurtime();
             checkButtons();
             checkTriggers();
-            motorSpinner.setMaxSpeed((int)(encoderTicksPerRotation * targetRPM)/60);
+            targetTicksPerSecond = ((int)(((double)(encoderTicksPerRotation*targetRPM))/60.0));
+            motorSpinner.setMaxSpeed(targetTicksPerSecond);
             motorSpinner.setPower(curPower);
             runTelemetry();
         }

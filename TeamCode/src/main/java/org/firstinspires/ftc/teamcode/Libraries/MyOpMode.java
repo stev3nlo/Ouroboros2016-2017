@@ -15,7 +15,7 @@ import com.qualcomm.hardware.adafruit.BNO055IMU;
 public abstract class MyOpMode extends LinearOpMode {
 
 	public static final int encoderTicksPerRotation = 1140;
-	public static final int goalRPM = 700;
+	public static final int goalRPM = 55;
 	protected static final int timeToDropBalls = 5;
 
 
@@ -127,7 +127,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
 
 		motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		motorSpinner.setMaxSpeed((encoderTicksPerRotation * goalRPM)/60);
+		motorSpinner.setMaxSpeed((int)(((double)(encoderTicksPerRotation*goalRPM))/60.0));
 
 		reset();
 	}
@@ -386,7 +386,6 @@ public abstract class MyOpMode extends LinearOpMode {
 		return curTime;
 	}
 
-
 	public void shoot() {
 		runSpinner(1.0);
 		initCurtime();
@@ -401,7 +400,6 @@ public abstract class MyOpMode extends LinearOpMode {
 	}
 
 	//Methods to control button pushing
-
 	public void pushButton(String side) {
 		if (colorB.beaconColor().equals(side)) {
 			pushButtonRight();

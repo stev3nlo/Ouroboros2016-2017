@@ -8,7 +8,6 @@ import java.io.IOException;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="OneManTeleOpTest", group="Teleop")  // @Autonomous(...) is the other common choice
 public class OneManTeleOpTest extends MyOpMode
 {
-    public static final int dropTime = 5;
 
     boolean isInBeaconMode = false;
     boolean shooterIsRunning = false;
@@ -89,7 +88,7 @@ public class OneManTeleOpTest extends MyOpMode
         {
             updateControllerVals();
             initCurtime(); //gets real time timer
-            move(g1y1, -g1y2); // moves drive wheels
+            move(-g1y1, g1y2); // moves drive wheels
 
             if(isInBeaconMode)
             {
@@ -105,6 +104,7 @@ public class OneManTeleOpTest extends MyOpMode
                 {
                     resetButtonPress();
                 }
+                moveManip(0.0);
             }
             else
             {
@@ -140,7 +140,7 @@ public class OneManTeleOpTest extends MyOpMode
             //releases balls from basket into spinner
             if (g1APressed && curTime > timeBallsFinishDropping)
             {
-                timeBallsFinishDropping = curTime + dropTime;
+                timeBallsFinishDropping = curTime + timeToDropBalls;
                 openServoDropper();
             }
             else if (curTime > timeBallsFinishDropping)

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import org.firstinspires.ftc.teamcode.Libraries.MotorScaler;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 
@@ -80,7 +81,7 @@ public class TeleOp extends MyOpMode
         {
             updateControllerVals();
             initCurtime(); //gets real time timer
-            move(g1y1, -g1y2); // moves drive wheels
+            move(-MotorScaler.scaleSimple(g1y1), MotorScaler.scaleSimple(g1y2)); // moves drive wheels
             moveManip(g2y1);
 
             if (g2YPressed)
