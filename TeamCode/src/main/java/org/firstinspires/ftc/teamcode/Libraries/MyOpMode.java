@@ -210,7 +210,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void moveForwards(double speed) {
-		move(speed, speed);
+		move(-speed, speed);
 	}
 
 	/**
@@ -235,7 +235,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void turnRight(double speed) {
-		move(-speed, speed);
+		move(-speed, -speed);
 	}
 
 	/**
@@ -314,10 +314,16 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void moveToWhiteLine(double speed) throws InterruptedException {
+		telemetry.addData("moving forwards", "");
+		telemetry.update();
 		moveForwards(1);
-		while (!colorC.groundColor().equals("White")) {
+		while (colorC.groundColor().equals("Gray")) {
+			telemetry.addData("Ground Color", colorC.groundColor());
+			telemetry.update();
 			idle();
 		}
+		telemetry.addData("at white line", "");
+		telemetry.update();//philip is garbage
 		stopMotors();
 	}
 
@@ -359,7 +365,6 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void moveForwardToBeacon(double speed) throws InterruptedException {
 		moveForwards(speed);
 		while (!range.inFrontOfBeacon()) {
-			range.filterUltraSonicValues();
 			idle();
 		}
 		stopMotors();
@@ -368,7 +373,6 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void moveAwayFromBeacon(double speed, int distance) throws InterruptedException {
 		moveBackwards(speed);
 		while (!(range.getUltraSonicDistance() > distance)) {
-			range.filterUltraSonicValues();
 			idle();
 		}
 		stopMotors();
@@ -450,6 +454,16 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void updateServoPositions()
 	{
 
+	}
+
+	public void pause() throws InterruptedException {
+		initCurtime();
+		double startTime = getCurTime();
+		while (getCurTime() < startTime + 2.0)
+		{
+			initCurtime();
+			idle();
+		}
 	}
 
 	public void update()

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 public class SensorMRRange extends MyOpMode {
 
+	public int prevUSDVal;
 	private ElapsedTime runtime = new ElapsedTime();
 	byte[] rangeCache; //The read will return an array of bytes.
 
@@ -34,7 +35,8 @@ public class SensorMRRange extends MyOpMode {
 	public SensorMRRange(I2cDevice rangeSensor) {
 		this.rangeSensor = rangeSensor;
 		initReader();
-		ultraSonicDistanceValue = 255;
+		ultraSonicDistanceValue = -1;
+		prevUSDVal = ultraSonicDistanceValue;
 	}
 
 	public void initReader() {
@@ -42,13 +44,17 @@ public class SensorMRRange extends MyOpMode {
 		rangeReader.engage();
 	}
 
-	public int getUltraSonicDistance() {
+	public int getRawUltraSonicDistance() {
 		return rangeCache[0] & 0xFF;
 	}
 
-	public void filterUltraSonicValues() {
-		if (getUltraSonicDistance() != 255) {
-			ultraSonicDistanceValue = getUltraSonicDistance();
+	public int getUltraSonicDistance() {
+		int usd = rangeCache[0] & 0xFF;
+		if (usd == 255) {
+			return prevUSDVal;
+		} else {
+			prevUSDVal = usd;
+			return usd;
 		}
 	}
 
@@ -84,9 +90,9 @@ public class SensorMRRange extends MyOpMode {
 		String output = "";
 
 		//output += "Ultra Sonic " + String.valueOf(cache.get(0));
-		filterUltraSonicValues();
-		output += "Ultra Sonic " + ultraSonicDistanceValue;
-		output += "\nODS " + String.valueOf(cache.get(1));
+		output += "Raw USD: " + getRawUltraSonicDistance() + "\n";
+		output += "Ultra Sonic: " + ultraSonicDistanceValue;
+		output += "\nODS: " + String.valueOf(cache.get(1));
 		output += "\nStatus: " + String.valueOf(cache.get(2));
 
 		return output;

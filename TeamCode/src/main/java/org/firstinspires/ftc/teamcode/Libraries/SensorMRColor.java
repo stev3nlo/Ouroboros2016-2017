@@ -141,7 +141,7 @@ public class SensorMRColor extends MyOpMode {
 
 	//returns whether the color of the beacon is Red or Blue
 	public String beaconColor() {
-		if (getBlue() > 5) {
+		if (getBlue() > 3) {
 			return "Blue";
 		} else
 			return "Red";

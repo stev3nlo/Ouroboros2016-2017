@@ -24,7 +24,7 @@ public class RangeTest extends MyOpMode {
         waitForStart();
         while (opModeIsActive())
         {
-            telemetry.addData("", range);
+			telemetry.addData("", range);
             telemetry.update();
 
 			idle();

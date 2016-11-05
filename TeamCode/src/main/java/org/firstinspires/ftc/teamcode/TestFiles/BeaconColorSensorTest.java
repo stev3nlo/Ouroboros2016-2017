@@ -48,38 +48,38 @@ public class BeaconColorSensorTest extends MyOpMode {
 	public void runOpMode() throws InterruptedException {
 		initialize();
 		waitForStart();
-//		while(opModeIsActive())
+		while(opModeIsActive())
+		{
+			telemetry.addData("Color Center Values", colorB);
+			telemetry.addData("Color Center Beacon", colorB.beaconColor());
+			telemetry.update();
+			idle();
+		}
+//		initCurtime();
+//		pushButtonRight();
+//		initCurtime();
+//		double startTime = getCurTime();
+//		while(getCurTime() < startTime + 2.0)
 //		{
-//			telemetry.addData("Color Center Values", colorB);
-//			telemetry.addData("Color Center Beacon", colorB.beaconColor());
-//			telemetry.update();
+//			initCurtime();
 //			idle();
 //		}
-		initCurtime();
-		pushButtonRight();
-		initCurtime();
-		double startTime = getCurTime();
-		while(getCurTime() < startTime + 2.0)
-		{
-			initCurtime();
-			idle();
-		}
-		//Thread.sleep(250);
-		pushButtonLeft();
-		initCurtime();
-		startTime = getCurTime();
-		while (getCurTime() < startTime + 2.0)
-		{
-			initCurtime();
-			idle();
-		}
-		resetButtonPress();
-		initCurtime();
-		startTime = getCurTime();
-		while (getCurTime() < startTime + 2.0)
-		{
-			initCurtime();
-			idle();
-		}
+//		//Thread.sleep(250);
+//		pushButtonLeft();
+//		initCurtime();
+//		startTime = getCurTime();
+//		while (getCurTime() < startTime + 2.0)
+//		{
+//			initCurtime();
+//			idle();
+//		}
+//		resetButtonPress();
+//		initCurtime();
+//		startTime = getCurTime();
+//		while (getCurTime() < startTime + 2.0)
+//		{
+//			initCurtime();
+//			idle();
+//		}
 	}
 }
