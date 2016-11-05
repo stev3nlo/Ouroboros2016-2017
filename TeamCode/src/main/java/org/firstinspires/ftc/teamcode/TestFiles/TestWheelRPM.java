@@ -46,11 +46,11 @@ public class TestWheelRPM extends MyOpMode
     public Map.Entry getFirstSetFromHashMap(HashMap<Double,Long> single)
     {
         Iterator it = single.entrySet().iterator();
-        ArrayList<Double> toRemove = new ArrayList<Double>();
         while (it.hasNext()) {
             Map.Entry pair = (Map.Entry)it.next();
             return pair;
         }
+        return null;
     }
 
     public HashMap<Double,Long> getFirstEncoderTimeSetAfterTimeL1(double t)

@@ -11,13 +11,19 @@ import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 import org.firstinspires.ftc.teamcode.TeleOp;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * Created by Spencer on 10/20/2016.
  */
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Spinner Test", group="Test")
 public class SpinnerTest extends TeleOp {
 
-    double targetRPM = 55;
+    double targetRPM = 500;
     double curFactor;
     double timeAtLastRPMUpdate;
     double timeAtLastButtonPress;
@@ -25,6 +31,8 @@ public class SpinnerTest extends TeleOp {
     int targetTicksPerSecond;
     double curPower;
     boolean isStopped = true;
+
+    TreeMap<Double,Long> RPMs;
 
     //DcMotor motorSpinner;
 
@@ -125,6 +133,39 @@ public class SpinnerTest extends TeleOp {
             curPower = 1.0;
     }
     */
+
+    public Map.Entry getFirstSetFromHashMap(HashMap<Double,Long> single)
+    {
+        Iterator it = single.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            return pair;
+        }
+        return null;
+    }
+
+    public HashMap<Double,Long> getFirstEncoderTimeSetAfterTimeL1(double t)
+    {
+        HashMap<Double,Long> vals = new HashMap<Double,Long>();
+        Iterator it = RPMs.entrySet().iterator();
+        ArrayList<Double> toRemove = new ArrayList<Double>();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            if((double)pair.getKey()>t)
+            {
+                vals.put((double)pair.getKey(),(long)pair.getValue());
+                break;
+            }
+            else
+            {
+                toRemove.add((double)pair.getKey());
+            }
+            it.remove(); // avoids a ConcurrentModificationException
+        }
+        while(toRemove.size()>0)
+            RPMs.remove(toRemove);
+        return vals;
+    }
 
     public void checkTriggers()
     {
