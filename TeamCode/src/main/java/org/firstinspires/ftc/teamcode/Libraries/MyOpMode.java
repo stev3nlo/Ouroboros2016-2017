@@ -15,8 +15,8 @@ import com.qualcomm.hardware.adafruit.BNO055IMU;
 public abstract class MyOpMode extends LinearOpMode {
 
 	public static final int encoderTicksPerRotation = 1140;
-	public static final int goalRPM = 55;
-	protected static final int timeToDropBalls = 5;
+	public static final int goalRPM = 50;
+	protected static final int timeToDropBalls = 3;
 
 
 	//drive train motors
@@ -165,12 +165,12 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void openServoDropper()
 	{
-		setServoDropperPosition(1.0);
+		setServoDropperPosition(0.0);
 	}
 
 	public void closeServoDropper()
 	{
-		setServoDropperPosition(0.0);
+		setServoDropperPosition(1.0);
 	}
 
 	public long getSpinnerEncoderVal()
