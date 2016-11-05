@@ -178,6 +178,16 @@ public abstract class MyOpMode extends LinearOpMode {
 		return motorSpinner.getCurrentPosition();
 	}
 
+	public long getMotorL1EncoderVal()
+	{
+		return motorL1.getCurrentPosition();
+	}
+
+	public long getMotorR1EncoderVal()
+	{
+		return motorR1.getCurrentPosition();
+	}
+
 	/**
 	 * Stops all of the motors.
 	 * <p>
