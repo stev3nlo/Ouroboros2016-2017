@@ -30,6 +30,7 @@ public class SpinnerTest extends TeleOp {
     double timeAtLastButtonPress;
     double timeAtLastTriggerPress;
     int targetTicksPerSecond;
+    double calcedRPMOfMotor;
     boolean isStopped = true;
 
     TreeMap<Double,Long> RPMs = new TreeMap<Double,Long>();
@@ -43,11 +44,12 @@ public class SpinnerTest extends TeleOp {
         //motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //motorSpinner.setMaxSpeed(targetTicksPerSecond);
         curFactor = 100;
-        curPowerOfMotorSpinner = 1.0;
+        curPowerOfMotorSpinner = 0.4;
     }
 
     public void runTelemetry()
     {
+        telemetry.addData("calcedRPMOfMotor",calcedRPMOfMotor);
         telemetry.addData("curFactor",curFactor);
         telemetry.addData("targetTicksPerSecond",targetTicksPerSecond);
         telemetry.addData("encoderTicks",getSpinnerEncoderVal());
@@ -120,7 +122,7 @@ public class SpinnerTest extends TeleOp {
         else if(!isStopped && g1BPressed && getCurTime() - timeAtLastButtonPress > 0.2)
         {
             timeAtLastButtonPress = getCurTime();
-            curPowerOfMotorSpinner = 0.0;
+            //curPowerOfMotorSpinner = 0.0;
         }
     }
 
@@ -179,7 +181,7 @@ public class SpinnerTest extends TeleOp {
             it.remove(); // avoids a ConcurrentModificationException
         }
         while(toRemove.size()>0)
-            RPMs.remove(toRemove);
+            RPMs.remove(toRemove.remove(0));
         return vals;
     }
 
@@ -192,28 +194,31 @@ public class SpinnerTest extends TeleOp {
         timeAtLastButtonPress = getCurTime();
         timeAtLastTriggerPress = getCurTime();
         RPMs.put(getCurTime(),getSpinnerEncoderVal());
+        double initTime = getCurTime();
         while(opModeIsActive())
         {
             updateControllerVals();
             initCurtime();
             checkButtons();
             checkTriggers();
+            targetTicksPerSecond = ((int)(((double)(encoderTicksPerRotation*targetRPM))/60.0));
             RPMs.put(getCurTime(),getSpinnerEncoderVal());
-            HashMap<Double,Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.5);
-            Map.Entry pair = getFirstSetFromHashMap(firstEncoderTimeSetAfterTime);
-            double oldTime = (double)pair.getKey();
-            long oldEncoderVal = (long)pair.getValue();
-            double calcedRPMOfMotor = getSpinnerEncoderVal() - oldEncoderVal;
-            calcedRPMOfMotor /= getCurTime()-oldTime;
-            telemetry.addData("motorRPM", calcedRPMOfMotor);
-
-            if(calcedRPMOfMotor>targetRPM)
-            {
-                curPowerOfMotorSpinner -= calcedRPMOfMotor - targetRPM / 200.0;
-            }
-            else
-            {
-                curPowerOfMotorSpinner += calcedRPMOfMotor - targetRPM / 200.0;
+            if(getCurTime() > initTime + 0.25) {
+                HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.4);
+                Map.Entry pair = getFirstSetFromHashMap(firstEncoderTimeSetAfterTime);
+                double oldTime = (double) pair.getKey();
+                long oldEncoderVal = (long) pair.getValue();
+                calcedRPMOfMotor = getSpinnerEncoderVal() - oldEncoderVal;
+                calcedRPMOfMotor /= 1120; //Number of rotations since last run
+                calcedRPMOfMotor /= getCurTime() - oldTime; //Number of rotations per second
+                calcedRPMOfMotor *= 60.0;
+                telemetry.addData("motorRPM", calcedRPMOfMotor);
+                curPowerOfMotorSpinner -= (calcedRPMOfMotor - targetRPM) / 420.0;
+                if (curPowerOfMotorSpinner > 1.0)
+                    curPowerOfMotorSpinner = 1.0;
+                else if (curPowerOfMotorSpinner < 0.0)
+                    curPowerOfMotorSpinner = 0.0;
+                initTime = getCurTime();
             }
             motorSpinner.setPower(curPowerOfMotorSpinner);
             runTelemetry();

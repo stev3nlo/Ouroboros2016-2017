@@ -29,17 +29,17 @@ public class CenterServo extends MyOpMode {
 		while (opModeIsActive())
 		{
 			if (gamepad1.x) {	//left
-				servo.setPosition(curVal -= .05);
+				curVal = .15;
+				servo.setPosition(curVal);
 				telemetry.addData("Current Position", curVal);
 			} else {
 				if (gamepad1.a) {	//center
-					servo.setPosition(.5);
+					curVal = .5;
+					servo.setPosition(curVal);
 					telemetry.addData("Current Position", curVal);
 				} else {
 					if (gamepad1.b)	 {	//right
-						servo.setPosition(curVal += .05);
-						telemetry.addData("Current Position", curVal);
-					} else {
+						curVal = .85;
 						servo.setPosition(curVal);
 						telemetry.addData("Current Position", curVal);
 					}
