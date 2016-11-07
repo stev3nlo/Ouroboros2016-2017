@@ -8,9 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
-/**
- * Created by spencersharp on 11/5/16.
- */
+
 public class TestWheelRPM extends MyOpMode
 {
     TreeMap<Double,Long> motorL1RPMs;
