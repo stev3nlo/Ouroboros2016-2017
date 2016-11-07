@@ -423,7 +423,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	}
 
 	public void pushButtonRight() {
-		double v = 1.0;
+		double v = .85;
 		servoBeaconPusher.setPosition(v);
 	}
 
