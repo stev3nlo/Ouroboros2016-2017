@@ -6,6 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.adafruit.BNO055IMU;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.TreeMap;
+
 /**
  * @author 		Steven Lo
  * @version 	1.0			(I don't know what this really is)
@@ -17,6 +23,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	public static final int encoderTicksPerRotation = 1140;
 	public static final int goalRPM = 50;
 	protected static final int timeToDropBalls = 3;
+	protected double timeSinceLastStabilization = 0.0;
+	protected TreeMap<Double,Long> RPMs = new TreeMap<Double,Long>();
+	protected double curRPM;
+	protected double initTime;
 
 
 	//drive train motors
@@ -470,6 +480,67 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 
 	}
+
+	public Map.Entry getFirstSetFromHashMap(HashMap<Double,Long> single)
+	{
+		Iterator it = single.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry)it.next();
+			return pair;
+		}
+		return null;
+	}
+
+	public HashMap<Double,Long> getFirstEncoderTimeSetAfterTime(double t)
+	{
+		HashMap<Double,Long> vals = new HashMap<Double,Long>();
+		Iterator it = RPMs.entrySet().iterator();
+		ArrayList<Double> toRemove = new ArrayList<Double>();
+		while (it.hasNext()) {
+			Map.Entry pair = (Map.Entry)it.next();
+			if((double)pair.getKey()>t)
+			{
+				vals.put((double)pair.getKey(),(long)pair.getValue());
+				break;
+			}
+			else
+			{
+				toRemove.add((double)pair.getKey());
+			}
+			it.remove(); // avoids a ConcurrentModificationException
+		}
+		while(toRemove.size()>0)
+			RPMs.remove(toRemove.remove(0));
+		return vals;
+	}
+
+	public void runRPMStabilization()
+	{
+		RPMs.put(getCurTime(), getSpinnerEncoderVal());
+		telemetry.addData("stabilzing","true");
+		if(getCurTime()-initTime>2 && getCurTime() - timeAtLastStabilization > 0.3) {
+			//if(getCurTime() > initTime + 0.25) {
+			HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.3);
+			Map.Entry pair = getFirstSetFromHashMap(firstEncoderTimeSetAfterTime);
+			double oldTime = (double) pair.getKey();
+			long oldEncoderVal = (long) pair.getValue();
+			curRPM = getSpinnerEncoderVal() - oldEncoderVal;
+			curRPM /= 1120; //Number of rotations since last run
+			curRPM /= getCurTime() - oldTime; //Number of rotations per second
+			curRPM *= 60.0;
+			//telemetry.addData("motorRPM", curRPM);
+			if(curRPM>goalRPM)
+				curPowerOfMotorSpinner -= Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (50000);
+			else
+				curPowerOfMotorSpinner += Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (50000);
+			if (curPowerOfMotorSpinner > 1.0)
+				curPowerOfMotorSpinner = 1.0;
+			else if (curPowerOfMotorSpinner < 0.0)
+				curPowerOfMotorSpinner = 0.0;
+			timeAtLastStabilization = getCurTime();
+		}
+	}
+
 	@Override
 	public void runOpMode() throws InterruptedException
 	{

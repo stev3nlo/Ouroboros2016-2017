@@ -9,7 +9,7 @@ import java.io.IOException;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop", group="Teleop")  // @Autonomous(...) is the other common choice
 public class TeleOp extends MyOpMode
 {
-    boolean shooterIsRunning = false;
+    public boolean shooterIsRunning = false;
     //Controller values
 
     public double g1y1;    //left drive
@@ -42,7 +42,7 @@ public class TeleOp extends MyOpMode
 
     double timeBallsFinishDropping;
 
-    boolean firstCycleOfSpinner;
+    public boolean firstCycleOfSpinner;
 
     public void updateControllerVals()
     {
@@ -73,6 +73,8 @@ public class TeleOp extends MyOpMode
         g2BPressed = gamepad2.b;
     }
 
+
+
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
@@ -86,7 +88,7 @@ public class TeleOp extends MyOpMode
 
             if (g2YPressed)
             {
-                curPowerOfMotorSpinner = 0.0;
+                runSpinner(curPowerOfMotorSpinner);
                 shooterIsRunning = false;
                 firstCycleOfSpinner = true;
             }
@@ -94,9 +96,11 @@ public class TeleOp extends MyOpMode
             if(g2XPressed || shooterIsRunning)
             {
                 shooterIsRunning = true;
-                curPowerOfMotorSpinner = 1.0;
+                runSpinner(curPowerOfMotorSpinner);
+                initTime = getCurTime();
+                runRPMStabilization();
             }
-            runSpinner(curPowerOfMotorSpinner);
+
 
             // stops spinner
 

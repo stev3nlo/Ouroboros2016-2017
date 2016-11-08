@@ -44,7 +44,7 @@ public class SpinnerTest extends TeleOp {
         //motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         //motorSpinner.setMaxSpeed(targetTicksPerSecond);
         curFactor = 100;
-        curPowerOfMotorSpinner = 0.4;
+        curPowerOfMotorSpinner = 0.3;
     }
 
     public void runTelemetry()
@@ -203,8 +203,8 @@ public class SpinnerTest extends TeleOp {
             checkTriggers();
             targetTicksPerSecond = ((int)(((double)(encoderTicksPerRotation*targetRPM))/60.0));
             RPMs.put(getCurTime(),getSpinnerEncoderVal());
-            if(getCurTime() > initTime + 0.25) {
-                HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.4);
+            if(getCurTime() > initTime + 0.35) {
+                HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.3);
                 Map.Entry pair = getFirstSetFromHashMap(firstEncoderTimeSetAfterTime);
                 double oldTime = (double) pair.getKey();
                 long oldEncoderVal = (long) pair.getValue();
@@ -213,7 +213,10 @@ public class SpinnerTest extends TeleOp {
                 calcedRPMOfMotor /= getCurTime() - oldTime; //Number of rotations per second
                 calcedRPMOfMotor *= 60.0;
                 telemetry.addData("motorRPM", calcedRPMOfMotor);
-                curPowerOfMotorSpinner -= (calcedRPMOfMotor - targetRPM) / 420.0;
+                if(calcedRPMOfMotor>targetRPM)
+                    curPowerOfMotorSpinner -= Math.sqrt(Math.abs(((calcedRPMOfMotor - targetRPM)*(calcedRPMOfMotor-targetRPM)*(calcedRPMOfMotor-targetRPM)))) / (750000.0*25);
+                else
+                    curPowerOfMotorSpinner += Math.sqrt(Math.abs(((calcedRPMOfMotor - targetRPM)*(calcedRPMOfMotor-targetRPM)*(calcedRPMOfMotor-targetRPM)))) / (750000.0*25);
                 if (curPowerOfMotorSpinner > 1.0)
                     curPowerOfMotorSpinner = 1.0;
                 else if (curPowerOfMotorSpinner < 0.0)
