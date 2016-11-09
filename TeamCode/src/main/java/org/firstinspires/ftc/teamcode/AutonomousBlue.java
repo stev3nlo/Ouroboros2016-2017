@@ -16,7 +16,7 @@ public class AutonomousBlue extends MyAutonomous {
 		waitForStart();
 		initCurtime();
 
-		moveToWhiteLine(0.8);
+		moveToWhiteLine(0.4);
 		pause();
 //		turnRightToWhiteLine(.25);
 //		moveForwardToBeacon(.25);
