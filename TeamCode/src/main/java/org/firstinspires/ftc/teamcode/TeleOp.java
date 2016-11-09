@@ -25,18 +25,18 @@ public class TeleOp extends MyOpMode
     public boolean g1APressed;
     public boolean g1BPressed;
 
-    double g2y1;    //lift
-    double g2y2;    //manipulator
-    double g2x1;
-    double g2x2;
-    boolean g2Lbump;    //grab cap ball
-    boolean g2Rbump;    //release cap ball
-    double g2Ltrig;
-    double g2Rtrig;
-    boolean g2XPressed;     //start shooter spinner
-    boolean g2YPressed;     //stop shooter spinner
-    boolean g2APressed;     //toggle servo dropper
-    boolean g2BPressed;
+    public double g2y1;    //lift
+    public double g2y2;    //manipulator
+    public double g2x1;
+    public double g2x2;
+    public boolean g2Lbump;    //grab cap ball
+    public boolean g2Rbump;    //release cap ball
+    public double g2Ltrig;
+    public double g2Rtrig;
+    public boolean g2XPressed;     //start shooter spinner
+    public boolean g2YPressed;     //stop shooter spinner
+    public boolean g2APressed;     //toggle servo dropper
+    public boolean g2BPressed;
 
     long timeAtEndOfLastCycle;
 
@@ -73,8 +73,6 @@ public class TeleOp extends MyOpMode
         g2BPressed = gamepad2.b;
     }
 
-
-
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
@@ -83,12 +81,14 @@ public class TeleOp extends MyOpMode
         {
             updateControllerVals();
             initCurtime(); //gets real time timer
-            move(-MotorScaler.scaleSimple(g1y1), MotorScaler.scaleSimple(g1y2)); // moves drive wheels
+            move(MotorScaler.scaleSimple(g1y1), -MotorScaler.scaleSimple(g1y2)); // moves drive wheels
             moveManip(g2y1);
 
-            if (g2YPressed)
+            //Stabilization
+            /*
+            if (g2YPressed || !shooterIsRunning)
             {
-                runSpinner(curPowerOfMotorSpinner);
+                runSpinner(0.0);
                 shooterIsRunning = false;
                 firstCycleOfSpinner = true;
             }
@@ -96,10 +96,29 @@ public class TeleOp extends MyOpMode
             if(g2XPressed || shooterIsRunning)
             {
                 shooterIsRunning = true;
-                runSpinner(curPowerOfMotorSpinner);
-                initTime = getCurTime();
+                if(firstCycleOfSpinner) {
+                    firstCycleOfSpinner = false;
+                    initTime = getCurTime();
+                }
                 runRPMStabilization();
+
+                runSpinner(curPowerOfMotorSpinner);
             }
+            */
+
+            //No stabilization
+            /*
+            if(g2YPressed || !shooterIsRunning)
+            {
+                runSpinner(0.0);
+                shooterIsRunning = false;
+            }
+            if(g2XPressed || shooterIsRunning)
+            {
+                shooterIsRunning = true;
+                runSpinner(0.35);
+            }
+            */
 
 
             // stops spinner
@@ -129,6 +148,7 @@ public class TeleOp extends MyOpMode
                 resetButtonPress();
             }
             timeAtEndOfLastCycle = System.nanoTime()/1000000000;
+            try{idle();}catch(InterruptedException e){}
         }
     }
 }

@@ -21,7 +21,7 @@ import java.util.TreeMap;
 public abstract class MyOpMode extends LinearOpMode {
 
 	public static final int encoderTicksPerRotation = 1140;
-	public static final int goalRPM = 50;
+	public static final int goalRPM = 62;
 	protected static final int timeToDropBalls = 3;
 	protected double timeSinceLastStabilization = 0.0;
 	protected TreeMap<Double,Long> RPMs = new TreeMap<Double,Long>();
@@ -37,7 +37,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * DcMotor variable for the second motor on the right
 	 */
-	//protected DcMotor motorR2;
+	protected DcMotor motorR2;
 	/**
 	 * DcMotor variable for the first motor on the left
 	 */
@@ -45,7 +45,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * DcMotor variable for the second motor on the left
 	 */
-	//protected DcMotor motorL2;
+	protected DcMotor motorL2;
 	/**
 	 * DcMotor variable for the motor on the manipulator
 	 */
@@ -118,9 +118,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		//hardware maps the drive motors
 		motorR1 = hardwareMap.dcMotor.get("motorR1");
-		//motorR2 = hardwareMap.dcMotor.get("motorR2");
+		motorR2 = hardwareMap.dcMotor.get("motorR2");
 		motorL1 = hardwareMap.dcMotor.get("motorL1");
-		//motorL2 = hardwareMap.dcMotor.get("motorL2");
+		motorL2 = hardwareMap.dcMotor.get("motorL2");
 		motorManip = hardwareMap.dcMotor.get("motorManip");
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
 		servoDropper = hardwareMap.servo.get("servoDropper");
@@ -136,8 +136,9 @@ public abstract class MyOpMode extends LinearOpMode {
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
 
-		motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		motorSpinner.setMaxSpeed((int)(((double)(encoderTicksPerRotation*goalRPM))/60.0));
+		curPowerOfMotorSpinner = 0.3;
+		//motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+		//motorSpinner.setMaxSpeed((int)(((double)(encoderTicksPerRotation*goalRPM))/60.0));
 
 		reset();
 	}
@@ -153,9 +154,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void move(double speedL, double speedR)
 	{
 		motorL1.setPower(speedL);
-		//motorL2.setPower(speedL);
+		motorL2.setPower(speedL);
 		motorR1.setPower(speedR);
-		//motorR2.setPower(speedR);
+		motorR2.setPower(speedR);
 	}
 
 	public void moveManip(double speed)
@@ -530,9 +531,9 @@ public abstract class MyOpMode extends LinearOpMode {
 			curRPM *= 60.0;
 			//telemetry.addData("motorRPM", curRPM);
 			if(curRPM>goalRPM)
-				curPowerOfMotorSpinner -= Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (50000);
+				curPowerOfMotorSpinner -= Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (10000);
 			else
-				curPowerOfMotorSpinner += Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (50000);
+				curPowerOfMotorSpinner += Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (10000);
 			if (curPowerOfMotorSpinner > 1.0)
 				curPowerOfMotorSpinner = 1.0;
 			else if (curPowerOfMotorSpinner < 0.0)

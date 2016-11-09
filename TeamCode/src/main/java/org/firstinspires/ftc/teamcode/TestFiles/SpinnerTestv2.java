@@ -23,7 +23,7 @@ public class SpinnerTestv2 extends TeleOp
 {
     public void initialize(){
         motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
-        curPowerOfMotorSpinner = 0.25;
+        curPowerOfMotorSpinner = 0.3;
     }
     public void runOpMode()
     {
