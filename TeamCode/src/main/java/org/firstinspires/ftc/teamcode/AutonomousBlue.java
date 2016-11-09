@@ -2,16 +2,17 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
+
 
 /**
  * Created by Steven on 10/20/2016.
  */
 @Autonomous(name = "Autonomous Blue", group = "Test")
-public class AutonomousBlue extends MyOpMode {
+public class AutonomousBlue extends MyAutonomous {
 	@Override
 	public void runOpMode() throws InterruptedException {
-		initialize();
+		super.runOpMode();
 		waitForStart();
 		initCurtime();
 

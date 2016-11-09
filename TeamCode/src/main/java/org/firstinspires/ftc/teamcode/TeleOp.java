@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 
 import java.io.IOException;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop", group="Teleop")  // @Autonomous(...) is the other common choice
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Teleop", group="Teleop")  // @MyAutonomous(...) is the other common choice
 public class TeleOp extends MyOpMode
 {
     public boolean shooterIsRunning = false;
@@ -77,6 +77,28 @@ public class TeleOp extends MyOpMode
         g2BPressed = gamepad2.b;
     }
 
+    public void updateTelemetry()
+    {
+        telemetry.addData("BEACON PUSH INFO","");
+        if(g2Ltrig > 0.1)
+        {
+            telemetry.addData("g2Ltrig being pressed", "LEFT");
+        }
+        else if(g2Rtrig > 0.1)
+        {
+            telemetry.addData("g2Rtrig being pressed", "RIGHT");
+        }
+        else if(g2Rbump || g2Lbump)
+        {
+            telemetry.addData("g2Rbump or g2Lbump being pressed", "MIDDLE");
+        }
+        else
+        {
+            telemetry.addData("No beacon control being pressed","");
+        }
+        telemetry.update();
+    }
+
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
@@ -89,7 +111,7 @@ public class TeleOp extends MyOpMode
             moveManip(g2y1);
 
             //Stabilization
-            /*
+
             if (g2YPressed || !shooterIsRunning)
             {
                 runSpinner(0.0);
@@ -108,10 +130,11 @@ public class TeleOp extends MyOpMode
 
                 runSpinner(curPowerOfMotorSpinner);
             }
-            */
+
 
             //No stabilization
 
+            /*
             if(g2YPressed || !shooterIsRunning)
             {
                 runSpinner(0.0);
@@ -122,6 +145,7 @@ public class TeleOp extends MyOpMode
                 shooterIsRunning = true;
                 runSpinner(0.35);
             }
+            */
 
 
 
@@ -150,6 +174,7 @@ public class TeleOp extends MyOpMode
             {
                 resetButtonPress();
             }
+            updateTelemetry();
             //timeAtEndOfLastCycle = System.nanoTime()/1000000000;
             try{idle();}catch(InterruptedException e){}
         }

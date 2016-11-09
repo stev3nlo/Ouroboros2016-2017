@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 
 import java.io.IOException;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="OneManTeleOpTest", group="Teleop")  // @Autonomous(...) is the other common choice
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="OneManTeleOpTest", group="Teleop")  // @MyAutonomous(...) is the other common choice
 public class OneManTeleOpTest extends MyOpMode
 {
 
@@ -82,6 +82,7 @@ public class OneManTeleOpTest extends MyOpMode
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
+        waitForStart();
         initCurtime();
         minTimeForNextBeaconModeSwitch = curTime;
         while (opModeIsActive())

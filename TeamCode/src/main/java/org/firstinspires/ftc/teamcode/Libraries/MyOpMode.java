@@ -21,7 +21,7 @@ import java.util.TreeMap;
 public abstract class MyOpMode extends LinearOpMode {
 
 	public static final int encoderTicksPerRotation = 1140;
-	public static final int goalRPM = 62;
+	public static final int goalRPM = 55;
 	protected static final int timeToDropBalls = 3;
 	protected double timeSinceLastStabilization = 0.0;
 	protected TreeMap<Double,Long> RPMs = new TreeMap<Double,Long>();
@@ -129,18 +129,24 @@ public abstract class MyOpMode extends LinearOpMode {
 		resetButtonPress();
 
 
-		//initialize sensors
-		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
-		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
-		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
-		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
-		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
+
+
 
 		curPowerOfMotorSpinner = 0.3;
 		//motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		//motorSpinner.setMaxSpeed((int)(((double)(encoderTicksPerRotation*goalRPM))/60.0));
 
 		reset();
+	}
+
+	//initialize sensors
+	public void initializeSensors()
+	{
+		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
+		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
+		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
+		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
+		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
 	}
 
 	/**
@@ -325,7 +331,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void moveToWhiteLine(double speed) throws InterruptedException {
-		telemetry.addData("moving forwards", "");
+		telemetry.addData("current alpha", colorC.getAlpha());
 		telemetry.update();
 		moveForwards(1);
 		while (colorC.groundColor().equals("Gray")) {
@@ -334,7 +340,8 @@ public abstract class MyOpMode extends LinearOpMode {
 			idle();
 		}
 		telemetry.addData("at white line", "");
-		telemetry.update();//philip is garbage
+		telemetry.addData("ground Color", colorC.groundColor());
+		telemetry.update();
 		stopMotors();
 	}
 
@@ -452,9 +459,9 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void reset() {
 		motorR1.setPower(0);
-		//motorR2.setPower(0);
+		motorR2.setPower(0);
 		motorL1.setPower(0);
-		//motorL2.setPower(0);
+		motorL2.setPower(0);
 	}
 
 	public void updateMotorSpeeds()
@@ -518,10 +525,12 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void runRPMStabilization()
 	{
 		RPMs.put(getCurTime(), getSpinnerEncoderVal());
-		telemetry.addData("stabilzing","true");
-		if(getCurTime()-initTime>2 && getCurTime() - timeAtLastStabilization > 0.3) {
+		telemetry.addData("stabilizing","true");
+		telemetry.addData("curRPM",curRPM);
+		telemetry.addData("goalRPM",goalRPM);
+		if(getCurTime()-initTime>1.25 && getCurTime() - timeAtLastStabilization > 0.3) {
 			//if(getCurTime() > initTime + 0.25) {
-			HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.3);
+			HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.5);
 			Map.Entry pair = getFirstSetFromHashMap(firstEncoderTimeSetAfterTime);
 			double oldTime = (double) pair.getKey();
 			long oldEncoderVal = (long) pair.getValue();

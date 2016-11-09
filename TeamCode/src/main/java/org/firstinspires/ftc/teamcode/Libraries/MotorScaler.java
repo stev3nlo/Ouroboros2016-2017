@@ -136,7 +136,7 @@ public class MotorScaler {
      * <p>
      * Use this method for standard movement, or autonomous powers. This method is slower
      * in runtime, but is more precise. Use if your input value needs to exactly match
-     * match the output. (Autonomous one time set)
+     * match the output. (MyAutonomous one time set)
      *
      * @param  inpFromController  a double representing the value inputted from the controller
      * @return a double representing the value sent to the motor in order to obtain the mA value

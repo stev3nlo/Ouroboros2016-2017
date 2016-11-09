@@ -7,11 +7,11 @@ import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 /**
  * Created by Steven on 10/31/2016.
  */
-@Autonomous(name = "Autonomous Red", group = "Test")
+@Autonomous(name = "MyAutonomous Red", group = "Test")
 public class AutonomousRed extends MyOpMode {
 	@Override
 	public void runOpMode() throws InterruptedException {
-		initialize();
+		super.runOpMode();
 		waitForStart();
 		initCurtime();
 

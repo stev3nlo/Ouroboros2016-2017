@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 public class AutoOpBlue extends MyOpMode {
 
     public void runOpMode() throws InterruptedException {
+        super.runOpMode();
+        waitForStart();
         //moves towards white line in front of beacon
         moveToWhiteLine(1.0);
         turnRightToWhiteLine(1.0);
