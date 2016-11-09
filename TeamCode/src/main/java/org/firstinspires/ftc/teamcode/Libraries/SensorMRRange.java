@@ -58,6 +58,7 @@ public class SensorMRRange extends MyOpMode {
 		}
 	}
 
+	//
 	public int getOpticDistance() {
 		return rangeCache[1] & 0xFF;
 	}

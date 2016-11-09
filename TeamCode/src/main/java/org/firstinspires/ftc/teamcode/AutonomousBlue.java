@@ -15,7 +15,7 @@ public class AutonomousBlue extends MyOpMode {
 		waitForStart();
 		initCurtime();
 
-		moveToWhiteLine(.5);
+		moveToWhiteLine(0.8);
 		pause();
 //		turnRightToWhiteLine(.25);
 //		moveForwardToBeacon(.25);

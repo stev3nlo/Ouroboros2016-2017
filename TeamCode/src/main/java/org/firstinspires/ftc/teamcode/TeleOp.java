@@ -25,6 +25,10 @@ public class TeleOp extends MyOpMode
     public boolean g1APressed;
     public boolean g1BPressed;
 
+    int numLoopsRemainining;
+    double timeAtLastLoop;
+    double timePerLoop = 1.0;
+
     public double g2y1;    //lift
     public double g2y2;    //manipulator
     public double g2x1;
@@ -76,7 +80,7 @@ public class TeleOp extends MyOpMode
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
-
+        timeAtLastLoop = getCurTime();
         while (opModeIsActive())
         {
             updateControllerVals();
@@ -107,7 +111,7 @@ public class TeleOp extends MyOpMode
             */
 
             //No stabilization
-            /*
+
             if(g2YPressed || !shooterIsRunning)
             {
                 runSpinner(0.0);
@@ -118,19 +122,18 @@ public class TeleOp extends MyOpMode
                 shooterIsRunning = true;
                 runSpinner(0.35);
             }
-            */
+
 
 
             // stops spinner
 
 
             //releases balls from basket into spinner
-            if (g2APressed && getCurTime() > timeBallsFinishDropping)
+            if (g2APressed)
             {
-                timeBallsFinishDropping = getCurTime() + timeToDropBalls;
                 openServoDropper();
             }
-            else if (getCurTime() > timeBallsFinishDropping)
+            else if(g2BPressed)
             {
                 closeServoDropper();
             }
@@ -147,7 +150,7 @@ public class TeleOp extends MyOpMode
             {
                 resetButtonPress();
             }
-            timeAtEndOfLastCycle = System.nanoTime()/1000000000;
+            //timeAtEndOfLastCycle = System.nanoTime()/1000000000;
             try{idle();}catch(InterruptedException e){}
         }
     }
