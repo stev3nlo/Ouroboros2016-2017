@@ -8,10 +8,11 @@ import java.io.IOException;
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="OneManTeleOpTest", group="Teleop")  // @MyAutonomous(...) is the other common choice
 public class OneManTeleOpTest extends MyOpMode
 {
-
+    double timeAtLastBallDrop;
     boolean isInBeaconMode = false;
     boolean shooterIsRunning = false;
     public double minTimeForNextBeaconModeSwitch = 0.0;
+    boolean isBallDropperOpen = false;
     //Controller values
 
     double g1y1;    //left drive
@@ -84,12 +85,13 @@ public class OneManTeleOpTest extends MyOpMode
         super.runOpMode();
         waitForStart();
         initCurtime();
-        minTimeForNextBeaconModeSwitch = curTime;
+        minTimeForNextBeaconModeSwitch = getCurTime();
+        timeAtLastBallDrop = getCurTime();
         while (opModeIsActive())
         {
             updateControllerVals();
             initCurtime(); //gets real time timer
-            move(-g1y1, g1y2); // moves drive wheels
+            move(g1y1, -g1y2); // moves drive wheels
 
             if(isInBeaconMode)
             {
@@ -124,30 +126,42 @@ public class OneManTeleOpTest extends MyOpMode
             }
 
             //creates constant speed of spinner throughout game
-            if (g2YPressed)
+            if (g1YPressed || !shooterIsRunning)
             {
-                curPowerOfMotorSpinner = 0.0;
+                runSpinner(0.0);
                 shooterIsRunning = false;
                 firstCycleOfSpinner = true;
             }
             //creates constant speed of spinner throughout game
-            if(g2XPressed || shooterIsRunning)
+            if(g1XPressed || shooterIsRunning)
             {
                 shooterIsRunning = true;
-                curPowerOfMotorSpinner = 1.0;
+                if(firstCycleOfSpinner) {
+                    firstCycleOfSpinner = false;
+                    timeAtLastStabilization = getCurTime();
+                    initTime = getCurTime();
+                }
+                runRPMStabilization();
+
+                runSpinner(curPowerOfMotorSpinner);
             }
-            runSpinner(curPowerOfMotorSpinner);
 
             //releases balls from basket into spinner
-            if (g1APressed && curTime > timeBallsFinishDropping)
+            if (!isBallDropperOpen && g1APressed && getCurTime() > timeAtLastBallDrop + 0.4)
             {
-                timeBallsFinishDropping = curTime + timeToDropBalls;
+                timeAtLastBallDrop = getCurTime();
+                isBallDropperOpen = true;
                 openServoDropper();
+                telemetry.addData("ballDropper","opened");
             }
-            else if (curTime > timeBallsFinishDropping)
+            else if (isBallDropperOpen && g1APressed && getCurTime() > timeAtLastBallDrop + 0.4)
             {
+                timeAtLastBallDrop = getCurTime();
+                isBallDropperOpen = false;
                 closeServoDropper();
+                telemetry.addData("ballDropper","closed");
             }
+            telemetry.update();
             timeAtEndOfLastCycle = System.nanoTime()/1000000000;
         }
     }

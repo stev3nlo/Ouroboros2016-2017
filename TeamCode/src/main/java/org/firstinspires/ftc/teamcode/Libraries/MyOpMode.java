@@ -92,7 +92,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	long timeAtEndOfLastCycle;
 
-	double timeAtLastStabilization;
+	public double timeAtLastStabilization;
 	double timeBallsFinishDropping;
 
 	boolean firstCycleOfSpinner;
@@ -147,6 +147,9 @@ public abstract class MyOpMode extends LinearOpMode {
 		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
+		colorC.sensorSetup(0x2e);
+		colorR.sensorSetup(0x2a);
+		colorB.sensorSetup(0x2c);
 	}
 
 	/**
@@ -524,20 +527,24 @@ public abstract class MyOpMode extends LinearOpMode {
 		return vals;
 	}
 
+	public double oldTime;
+	public long oldEncoderVal;
+	public double timeSinceLastRPMUpdate;
 	public void runRPMStabilization()
 	{
 		RPMs.put(getCurTime(), getSpinnerEncoderVal());
-		telemetry.addData("stabilizing","true");
-		telemetry.addData("curRPM",curRPM);
+
+		telemetry.addData("curRPM", curRPM);
 		telemetry.addData("goalRPM",goalRPM);
-		if(getCurTime()-initTime>1.25 && getCurTime() - timeAtLastStabilization > 0.3) {
+		if(getCurTime()-initTime>3.0 && getCurTime() - timeAtLastStabilization > 0.3) {
 			//if(getCurTime() > initTime + 0.25) {
-			HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.5);
+			HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.75);
 			Map.Entry pair = getFirstSetFromHashMap(firstEncoderTimeSetAfterTime);
-			double oldTime = (double) pair.getKey();
-			long oldEncoderVal = (long) pair.getValue();
+			oldTime = (double) pair.getKey();
+			oldEncoderVal = (long) pair.getValue();
 			curRPM = getSpinnerEncoderVal() - oldEncoderVal;
 			curRPM /= 1120; //Number of rotations since last run
+			timeSinceLastRPMUpdate = getCurTime() - oldTime;
 			curRPM /= getCurTime() - oldTime; //Number of rotations per second
 			curRPM *= 60.0;
 			//telemetry.addData("motorRPM", curRPM);
@@ -551,6 +558,11 @@ public abstract class MyOpMode extends LinearOpMode {
 				curPowerOfMotorSpinner = 0.0;
 			timeAtLastStabilization = getCurTime();
 		}
+		telemetry.addData("curTime","" + getCurTime());
+		telemetry.addData("curEncoderVal", "" + getSpinnerEncoderVal());
+		telemetry.addData("oldTime",oldTime);
+		telemetry.addData("oldEncoderVal",oldEncoderVal);
+		telemetry.addData("timeSinceLastRPMUpdate",timeSinceLastRPMUpdate);
 	}
 
 	public void moveWithEncoders(double speed, int goal) {

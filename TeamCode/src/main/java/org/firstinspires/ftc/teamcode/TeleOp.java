@@ -125,6 +125,7 @@ public class TeleOp extends MyOpMode
                 if(firstCycleOfSpinner) {
                     firstCycleOfSpinner = false;
                     initTime = getCurTime();
+                    timeAtLastStabilization = getCurTime();
                 }
                 runRPMStabilization();
 
