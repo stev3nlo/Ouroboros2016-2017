@@ -333,8 +333,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void moveToWhiteLine(double speed) throws InterruptedException {
 		telemetry.addData("current alpha", colorC.getAlpha());
 		telemetry.update();
-		moveForwards(1);
+		moveForwards(speed);
 		while (colorC.groundColor().equals("Gray")) {
+			telemetry.addData("speed", speed);
 			telemetry.addData("current alpha", colorC.getAlpha());
 			telemetry.addData("Ground Color", colorC.groundColor());
 			telemetry.update();
@@ -356,7 +357,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void turnRightToWhiteLine(double speed) throws InterruptedException {
-		turnRight(1);
+		turnRight(speed);
 		while (!colorR.groundColor().equals("White")) {
 			idle();
 		}
