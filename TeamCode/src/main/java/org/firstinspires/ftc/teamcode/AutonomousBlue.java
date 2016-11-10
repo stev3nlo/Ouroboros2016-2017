@@ -13,7 +13,6 @@ public class AutonomousBlue extends MyAutonomous {
 	@Override
 	public void runOpMode() throws InterruptedException {
 		super.runOpMode();
-		waitForStart();
 		initCurtime();
 
 		moveToWhiteLine(-.085);

@@ -553,6 +553,26 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void moveWithEncoders(double speed, int goal) {
+		int currEnc = getAvgEnc();
+		int avgEnc = currEnc;
+		moveForwards(speed);
+		while (avgEnc - currEnc < goal) {
+			avgEnc = getAvgEnc();
+		}
+		stopMotors();
+	}
+
+	public int getAvgEnc() {
+		int encL1 = motorL1.getCurrentPosition();
+		int encL2 = motorL2.getCurrentPosition();
+		int encR1 = motorR1.getCurrentPosition();
+		int encR2 = motorR2.getCurrentPosition();
+		int avg = encL1 + encL2 + encR1 + encR2;
+		avg /= 4;
+		return avg;
+	}
+
 	@Override
 	public void runOpMode() throws InterruptedException
 	{
