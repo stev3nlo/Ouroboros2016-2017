@@ -17,22 +17,22 @@ public class AutoBlueGyroBased extends MyOpMode {
 
 		moveWithEncoders(.5, 40);	//needs to test goal
 		pause();
-		gyroTurnRightCorrection(-.085, 45);
-		pause();
-		moveWithEncoders(1, 200);	//need to test goal
-		pause();
-		moveToWhiteLine(-.085);
-		pause();
-		gyroTurnRightCorrection(-.085, 45);
-		pause();
-		moveForwardToBeacon(-.085);
-		pause();
-		pushButton("Blue");
-		pause();
-		moveAwayFromBeacon(-.085, 25);
-		pause();
-		gyroTurnRightCorrection(-.085, 90);
-		pause();
-		shoot();
+//		gyroTurnRightCorrection(-.085, 45);
+//		pause();
+//		moveWithEncoders(1, 200);	//need to test goal
+//		pause();
+//		moveToWhiteLine(-.085);
+//		pause();
+//		gyroTurnRightCorrection(-.085, 45);
+//		pause();
+//		moveForwardToBeacon(-.085);
+//		pause();
+//		pushButton("Blue");
+//		pause();
+//		moveAwayFromBeacon(-.085, 25);
+//		pause();
+//		gyroTurnRightCorrection(-.085, 90);
+//		pause();
+//		shoot();
 	}
 }
