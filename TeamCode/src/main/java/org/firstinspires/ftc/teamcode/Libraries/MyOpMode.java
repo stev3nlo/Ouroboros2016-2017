@@ -335,6 +335,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		telemetry.update();
 		moveForwards(1);
 		while (colorC.groundColor().equals("Gray")) {
+			telemetry.addData("current alpha", colorC.getAlpha());
 			telemetry.addData("Ground Color", colorC.groundColor());
 			telemetry.update();
 			idle();

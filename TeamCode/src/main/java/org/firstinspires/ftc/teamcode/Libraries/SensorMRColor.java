@@ -18,7 +18,7 @@ public class SensorMRColor extends MyOpMode {
 	public SensorMRColor(ColorSensor colorSensor) {
 		//Initialize color sensor
 		RGB = colorSensor;
-		getGrayAlpha();
+		grayAlpha = getGrayAlpha();
 	}
 
 	//returns the R, G, and B values that the color sensor senses in a list
@@ -83,6 +83,9 @@ public class SensorMRColor extends MyOpMode {
 
 	//gets the alpha value (level of whiteness)
 	public int getAlpha() {
+		if (RGB.alpha() == 255) {
+			return grayAlpha;
+		}
 		return RGB.alpha();
 	}
 
