@@ -154,7 +154,7 @@ public class TeleOp extends MyOpMode
 
 
             //releases balls from basket into spinner
-            if (g2APressed)
+            if (g2APressed && !shooterIsRunning)
             {
                 openServoDropper();
             }
