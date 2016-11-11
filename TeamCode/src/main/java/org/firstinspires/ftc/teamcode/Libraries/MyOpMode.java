@@ -215,10 +215,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * </p>
 	 */
 	public void stopMotors() {
-		motorR1.setPower(0);
-		//motorR2.setPower(0);
+		motorR1.setPower(0.0);
+		motorR2.setPower(0);
 		motorL1.setPower(0);
-		//motorL2.setPower(0);
+		motorL2.setPower(0);
 	}
 
 	/**
@@ -305,16 +305,35 @@ public abstract class MyOpMode extends LinearOpMode {
 		gyroTurnRight(-speed, -targetAngle);
 	}
 
+	public double getAngleDiff(double angle1, double angle2)
+	{
+		if(Math.abs(angle1 - angle2) < 180.0)
+			return Math.abs(angle1-angle2);
+		else if(angle1 > angle2)
+		{
+			angle1 -= 360;
+			return Math.abs(angle2-angle1);
+		}
+		else
+		{
+			angle2 -= 360;
+			return Math.abs(angle1-angle2);
+		}
+	}
 	public void gyroTurnRightCorrection(double speed, double targetAngle) throws InterruptedException {
 		double startAngle = gyro.getYaw();
 		double newAngle = gyro.getYaw();
 		turnRight(speed);
-		while(Math.abs(newAngle - startAngle) < targetAngle) {
+		while(getAngleDiff(startAngle,newAngle) < targetAngle) {
 			newAngle = gyro.getYaw();
+			telemetry.addData("init Turning",newAngle);
+			telemetry.update();
 			idle();
 		}
 		turnLeft(speed / 2);
 		while(Math.abs(newAngle - startAngle) > targetAngle) {
+			telemetry.addData("correctional Turning",newAngle);
+			telemetry.update();
 			newAngle = gyro.getYaw();
 			idle();
 		}
@@ -479,11 +498,12 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	}
 
-	public void pause() throws InterruptedException {
+	public void pause(double t) throws InterruptedException {
 		initCurtime();
 		double startTime = getCurTime();
-		while (getCurTime() < startTime + 2.0)
+		while (getCurTime() < startTime + t)
 		{
+			telemetry.addData("pausing",getCurTime());
 			initCurtime();
 			idle();
 		}
@@ -565,12 +585,49 @@ public abstract class MyOpMode extends LinearOpMode {
 		telemetry.addData("timeSinceLastRPMUpdate",timeSinceLastRPMUpdate);
 	}
 
+	public void runRPMStabilizationAuto()
+	{
+		RPMs.put(getCurTime(), getSpinnerEncoderVal());
+
+		telemetry.addData("curRPM", curRPM);
+		telemetry.addData("goalRPM",goalRPM);
+		if(getCurTime()-initTime>3.0 && getCurTime() - timeAtLastStabilization > 0.3) {
+			//if(getCurTime() > initTime + 0.25) {
+			HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.2);
+			Map.Entry pair = getFirstSetFromHashMap(firstEncoderTimeSetAfterTime);
+			oldTime = (double) pair.getKey();
+			oldEncoderVal = (long) pair.getValue();
+			curRPM = getSpinnerEncoderVal() - oldEncoderVal;
+			curRPM /= 1120; //Number of rotations since last run
+			timeSinceLastRPMUpdate = getCurTime() - oldTime;
+			curRPM /= getCurTime() - oldTime; //Number of rotations per second
+			curRPM *= 60.0;
+			//telemetry.addData("motorRPM", curRPM);
+			if(curRPM>goalRPM)
+				curPowerOfMotorSpinner -= Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (10000);
+			else
+				curPowerOfMotorSpinner += Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (10000);
+			if (curPowerOfMotorSpinner > 1.0)
+				curPowerOfMotorSpinner = 1.0;
+			else if (curPowerOfMotorSpinner < 0.0)
+				curPowerOfMotorSpinner = 0.0;
+			timeAtLastStabilization = getCurTime();
+		}
+		telemetry.addData("curTime","" + getCurTime());
+		telemetry.addData("curEncoderVal", "" + getSpinnerEncoderVal());
+		telemetry.addData("oldTime",oldTime);
+		telemetry.addData("oldEncoderVal",oldEncoderVal);
+		telemetry.addData("timeSinceLastRPMUpdate",timeSinceLastRPMUpdate);
+	}
+
 	public void moveWithEncoders(double speed, int goal) {
 		int currEnc = getAvgEnc();
 		int avgEnc = currEnc;
 		moveForwards(speed);
-		while (avgEnc - currEnc < goal) {
+		while (Math.abs(avgEnc - currEnc) < goal) {
 			avgEnc = getAvgEnc();
+			telemetry.addData("avgEnc",avgEnc);
+			telemetry.update();
 		}
 		stopMotors();
 	}

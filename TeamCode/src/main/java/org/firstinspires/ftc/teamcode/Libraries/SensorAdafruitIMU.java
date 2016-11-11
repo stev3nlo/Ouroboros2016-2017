@@ -72,7 +72,8 @@ public class SensorAdafruitIMU extends MyOpMode
     public double getYaw()
     {
         angles = imu.getAngularOrientation().toAxesReference(AxesReference.INTRINSIC).toAxesOrder(AxesOrder.ZYX);
-        return angles.firstAngle;
+
+        return -1*angles.firstAngle;
     }
 
     public double getRoll()

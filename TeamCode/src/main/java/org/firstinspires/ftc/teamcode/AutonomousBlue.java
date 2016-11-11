@@ -16,12 +16,12 @@ public class AutonomousBlue extends MyAutonomous {
 		initCurtime();
 
 		moveToWhiteLine(.085);
-		pause();
+		//pause();
 		turnRightToWhiteLine(.15);
 //		moveForwardToBeacon(.25);
 //		pushButton("Blue");
 //		moveAwayFromBeacon(.5, 25);		//needs to be tested
-//		gyroTurnRightCorrection(.25, 90);
+		gyroTurnRightCorrection(.25, 90);
 //		shoot();
 	}
 }
