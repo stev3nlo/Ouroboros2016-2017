@@ -128,10 +128,6 @@ public abstract class MyOpMode extends LinearOpMode {
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 		resetButtonPress();
 
-
-
-
-
 		curPowerOfMotorSpinner = 0.3;
 		//motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		//motorSpinner.setMaxSpeed((int)(((double)(encoderTicksPerRotation*goalRPM))/60.0));
@@ -142,7 +138,11 @@ public abstract class MyOpMode extends LinearOpMode {
 	//initialize sensors
 	public void initializeSensors()
 	{
+		telemetry.addData("Gyro", "Initializing");
+		telemetry.update();
 		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
+		telemetry.addData("Gyro", "Initialized");
+		telemetry.update();
 		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
 		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
@@ -285,7 +285,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		double startAngle = gyro.getYaw();		//angle of the robot before the turn
 		double newAngle = gyro.getYaw();		//angle of the robot during the turn
 		turnRight(speed);		//starts the turn
-		while (Math.abs(newAngle - startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
+		while (getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
 			newAngle = gyro.getYaw();		//updates the new angle constantly
 			idle();
 		}
@@ -324,19 +324,19 @@ public abstract class MyOpMode extends LinearOpMode {
 		double startAngle = gyro.getYaw();
 		double newAngle = gyro.getYaw();
 		turnRight(speed);
-		while(getAngleDiff(startAngle,newAngle) < targetAngle) {
+		double angleDiff = getAngleDiff(startAngle, newAngle);
+		while(angleDiff < targetAngle) {
 			newAngle = gyro.getYaw();
-			telemetry.addData("init Turning",newAngle);
-			telemetry.update();
+			angleDiff = getAngleDiff(startAngle, newAngle);
 			idle();
 		}
-		turnLeft(speed / 2);
-		while(Math.abs(newAngle - startAngle) > targetAngle) {
-			telemetry.addData("correctional Turning",newAngle);
-			telemetry.update();
+		turnLeft(speed * .5);
+		while(angleDiff > targetAngle) {
 			newAngle = gyro.getYaw();
+			angleDiff = getAngleDiff(startAngle, newAngle);
 			idle();
 		}
+		stopMotors();
 	}
 
 	public void gyroTurnLeftCorrection(double speed, double targetAngle) throws InterruptedException {
@@ -503,7 +503,6 @@ public abstract class MyOpMode extends LinearOpMode {
 		double startTime = getCurTime();
 		while (getCurTime() < startTime + t)
 		{
-			telemetry.addData("pausing",getCurTime());
 			initCurtime();
 			idle();
 		}
@@ -625,9 +624,9 @@ public abstract class MyOpMode extends LinearOpMode {
 		int avgEnc = currEnc;
 		moveForwards(speed);
 		while (Math.abs(avgEnc - currEnc) < goal) {
-			avgEnc = getAvgEnc();
-			telemetry.addData("avgEnc",avgEnc);
+			telemetry.addData("avg Enc", avgEnc);
 			telemetry.update();
+			avgEnc = getAvgEnc();
 		}
 		stopMotors();
 	}
