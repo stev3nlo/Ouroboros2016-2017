@@ -11,21 +11,6 @@ import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 @Autonomous(name="Shoot Only Auto Blue", group="Auto")
 public class ShootOnlyAutoBlue extends MyAutonomous {
 
-	public void simpleStabilizingLoop(double t)
-	{
-		initCurtime();
-		double startOfStablilizing = getCurTime();
-		//telemetry.addData(""+startOfStablilizing,startOfStablilizing);
-		while (getCurTime() - startOfStablilizing < t) {
-			telemetry.addData("startOfStablilizing",startOfStablilizing);
-			telemetry.addData("getCurTime",getCurTime());
-			runRPMStabilizationAuto();
-			telemetry.update();
-			runSpinner(curPowerOfMotorSpinner);
-			initCurtime();
-			try{idle();}catch(InterruptedException e){}
-		}
-	}
 	@Override
 	public void runOpMode() throws InterruptedException {
 		super.runOpMode();

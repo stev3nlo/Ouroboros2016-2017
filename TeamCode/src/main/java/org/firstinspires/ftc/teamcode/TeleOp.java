@@ -102,6 +102,7 @@ public class TeleOp extends MyOpMode
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
+        waitForStart();
         timeAtLastLoop = getCurTime();
         while (opModeIsActive())
         {
@@ -154,7 +155,7 @@ public class TeleOp extends MyOpMode
 
 
             //releases balls from basket into spinner
-            if (g2APressed && !shooterIsRunning)
+            if (g2APressed && shooterIsRunning)
             {
                 openServoDropper();
             }

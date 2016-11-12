@@ -12,4 +12,25 @@ public class MyAutonomous extends MyOpMode
         initialize();
         initializeSensors();
     }
+
+    public void simpleStabilizingLoop(double t) throws InterruptedException
+    {
+        if(opModeIsActive()) {
+            initCurtime();
+            double startOfStablilizing = getCurTime();
+            //telemetry.addData(""+startOfStablilizing,startOfStablilizing);
+            while (opModeIsActive() && getCurTime() - startOfStablilizing < t) {
+                telemetry.addData("startOfStablilizing", startOfStablilizing);
+                telemetry.addData("getCurTime", getCurTime());
+                runRPMStabilizationAuto();
+                telemetry.update();
+                runSpinner(curPowerOfMotorSpinner);
+                initCurtime();
+                try {
+                    idle();
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+    }
 }

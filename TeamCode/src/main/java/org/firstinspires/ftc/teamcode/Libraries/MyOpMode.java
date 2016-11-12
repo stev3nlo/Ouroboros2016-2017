@@ -185,11 +185,13 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void openServoDropper()
 	{
-		setServoDropperPosition(0.0);
+		if(opModeIsActive())
+			setServoDropperPosition(0.0);
 	}
 
 	public void closeServoDropper()
 	{
+		if(opModeIsActive())
 		setServoDropperPosition(1.0);
 	}
 
@@ -434,7 +436,8 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void initCurtime()
 	{
-		curTime = ((double)System.nanoTime())/1000000000.0;
+		if(opModeIsActive())
+			curTime = ((double)System.nanoTime())/1000000000.0;
 	}
 
 	public double getCurTime()
@@ -615,26 +618,31 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 		telemetry.addData("curTime","" + getCurTime());
 		telemetry.addData("curEncoderVal", "" + getSpinnerEncoderVal());
-		telemetry.addData("oldTime",oldTime);
+		telemetry.addData("oldTime", oldTime);
 		telemetry.addData("oldEncoderVal",oldEncoderVal);
-		telemetry.addData("timeSinceLastRPMUpdate",timeSinceLastRPMUpdate);
+		telemetry.addData("timeSinceLastRPMUpdate", timeSinceLastRPMUpdate);
 	}
 
 	public void moveWithEncoders(double speed, int goal) {
-		int currEnc = getAvgEnc();
-		int avgEnc = currEnc;
-		moveForwards(speed);
-		int distMoved = Math.abs(avgEnc - currEnc);
-		while (distMoved < goal) {
-			avgEnc = getAvgEnc();
-			telemetry.addData("avg Enc", avgEnc);
-			telemetry.addData("curr Enc", currEnc);
-			moveForwards(speed * ((1-(((double)distMoved / (double)goal)/2))));
-			distMoved = Math.abs(avgEnc - currEnc);
-			telemetry.update();
-			try{idle();}catch(InterruptedException e){}
+		if(opModeIsActive()) {
+			int currEnc = getAvgEnc();
+			int avgEnc = currEnc;
+			moveForwards(speed);
+			int distMoved = Math.abs(avgEnc - currEnc);
+			while (distMoved < goal && opModeIsActive()) {
+				avgEnc = getAvgEnc();
+				telemetry.addData("avg Enc", avgEnc);
+				telemetry.addData("curr Enc", currEnc);
+				moveForwards(speed * ((1 - (((double) distMoved / (double) goal) / 2))));
+				distMoved = Math.abs(avgEnc - currEnc);
+				telemetry.update();
+				try {
+					idle();
+				} catch (InterruptedException e) {
+				}
+			}
+			stopMotors();
 		}
-		stopMotors();
 	}
 
 	public int getAvgEnc() {
