@@ -21,7 +21,7 @@ import java.util.TreeMap;
 public abstract class MyOpMode extends LinearOpMode {
 
 	public static final int encoderTicksPerRotation = 1140;
-	public static final int goalRPM = 55;
+	public static final int goalRPM = 57;
 	protected static final int timeToDropBalls = 3;
 	protected double timeSinceLastStabilization = 0.0;
 	protected TreeMap<Double,Long> RPMs = new TreeMap<Double,Long>();
@@ -216,9 +216,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	public void stopMotors() {
 		motorR1.setPower(0.0);
-		motorR2.setPower(0);
-		motorL1.setPower(0);
-		motorL2.setPower(0);
+		motorR2.setPower(0.0);
+		motorL1.setPower(0.0);
+		motorL2.setPower(0.0);
 	}
 
 	/**
@@ -330,7 +330,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			angleDiff = getAngleDiff(startAngle, newAngle);
 			idle();
 		}
-		turnLeft(speed * .5);
+		turnLeft(speed * .25);
 		while(angleDiff > targetAngle) {
 			newAngle = gyro.getYaw();
 			angleDiff = getAngleDiff(startAngle, newAngle);
@@ -580,14 +580,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		telemetry.addData("curTime","" + getCurTime());
 		telemetry.addData("curEncoderVal", "" + getSpinnerEncoderVal());
 		telemetry.addData("oldTime",oldTime);
-		telemetry.addData("oldEncoderVal",oldEncoderVal);
-		telemetry.addData("timeSinceLastRPMUpdate",timeSinceLastRPMUpdate);
+		telemetry.addData("oldEncoderVal", oldEncoderVal);
+		telemetry.addData("timeSinceLastRPMUpdate", timeSinceLastRPMUpdate);
 	}
 
 	public void runRPMStabilizationAuto()
 	{
 		RPMs.put(getCurTime(), getSpinnerEncoderVal());
-
 		telemetry.addData("curRPM", curRPM);
 		telemetry.addData("goalRPM",goalRPM);
 		if(getCurTime()-initTime>3.0 && getCurTime() - timeAtLastStabilization > 0.3) {
@@ -599,18 +598,20 @@ public abstract class MyOpMode extends LinearOpMode {
 			curRPM = getSpinnerEncoderVal() - oldEncoderVal;
 			curRPM /= 1120; //Number of rotations since last run
 			timeSinceLastRPMUpdate = getCurTime() - oldTime;
-			curRPM /= getCurTime() - oldTime; //Number of rotations per second
-			curRPM *= 60.0;
-			//telemetry.addData("motorRPM", curRPM);
-			if(curRPM>goalRPM)
-				curPowerOfMotorSpinner -= Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (10000);
-			else
-				curPowerOfMotorSpinner += Math.sqrt(Math.abs(((curRPM - goalRPM)*(curRPM-goalRPM)*(curRPM-goalRPM)))) / (10000);
-			if (curPowerOfMotorSpinner > 1.0)
-				curPowerOfMotorSpinner = 1.0;
-			else if (curPowerOfMotorSpinner < 0.0)
-				curPowerOfMotorSpinner = 0.0;
-			timeAtLastStabilization = getCurTime();
+			if(timeSinceLastRPMUpdate != 0) {
+				curRPM /= getCurTime() - oldTime; //Number of rotations per second
+				curRPM *= 60.0;
+				//telemetry.addData("motorRPM", curRPM);
+				if (curRPM > goalRPM)
+					curPowerOfMotorSpinner -= Math.sqrt(Math.abs(((curRPM - goalRPM) * (curRPM - goalRPM) * (curRPM - goalRPM)))) / (10000);
+				else
+					curPowerOfMotorSpinner += Math.sqrt(Math.abs(((curRPM - goalRPM) * (curRPM - goalRPM) * (curRPM - goalRPM)))) / (10000);
+				if (curPowerOfMotorSpinner > 1.0)
+					curPowerOfMotorSpinner = 1.0;
+				else if (curPowerOfMotorSpinner < 0.0)
+					curPowerOfMotorSpinner = 0.0;
+				timeAtLastStabilization = getCurTime();
+			}
 		}
 		telemetry.addData("curTime","" + getCurTime());
 		telemetry.addData("curEncoderVal", "" + getSpinnerEncoderVal());
@@ -623,28 +624,36 @@ public abstract class MyOpMode extends LinearOpMode {
 		int currEnc = getAvgEnc();
 		int avgEnc = currEnc;
 		moveForwards(speed);
-		while (Math.abs(avgEnc - currEnc) < goal) {
-			telemetry.addData("avg Enc", avgEnc);
-			telemetry.update();
+		int distMoved = Math.abs(avgEnc - currEnc);
+		while (distMoved < goal) {
 			avgEnc = getAvgEnc();
+			telemetry.addData("avg Enc", avgEnc);
+			telemetry.addData("curr Enc", currEnc);
+			moveForwards(speed * ((1-(((double)distMoved / (double)goal)/2))));
+			distMoved = Math.abs(avgEnc - currEnc);
+			telemetry.update();
+			try{idle();}catch(InterruptedException e){}
 		}
 		stopMotors();
 	}
 
 	public int getAvgEnc() {
 		int encL1 = motorL1.getCurrentPosition();
+		//telemetry.addData("encL1",encL1);
 		int encL2 = motorL2.getCurrentPosition();
+		//telemetry.addData("encL2",encL2);
 		int encR1 = motorR1.getCurrentPosition();
+		//telemetry.addData("encR1",encR1);
 		int encR2 = motorR2.getCurrentPosition();
+		//telemetry.addData("encR2",encR2);
 		int avg = encL1 + encL2 + encR1 + encR2;
 		avg /= 4;
-		return avg;
+		return encR1/4;
 	}
 
 	@Override
 	public void runOpMode() throws InterruptedException
 	{
 		initialize(); //Sets up motors, servos, and gyros
-		waitForStart();
 	}
 }
