@@ -159,7 +159,7 @@ public class TeleOp extends MyOpMode
             {
                 openServoDropper();
             }
-            else if(g2BPressed)
+            else if(g2BPressed || !shooterIsRunning)
             {
                 closeServoDropper();
             }
