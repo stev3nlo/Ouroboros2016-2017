@@ -38,15 +38,16 @@ public class AutoBlueRange extends MyOpMode {
         //turn until both range1 and range2 are equal
         while(!(rangeF.getUltraSonicDistance() == rangeB.getUltraSonicDistance()))
         {
-            turnLeft(.5);
+            move(0.0, 1.0);
         }
+
         stopMotors();
 
         //press far beacon
         pushButton("Blue");
 
-        //back up until at closest beacon
-       moveBackToWhiteLineODS(1.0);
+        //back up until at closest beacon, includes stablilizing
+        moveBackToWhiteLineODS(1.0);
 
         //press closest beacon
         pushButton("Blue");
@@ -75,8 +76,5 @@ public class AutoBlueRange extends MyOpMode {
 
         //turns off spinnner
         runSpinner(0.0);
-
-
-
     }
 }

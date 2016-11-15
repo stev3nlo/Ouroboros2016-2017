@@ -392,6 +392,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		stopMotors();
 	}
 
+
 	/**
 	 * This method gives the opposite speed to the turnRightToWhiteLine method to do the same thing
 	 * but on the other side of the field (turning left)
@@ -425,6 +426,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 		stopMotors();
 	}
+
 
 	
 	//Essential shooter methods
@@ -507,7 +509,18 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		while(ods.lightDetected()<.5) //random number!!! needs to be replaced!!!
 		{
-			moveBackwards(speed);	
+			while(rangeF.getUltraSonicDistance() > rangeB.getUltraSonicDistance())
+			{
+				move(-0.5,-0.8);
+			}
+			while(rangeF.getUltraSonicDistance() < rangeB.getUltraSonicDistance())
+			{
+				move(-0.8,-0.5);
+			}
+			while (rangeF.getUltraSonicDistance() == rangeB.getUltraSonicDistance())
+			{
+				move(-0.5, -0.5);
+			}
 		}
 		stopMotors();
 
