@@ -1,15 +1,14 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Autonomouses;
 
 /**
- * Created by Morgannanez on 10/6/16.
+ * Created by Morgannanez on 10/10/16.
  */
+
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 
-public class AutoOpRed extends MyOpMode {
+public class AutoOpBlue extends MyOpMode {
 
-/* NEED TO ADD BEACON PRESS METHOD*/
-    
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
         waitForStart();
@@ -17,16 +16,17 @@ public class AutoOpRed extends MyOpMode {
         moveToWhiteLine(1.0);
         turnRightToWhiteLine(1.0);
 
-        //need beacon press method
+        // beacon presser method
 
         //turns robot to shooting position
-        gyroTurnRight(1.0, 90.0);
-        gyroTurnRightCorrection(1.0,90.0);
+        gyroTurnLeft(1.0, 90.0);
+        gyroTurnLeftCorrection(1.0,90.0);
 
         //runs spinner
         initCurtime();
         double timeAtSpinnerStart = getCurTime();
-        while(getCurTime()< timeAtSpinnerStart+1.0) {
+        while(getCurTime()<timeAtSpinnerStart+1.0)
+        {
             initCurtime();
             //shoot();
             idle();
@@ -36,14 +36,15 @@ public class AutoOpRed extends MyOpMode {
         openServoDropper();
         initCurtime();
         double timeAtBallDrop = getCurTime();
-        while(getCurTime()<timeAtBallDrop+5.0) {
+        while(getCurTime()<timeAtBallDrop+5.0)
+        {
             initCurtime();
             //shoot();
             idle();
         }
         closeServoDropper();
 
-        //turns off spinner
+        //turns off spinnner
         runSpinner(0.0);
     }
 }
