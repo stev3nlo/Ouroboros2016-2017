@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.adafruit.BNO055IMU;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,6 +83,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	protected SensorMRRange rangeF;
 	protected SensorMRRange rangeB;
+	protected MROpticalDistanceSensor ods;
 
 	//Speed values for motors
 	protected double curPowerOfMotorR1 = 0.0;
@@ -498,6 +500,16 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void updateServoPositions()
 	{
+
+	}
+
+	public void moveBackToWhiteLineODS(double speed)
+	{
+		while(ods.lightDetected()<.5) //random number!!! needs to be replaced!!!
+		{
+			moveBackwards(speed);	
+		}
+		stopMotors();
 
 	}
 
