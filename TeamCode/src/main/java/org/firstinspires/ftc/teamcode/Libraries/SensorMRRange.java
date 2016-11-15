@@ -91,7 +91,7 @@ public class SensorMRRange extends MyOpMode {
 		String output = "";
 
 		//output += "Ultra Sonic " + String.valueOf(cache.get(0));
-		output += "Raw USD: " + getRawUltraSonicDistance() + "\n";
+		output += "\nRaw USD: " + getRawUltraSonicDistance() + "\n";
 		output += "Ultra Sonic: " + ultraSonicDistanceValue;
 		output += "\nODS: " + String.valueOf(cache.get(1));
 		output += "\nStatus: " + String.valueOf(cache.get(2));

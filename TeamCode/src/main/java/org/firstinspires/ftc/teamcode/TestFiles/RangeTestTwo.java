@@ -29,8 +29,8 @@ public class RangeTestTwo extends MyOpMode {
 		while (opModeIsActive())
 		{
 
-			telemetry.addData("", rangeF);
-			telemetry.addData("", rangeB);
+			telemetry.addData("Range F", rangeF);
+			telemetry.addData("Range B", rangeB);
 			telemetry.update();
 
 			idle();
