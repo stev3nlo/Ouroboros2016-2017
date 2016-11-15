@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomouses;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
+import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
+
 
 /**
  * Created by Steven on 11/14/2016.
@@ -16,7 +18,8 @@ public class AutoBlueRange extends MyOpMode {
     //shoot
     SensorMRRange rangeF;
     SensorMRRange rangeB;
-    int firstDistance;
+
+
 
     public void runOpMode() throws InterruptedException {
         rangeF.initializeSensors();
@@ -27,7 +30,7 @@ public class AutoBlueRange extends MyOpMode {
 
         //travel across the field to far beacon
         //using range1, stop x distance away
-        while(rangeF.getUltraSonicDistance() > 10) //random number
+        while(rangeF.getUltraSonicDistance() > 10) //random number!!!! needs to be replaced
         {
           moveForwards(1.0);
         }
@@ -35,18 +38,43 @@ public class AutoBlueRange extends MyOpMode {
         //turn until both range1 and range2 are equal
         while(!(rangeF.getUltraSonicDistance() == rangeB.getUltraSonicDistance()))
         {
-            firstDistance = rangeB.getUltraSonicDistance();
-            gyroTurnLeft(1.0, 45);
-            gyroTurnLeftCorrection(1.0, 45);
+            turnLeft(.5);
         }
+        stopMotors();
+
         //press far beacon
         pushButton("Blue");
 
         //back up until at closest beacon
-        while(!(rangeB.getUltraSonicDistance() < firstDistance ) )
+       moveBackToWhiteLineODS(1.0);
+
+        //press closest beacon
+        pushButton("Blue");
+
+        //runs spinner
+        initCurtime();
+        double timeAtSpinnerStart = getCurTime();
+        while(getCurTime()<timeAtSpinnerStart+1.0)
         {
-            moveBackwards();
+            initCurtime();
+            //shoot();
+            idle();
         }
+
+        //drops preplaced balls into spinner
+        openServoDropper();
+        initCurtime();
+        double timeAtBallDrop = getCurTime();
+        while(getCurTime()<timeAtBallDrop+5.0)
+        {
+            initCurtime();
+            //shoot();
+            idle();
+        }
+        closeServoDropper();
+
+        //turns off spinnner
+        runSpinner(0.0);
 
 
 
