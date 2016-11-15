@@ -80,7 +80,8 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * Modern Robotics Range Sensor that uses ultraSonic and Optical Distance
 	 */
-	protected SensorMRRange range;
+	protected SensorMRRange rangeF;
+	protected SensorMRRange rangeB;
 
 	//Speed values for motors
 	protected double curPowerOfMotorR1 = 0.0;
@@ -146,7 +147,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
 		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
-		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
+		rangeF = new SensorMRRange(hardwareMap.i2cDevice.get("rangeF"));
+		rangeB = new SensorMRRange(hardwareMap.i2cDevice.get("rangeB"));
 		colorC.sensorSetup(0x2e);
 		colorR.sensorSetup(0x2a);
 		colorB.sensorSetup(0x2c);
@@ -408,7 +410,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	//Moving to and from beacon methods	
 	public void moveForwardToBeacon(double speed) throws InterruptedException {
 		moveForwards(speed);
-		while (!range.inFrontOfBeacon()) {
+		while (!rangeF.inFrontOfBeacon()) {
 			idle();
 		}
 		stopMotors();
@@ -416,14 +418,12 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void moveAwayFromBeacon(double speed, int distance) throws InterruptedException {
 		moveBackwards(speed);
-		while (!(range.getUltraSonicDistance() > distance)) {
+		while (!(rangeF.getUltraSonicDistance() > distance)) {
 			idle();
 		}
 		stopMotors();
 	}
-	
-	
-	
+
 	
 	//Essential shooter methods
 	/**
