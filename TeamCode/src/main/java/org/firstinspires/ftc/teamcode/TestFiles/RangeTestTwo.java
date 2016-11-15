@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
  */
 
 
-@Autonomous(name="RangeTest", group="Test")
+@Autonomous(name="RangeTest2", group="Test")
 public class RangeTestTwo extends MyOpMode {
 
 	SensorMRRange rangeF;
