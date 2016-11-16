@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.adafruit.BNO055IMU;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,7 +81,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * Modern Robotics Range Sensor that uses ultraSonic and Optical Distance
 	 */
-	protected SensorMRRange range;
+	protected SensorMRRange rangeF;
+	protected SensorMRRange rangeB;
+	protected MROpticalDistanceSensor ods;
 
 	//Speed values for motors
 	protected double curPowerOfMotorR1 = 0.0;
@@ -146,7 +149,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
 		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
-		range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
+		rangeF = new SensorMRRange(hardwareMap.i2cDevice.get("rangeF"));
+		rangeB = new SensorMRRange(hardwareMap.i2cDevice.get("rangeB"));
 		colorC.sensorSetup(0x2e);
 		colorR.sensorSetup(0x2a);
 		colorB.sensorSetup(0x2c);
@@ -388,6 +392,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		stopMotors();
 	}
 
+
 	/**
 	 * This method gives the opposite speed to the turnRightToWhiteLine method to do the same thing
 	 * but on the other side of the field (turning left)
@@ -408,7 +413,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	//Moving to and from beacon methods	
 	public void moveForwardToBeacon(double speed) throws InterruptedException {
 		moveForwards(speed);
-		while (!range.inFrontOfBeacon()) {
+		while (!rangeF.inFrontOfBeacon()) {
 			idle();
 		}
 		stopMotors();
@@ -416,14 +421,13 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void moveAwayFromBeacon(double speed, int distance) throws InterruptedException {
 		moveBackwards(speed);
-		while (!(range.getUltraSonicDistance() > distance)) {
+		while (!(rangeF.getUltraSonicDistance() > distance)) {
 			idle();
 		}
 		stopMotors();
 	}
-	
-	
-	
+
+
 	
 	//Essential shooter methods
 	/**
@@ -498,6 +502,27 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void updateServoPositions()
 	{
+
+	}
+
+	public void moveBackToWhiteLineODS(double speed)
+	{
+		while(ods.lightDetected()<.5) //random number!!! needs to be replaced!!!
+		{
+			while(rangeF.getUltraSonicDistance() > rangeB.getUltraSonicDistance())
+			{
+				move(-0.5,-0.8);
+			}
+			while(rangeF.getUltraSonicDistance() < rangeB.getUltraSonicDistance())
+			{
+				move(-0.8,-0.5);
+			}
+			while (rangeF.getUltraSonicDistance() == rangeB.getUltraSonicDistance())
+			{
+				move(-0.5, -0.5);
+			}
+		}
+		stopMotors();
 
 	}
 
