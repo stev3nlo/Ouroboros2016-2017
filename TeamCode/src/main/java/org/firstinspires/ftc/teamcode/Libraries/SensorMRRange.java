@@ -44,6 +44,10 @@ public class SensorMRRange extends MyOpMode {
 		rangeReader.engage();
 	}
 
+	public void sensorSetup(int i) {
+		rangeReader.setI2cAddress(I2cAddr.create8bit(i));
+	}
+
 	public int getRawUltraSonicDistance() {
 		return rangeCache[0] & 0xFF;
 	}

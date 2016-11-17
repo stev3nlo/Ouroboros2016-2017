@@ -154,6 +154,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		colorC.sensorSetup(0x2e);
 		colorR.sensorSetup(0x2a);
 		colorB.sensorSetup(0x2c);
+		rangeF.sensorSetup(0x4a);
+		rangeB.sensorSetup(0x4c);
 	}
 
 	/**

@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 @Autonomous(name="RangeTest", group="Test")
 public class RangeTest extends MyOpMode {
 
+    SensorMRRange range;
+
     public void initialize()
     {
         range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));

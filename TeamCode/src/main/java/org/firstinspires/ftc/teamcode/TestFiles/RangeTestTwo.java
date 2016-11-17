@@ -21,6 +21,8 @@ public class RangeTestTwo extends MyOpMode {
 
 		 rangeF = new SensorMRRange(hardwareMap.i2cDevice.get("rangeF"));
 		 rangeB = new SensorMRRange(hardwareMap.i2cDevice.get("rangeB"));
+		rangeF.sensorSetup(0x4a);
+		rangeB.sensorSetup(0x4c);
 	}
 
 	public void runOpMode() throws InterruptedException {
