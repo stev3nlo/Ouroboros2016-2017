@@ -409,6 +409,16 @@ public abstract class MyOpMode extends LinearOpMode {
 		turnRightToWhiteLine(-speed);
 	}
 
+	public void moveBackToBeacon(String side)
+	{
+		while (!(colorB.getColor().equals(side)))
+		{
+			moveBackwards(1.0);
+		}
+		stopMotors();
+	}
+
+
 
 
 
@@ -467,19 +477,21 @@ public abstract class MyOpMode extends LinearOpMode {
 	//Methods to control button pushing
 	public void pushButton(String side) {
 		if (colorB.beaconColor().equals(side)) {
-			pushButtonRight();
-		} else {
-			pushButtonLeft();
+			moveBeaconPusherOut();
 		}
+		moveBeaconPusherIn();
 	}
 
-	public void pushButtonRight() {
+
+	public void moveBeaconPusherOut() {
+		//TEST VALUES
 		double v = .85;
 		servoBeaconPusher.setPosition(v);
 	}
 
-	public void pushButtonLeft() {
-		double v = 0.15;
+	public void moveBeaconPusherIn() {
+		//TEST VALUES
+		double v = -0.85;
 		servoBeaconPusher.setPosition(v);
 	}
 
