@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.Libraries;
 /**
  * Created by Morgannanez on 11/15/16.
  */
+import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
 public class MROpticalDistanceSensor extends MyOpMode{
@@ -29,6 +31,7 @@ public class MROpticalDistanceSensor extends MyOpMode{
   {
     return ods.getRawLightDetectedMax();
   }
+
 
 
 }
