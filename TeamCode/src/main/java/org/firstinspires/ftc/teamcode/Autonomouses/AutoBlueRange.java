@@ -31,7 +31,7 @@ public class AutoBlueRange extends MyOpMode {
         waitForStart();
 
         //travel forward to prine shooting spot
-        moveWithEncoders(-.3, 2150);
+        moveWithEncoders(-.3, 2150); //needs to be tested
 
         //shoot
         //runs spinner
@@ -65,6 +65,7 @@ public class AutoBlueRange extends MyOpMode {
         {
           moveForwards(1.0);
         }
+        stopMotors();
 
         //turn until both range1 and range2 are equal
         while(!(rangeF.getUltraSonicDistance() == rangeB.getUltraSonicDistance()))
@@ -78,13 +79,13 @@ public class AutoBlueRange extends MyOpMode {
         //move back until colorsensor senses right color
         moveBackToBeacon("Blue");
         //press far beacon
-        pushButton("Blue");
+        pushButton();
 
         //close beacon
         //move back until colorsensor senses right color
         moveBackToBeacon("Blue");
         //press far beacon
-        pushButton("Blue");
+        pushButton();
         
 
     }
