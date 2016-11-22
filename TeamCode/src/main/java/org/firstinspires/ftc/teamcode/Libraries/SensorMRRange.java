@@ -19,6 +19,8 @@ import java.util.ArrayList;
 
 public class SensorMRRange extends MyOpMode {
 
+    int averageROC;
+
 	public int prevUSDVal;
 	private ElapsedTime runtime = new ElapsedTime();
 	byte[] rangeCache; //The read will return an array of bytes.
@@ -101,5 +103,9 @@ public class SensorMRRange extends MyOpMode {
 		output += "\nStatus: " + String.valueOf(cache.get(2));
 
 		return output;
+	}
+
+	public int getAverageChange(){
+		return averageROC;
 	}
 }
