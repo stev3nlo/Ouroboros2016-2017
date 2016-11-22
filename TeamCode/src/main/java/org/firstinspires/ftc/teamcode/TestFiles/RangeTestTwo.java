@@ -16,7 +16,7 @@ public class RangeTestTwo extends MyOpMode {
 
 	SensorMRRange rangeF;
 	SensorMRRange rangeB;
-	
+
 	public void initialize()
 	{
 

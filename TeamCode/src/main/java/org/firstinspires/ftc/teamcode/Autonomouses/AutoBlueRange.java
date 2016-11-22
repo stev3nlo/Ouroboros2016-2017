@@ -9,13 +9,16 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
  * Created by Steven on 11/14/2016.
  */
 public class AutoBlueRange extends MyOpMode {
+    //travel 3ft to preferred shooting place
+    //shoot
     //travel across the field to far beacon
     //using range1, stop x distance away
     //turn until both range1 and range2 are equal
     //press far beacon
-    //back up until at closest beacon
+    //back up until at closest beacon using color sensor
     //press beacon
-    //shoot
+
+
     SensorMRRange rangeF;
     SensorMRRange rangeB;
 
@@ -40,6 +43,8 @@ public class AutoBlueRange extends MyOpMode {
         {
             move(0.0, 1.0);
         }
+
+
 
         stopMotors();
 
