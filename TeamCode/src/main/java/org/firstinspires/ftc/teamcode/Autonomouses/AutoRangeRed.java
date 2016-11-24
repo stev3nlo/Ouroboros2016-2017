@@ -24,6 +24,7 @@ public class AutoRangeRed extends MyOpMode {
     public void runOpMode() throws InterruptedException {
         rangeF.initializeSensors();
         rangeB.initializeSensors();
+        initializeRedServos();
         super.runOpMode();
         waitForStart();
 
@@ -63,6 +64,9 @@ public class AutoRangeRed extends MyOpMode {
             moveBackwards(1.0);
         }
         stopMotors();
+
+        //sets servos parallel to Wall
+        setServosParallel();
 
         //turn until both range1 and range2 are equal
         while(!(rangeF.getUltraSonicDistance() == rangeB.getUltraSonicDistance()))

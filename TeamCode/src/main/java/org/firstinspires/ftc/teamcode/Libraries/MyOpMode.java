@@ -56,6 +56,8 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	protected Servo servoDropper;	// servo for manipulator
 	protected Servo servoBeaconPusher;
+	protected Servo servoRangeF;
+	protected Servo servoRangeB;
 
 
 
@@ -131,6 +133,10 @@ public abstract class MyOpMode extends LinearOpMode {
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 		resetButtonPress();
 
+		servoRangeB = hardwareMap.servo.get("servoRangeB");
+		servoRangeF = hardwareMap.servo.get("servoRangeF");
+
+
 		curPowerOfMotorSpinner = 0.3;
 		//motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		//motorSpinner.setMaxSpeed((int)(((double)(encoderTicksPerRotation*goalRPM))/60.0));
@@ -157,6 +163,20 @@ public abstract class MyOpMode extends LinearOpMode {
 		rangeF.sensorSetup(0x4a);
 		rangeB.sensorSetup(0x4c);
 	}
+
+	public void initializeBlueServos()
+	{
+		servoRangeF.setPosition(.35); //NEEDS TO be TESTED, will be angled to wall
+		servoRangeB.setPosition(0.5); // NEEDS TO BE TESTED, will be PARALLEL to wall
+	}
+
+	public void initializeRedServos()
+	{
+		servoRangeB.setPosition(.65); //NEEDS TO be TESTED, will be angled to wall
+		servoRangeF.setPosition(0.5); // NEEDS TO BE TESTED, will be PARALLEL to wall
+	}
+
+
 
 	/**
 	 * Moves all the drive motors with given speed for the left and right sides
@@ -481,6 +501,14 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 		closeServoDropper();
 		runSpinner(0.0);
+	}
+
+	//sets range servos to be paralled with Wall
+
+	public void setServosParallel()
+	{
+		servoRangeB.setPosition(0.5);
+		servoRangeF.setPosition(0.5);
 	}
 
 	//Methods to control button pushing
