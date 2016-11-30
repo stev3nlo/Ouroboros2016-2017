@@ -28,7 +28,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected TreeMap<Double,Long> RPMs = new TreeMap<Double,Long>();
 	protected double curRPM;
 	protected double initTime;
-	protected int numCyclesOfSlowingSpinner = -1;
+	protected int numCyclesOfSlowingSpinner = 0;
 	protected double timeAtLastSpinnerSlowdown;
 
 
@@ -133,10 +133,10 @@ public abstract class MyOpMode extends LinearOpMode {
 		servoDropper = hardwareMap.servo.get("servoDropper");
 		closeServoDropper();
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
-		resetButtonPress();
+		moveBeaconPusherIn();
 
-		servoRangeB = hardwareMap.servo.get("servoRangeB");
-		servoRangeF = hardwareMap.servo.get("servoRangeF");
+		//servoRangeB = hardwareMap.servo.get("servoRangeB");
+		//servoRangeF = hardwareMap.servo.get("servoRangeF");
 
 
 		curPowerOfMotorSpinner = 0.3;
@@ -521,27 +521,33 @@ public abstract class MyOpMode extends LinearOpMode {
 	//Methods to control button pushing
 	public void pushButton() {
 		moveBeaconPusherOut();
+		initCurtime();
+		double startTime = getCurTime();
+		while(opModeIsActive() && getCurTime() - startTime <= 2.5)
+			initCurtime();
 		moveBeaconPusherIn();
 	}
 
 
 	public void moveBeaconPusherOut() {
 		//TEST VALUES
-		double v = .85;
+		double v = 1.0;
 		servoBeaconPusher.setPosition(v);
 	}
 
 	public void moveBeaconPusherIn() {
 		//TEST VALUES
-		double v = .15;
+		double v = 0.0;
 		servoBeaconPusher.setPosition(v);
 	}
 
+	/*
 	public void resetButtonPress()
 	{
 		double v = 0.5;
 		servoBeaconPusher.setPosition(v);
 	}
+	*/
 
 
 	public void reset() {

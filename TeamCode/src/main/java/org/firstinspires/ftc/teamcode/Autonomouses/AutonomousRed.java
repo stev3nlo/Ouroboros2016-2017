@@ -18,7 +18,7 @@ public class AutonomousRed extends MyOpMode {
 		moveToWhiteLine(1);
 		turnLeftToWhiteLine(.25);
 		moveForwardToBeacon(.25);
-		pushButton("Red");
+		//pushButton("Red");
 		moveAwayFromBeacon(.5, 25);		//needs to be tested
 		gyroTurnLeftCorrection(.25, 90);
 		//shoot();

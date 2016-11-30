@@ -197,15 +197,15 @@ public class TeleOp extends MyOpMode
 
             if(g2Ltrig > 0.1)
             {
-                pushButtonLeft();
+                moveBeaconPusherOut();
             }
             else if(g2Rtrig > 0.1)
             {
-                pushButtonRight();
+                moveBeaconPusherOut();
             }
             else if(g2Rbump || g2Lbump)
             {
-                resetButtonPress();
+                moveBeaconPusherIn();
             }
             updateTelemetry();
             //timeAtEndOfLastCycle = System.nanoTime()/1000000000;
