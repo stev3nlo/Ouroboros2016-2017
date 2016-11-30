@@ -139,7 +139,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		//servoRangeF = hardwareMap.servo.get("servoRangeF");
 
 
-		curPowerOfMotorSpinner = 0.3;
+		curPowerOfMotorSpinner = 0.9;
 		//motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		//motorSpinner.setMaxSpeed((int)(((double)(encoderTicksPerRotation*goalRPM))/60.0));
 
@@ -155,13 +155,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		telemetry.addData("Gyro", "Initialized");
 		telemetry.update();
 		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
-		colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
-		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
+		//colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
+		//colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 		rangeF = new SensorMRRange(hardwareMap.i2cDevice.get("rangeF"));
 		rangeB = new SensorMRRange(hardwareMap.i2cDevice.get("rangeB"));
 		colorC.sensorSetup(0x2e);
-		colorR.sensorSetup(0x2a);
-		colorB.sensorSetup(0x2c);
+		//colorR.sensorSetup(0x2a);
+		//colorB.sensorSetup(0x2c);
 		rangeF.sensorSetup(0x4a);
 		rangeB.sensorSetup(0x4c);
 	}

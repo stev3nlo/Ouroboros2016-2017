@@ -25,10 +25,11 @@ public class AutoBlueRange extends MyOpMode {
 
 
     public void runOpMode() throws InterruptedException {
-        rangeF.initializeSensors();
-        rangeB.initializeSensors();
+        //rangeF.initializeSensors();
+        //rangeB.initializeSensors();
         //initializeBlueServos();
         super.runOpMode();
+        initializeSensors();
         waitForStart();
 
         //travel forward to prine shooting spot
@@ -41,7 +42,7 @@ public class AutoBlueRange extends MyOpMode {
         while(getCurTime()<timeAtSpinnerStart+1.0)
         {
             initCurtime();
-            //shoot();
+            runSpinner(1.0);
             idle();
         }
 
@@ -49,20 +50,29 @@ public class AutoBlueRange extends MyOpMode {
         openServoDropper();
         initCurtime();
         double timeAtBallDrop = getCurTime();
-        while(getCurTime()<timeAtBallDrop+5.0)
+        while(getCurTime()<timeAtBallDrop+2.0)
         {
             initCurtime();
-            //shoot();
+            runSpinner(1.0);
             idle();
         }
         closeServoDropper();
 
         //turns off spinnner
-        runSpinner(0.0);
+        numCyclesOfSlowingSpinner = 10;
+        while(opModeIsActive() && numCyclesOfSlowingSpinner >= 0) {
+            initCurtime();
+            if (numCyclesOfSlowingSpinner >= 0 && getCurTime() - timeAtLastSpinnerSlowdown >= 0.2) {
+                runSpinner(curPowerOfMotorSpinner * ((double) numCyclesOfSlowingSpinner / 10.0));
+                timeAtLastSpinnerSlowdown = getCurTime();
+                if (numCyclesOfSlowingSpinner > 0)
+                    numCyclesOfSlowingSpinner--;
+            }
+        }
 
         //travel across the field to far beacon
         //using range1, stop x distance away
-        while(rangeF.getUltraSonicDistance() > 10) //random number!!!! needs to be replaced
+        while(rangeF.getUltraSonicDistance() > 10) //random number!! needs to be replaced
         {
           moveForwards(1.0);
         }
@@ -71,6 +81,8 @@ public class AutoBlueRange extends MyOpMode {
         //sets servos parallel to Wall
         //setServosParallel();
 
+        if(rangeF.getUltraSonicDistance() > rangeB.getUltraSonicDistance())
+            move(0.0, 0.3);
         //turn until both range1 and range2 are equal
         while(!(rangeF.getUltraSonicDistance() == rangeB.getUltraSonicDistance()))
         {

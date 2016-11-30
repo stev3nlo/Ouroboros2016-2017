@@ -17,7 +17,7 @@ import java.util.ArrayList;
  */
 
 
-public class SensorMRRange extends MyOpMode {
+public class SensorMRRange {
 
     int averageROC;
 
