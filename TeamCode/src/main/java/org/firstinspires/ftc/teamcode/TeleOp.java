@@ -28,6 +28,7 @@ public class TeleOp extends MyOpMode
     int numLoopsRemainining;
     double timeAtLastLoop;
     double timePerLoop = 1.0;
+    public int driverMode = 0;
 
     public double g2y1;    //lift
     public double g2y2;    //manipulator
@@ -80,6 +81,7 @@ public class TeleOp extends MyOpMode
     public void updateTelemetry()
     {
         telemetry.addData("BEACON PUSH INFO","");
+        telemetry.addData("curPowerOfMotorSpinner",curPowerOfMotorSpinner);
         if(g2Ltrig > 0.1)
         {
             telemetry.addData("g2Ltrig being pressed", "LEFT");
@@ -96,6 +98,8 @@ public class TeleOp extends MyOpMode
         {
             telemetry.addData("No beacon control being pressed","");
         }
+        telemetry.addData("motorL1EncoderVal",getMotorL1EncoderVal());
+        telemetry.addData("motorL2EncoderVal",getMotorL2EncoderVal());
         telemetry.update();
     }
 
@@ -108,16 +112,42 @@ public class TeleOp extends MyOpMode
         {
             updateControllerVals();
             initCurtime(); //gets real time timer
-            move(MotorScaler.scaleSimple(g1y1), -MotorScaler.scaleSimple(g1y2)); // moves drive wheels
+            if(driverMode == 0)
+                move(-g1y2, g1y1); // moves drive wheels
+            else if(driverMode == 1)
+                move(-g1y2 * 0.75, g1y1 * 0.75);
+            else if(driverMode == 2)
+                move(-g1y2*0.5, g1y1*0.5);
+            else if(driverMode == 3)
+                move(-g1y2*0.25, g1y1*0.25);
+            if(g1APressed)
+                driverMode = 0;
+            else if(g1BPressed)
+                driverMode = 1;
+            else if(g1YPressed)
+                driverMode = 2;
+            else if(g1XPressed)
+                driverMode = 3;
             moveManip(g2y1);
 
             //Stabilization
 
             if (g2YPressed || !shooterIsRunning)
             {
-                runSpinner(0.0);
                 shooterIsRunning = false;
                 firstCycleOfSpinner = true;
+                if(numCyclesOfSlowingSpinner==-1)
+                {
+                    numCyclesOfSlowingSpinner = 10;
+                    timeAtLastSpinnerSlowdown = getCurTime();
+                }
+                if(numCyclesOfSlowingSpinner >= 0 && getCurTime() - timeAtLastSpinnerSlowdown >= 0.2)
+                {
+                    runSpinner(curPowerOfMotorSpinner*((double)numCyclesOfSlowingSpinner/10.0));
+                    timeAtLastSpinnerSlowdown = getCurTime();
+                    if(numCyclesOfSlowingSpinner > 0)
+                        numCyclesOfSlowingSpinner--;
+                }
             }
             //creates constant speed of spinner throughout game
             if(g2XPressed || shooterIsRunning)
@@ -127,6 +157,7 @@ public class TeleOp extends MyOpMode
                     firstCycleOfSpinner = false;
                     initTime = getCurTime();
                     timeAtLastStabilization = getCurTime();
+                    numCyclesOfSlowingSpinner = -1;
                 }
                 runRPMStabilization();
 
@@ -155,11 +186,11 @@ public class TeleOp extends MyOpMode
 
 
             //releases balls from basket into spinner
-            if (g2APressed && shooterIsRunning)
+            if (g2APressed)// && shooterIsRunning)
             {
                 openServoDropper();
             }
-            else if(g2BPressed || !shooterIsRunning)
+            else if(g2BPressed)// || !shooterIsRunning)
             {
                 closeServoDropper();
             }

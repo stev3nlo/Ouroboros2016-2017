@@ -22,12 +22,14 @@ import java.util.TreeMap;
 public abstract class MyOpMode extends LinearOpMode {
 
 	public static final int encoderTicksPerRotation = 1140;
-	public static final int goalRPM = 57;
+	public static final int goalRPM = 150;
 	protected static final int timeToDropBalls = 3;
 	protected double timeSinceLastStabilization = 0.0;
 	protected TreeMap<Double,Long> RPMs = new TreeMap<Double,Long>();
 	protected double curRPM;
 	protected double initTime;
+	protected int numCyclesOfSlowingSpinner = -1;
+	protected double timeAtLastSpinnerSlowdown;
 
 
 	//drive train motors
@@ -91,7 +93,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected double curPowerOfMotorR1 = 0.0;
 	protected double curPowerOfMotorL1 = 0.0;
 	protected double curPowerOfMotorManip = 0.0;
-	protected double curPowerOfMotorSpinner = 0.0;
+	protected double curPowerOfMotorSpinner = 0.9;
 
 	public long spinnerEncoderOffset = 0;
 
@@ -229,6 +231,11 @@ public abstract class MyOpMode extends LinearOpMode {
 	public long getMotorL1EncoderVal()
 	{
 		return motorL1.getCurrentPosition();
+	}
+
+	public long getMotorL2EncoderVal()
+	{
+		return motorL2.getCurrentPosition();
 	}
 
 	public long getMotorR1EncoderVal()
