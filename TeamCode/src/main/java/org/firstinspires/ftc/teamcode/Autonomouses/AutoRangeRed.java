@@ -22,8 +22,8 @@ public class AutoRangeRed extends MyOpMode {
     SensorMRRange rangeF;
     SensorMRRange rangeB;
     public void runOpMode() throws InterruptedException {
-        rangeF.initializeSensors();
-        rangeB.initializeSensors();
+        //rangeF.initializeSensors();
+        //rangeB.initializeSensors();
         //initializeRedServos();//
         super.runOpMode();
         waitForStart();

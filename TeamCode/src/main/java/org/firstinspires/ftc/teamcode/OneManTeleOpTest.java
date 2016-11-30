@@ -97,17 +97,15 @@ public class OneManTeleOpTest extends MyOpMode
             {
                 if(g1Ltrig > 0.1)
                 {
-                    pushButtonLeft();
+                    pushButton();
                 }
-                else if(g1Rtrig > 0.1)
-                {
-                    pushButtonRight();
-                }
-                else if(g1Rbump || g2Lbump)
-                {
-                    resetButtonPress();
-                }
-                moveManip(0.0);
+                else {
+					moveBeaconPusherIn();
+				}
+//                else if(g1Rtrig > 0.1)
+//                {
+//                    pushButtonRight();
+//                }
             }
             else
             {

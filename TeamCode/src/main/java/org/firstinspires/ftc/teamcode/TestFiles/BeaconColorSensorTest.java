@@ -41,7 +41,7 @@ public class BeaconColorSensorTest extends MyOpMode {
 			}
 		}
 		*/
-		resetButtonPress();
+		moveBeaconPusherIn();
 		servoDropper.setPosition(1);
 	}
 
