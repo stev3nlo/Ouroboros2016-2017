@@ -55,7 +55,7 @@ public class AutoRangeTest extends MyOpMode {
 
         while (opModeIsActive())
         {
-            moveBackToWhiteLineODS(1.0);
+            //moveBackToWhiteLineODS(1.0);
             telemetry.addData("Range F ", rangeF);
             telemetry.addData("Range B ", rangeB);
             telemetry.update();

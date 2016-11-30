@@ -13,6 +13,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorAdafruitIMU;
 @Autonomous(name="GyroTest", group="Test")
 public class GyroTest extends MyOpMode {
 
+	SensorAdafruitIMU gyro;
+
     public void initialize(){
 		telemetry.addData("Gyro", "Initializing");
 		telemetry.update();

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.TestFiles;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
+import org.firstinspires.ftc.robotcontroller.external.samples.SensorMROpticalDistance;
 import org.firstinspires.ftc.teamcode.Libraries.MROpticalDistanceSensor;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 @Autonomous(name="OpticalDistanceTest", group="Test")
 public class OpticalDistanceTest extends MyOpMode {
 
-
+    MROpticalDistanceSensor ods;
     public void initialize() {
         ods = new MROpticalDistanceSensor(hardwareMap.opticalDistanceSensor.get("ods"));
     }

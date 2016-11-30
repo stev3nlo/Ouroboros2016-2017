@@ -18,12 +18,6 @@ public class AutoBlueRange extends MyOpMode {
     //back up until at closest beacon using color sensor
     //press beacon
 
-
-    SensorMRRange rangeF;
-    SensorMRRange rangeB;
-
-
-
     public void runOpMode() throws InterruptedException {
         //rangeF.initializeSensors();
         //rangeB.initializeSensors();
@@ -93,13 +87,13 @@ public class AutoBlueRange extends MyOpMode {
 
         //far beacon
         //move back until colorsensor senses right color
-        moveBackToBeacon("Blue");
+        //moveBackToBeacon("Blue");
         //press far beacon
         pushButton();
 
         //close beacon
         //move back until colorsensor senses right color
-        moveBackToBeacon("Blue");
+        //moveBackToBeacon("Blue");
         //press far beacon
         pushButton();
         

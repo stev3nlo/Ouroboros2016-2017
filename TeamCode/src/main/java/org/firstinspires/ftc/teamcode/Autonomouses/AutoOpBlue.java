@@ -13,14 +13,14 @@ public class AutoOpBlue extends MyOpMode {
         super.runOpMode();
         waitForStart();
         //moves towards white line in front of beacon
-        moveToWhiteLine(1.0);
-        turnRightToWhiteLine(1.0);
+        //moveToWhiteLine(1.0);
+        //turnRightToWhiteLine(1.0);
 
         // beacon presser method
 
         //turns robot to shooting position
-        gyroTurnLeft(1.0, 90.0);
-        gyroTurnLeftCorrection(1.0,90.0);
+        //gyroTurnLeft(1.0, 90.0);
+        //gyroTurnLeftCorrection(1.0,90.0);
 
         //runs spinner
         initCurtime();

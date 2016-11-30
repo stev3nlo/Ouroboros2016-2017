@@ -17,7 +17,7 @@ public class AutoBlueGyroBased extends MyAutonomous {
 		initCurtime();
 		moveWithEncoders(-.2, 500);	//needs to test goal
 		pause(1.0);
-		gyroTurnRightCorrection(.25, 45);
+		//gyroTurnRightCorrection(.25, 45);
 		pause(1.0);
 		moveWithEncoders(1, 200);	//need to test goal
 		pause(1.0);

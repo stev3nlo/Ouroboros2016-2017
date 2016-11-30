@@ -78,13 +78,13 @@ public class AutoRangeRed extends MyOpMode {
 
         //far beacon
         //move back until colorsensor senses right color
-        moveForwardToBeacon("Red");
+        //moveForwardToBeacon("Red");
         //press far beacon
         pushButton();
 
         //close beacon
         //move back until colorsensor senses right color
-        moveForwardToBeacon("Red");
+        //moveForwardToBeacon("Red");
         //press far beacon
         pushButton();
 

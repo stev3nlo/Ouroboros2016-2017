@@ -14,6 +14,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 @Autonomous(name = "GroundColorSensorTest", group = "Test")
 public class GroundColorSensorTest extends MyOpMode{
 
+	SensorMRColor colorC;
+	SensorMRColor colorR;
 
     public void initialize(){
 		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));

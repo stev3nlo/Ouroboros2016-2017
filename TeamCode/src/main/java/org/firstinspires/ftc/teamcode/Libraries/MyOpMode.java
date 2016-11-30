@@ -68,16 +68,16 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * Adafruit IMU Object
 	 */
-	protected SensorAdafruitIMU gyro;
+	//protected SensorAdafruitIMU gyro;
 
 	/**
 	 * Middle Modern Robotics Color Sensor object
 	 */
-	protected SensorMRColor colorC;
+	//protected SensorMRColor colorC;
 	/**
 	 * Rear Modern Robotics Color Sensor object
 	 */
-	protected SensorMRColor colorR;
+	//protected SensorMRColor colorR;
 	/**
 	 * Modern Robotics Color Sensor for beacon
 	 */
@@ -87,7 +87,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	protected SensorMRRange rangeF;
 	protected SensorMRRange rangeB;
-	protected MROpticalDistanceSensor ods;
+	//protected MROpticalDistanceSensor ods;
 
 	//Speed values for motors
 	protected double curPowerOfMotorR1 = 0.0;
@@ -149,19 +149,19 @@ public abstract class MyOpMode extends LinearOpMode {
 	//initialize sensors
 	public void initializeSensors()
 	{
-		telemetry.addData("Gyro", "Initializing");
-		telemetry.update();
-		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
-		telemetry.addData("Gyro", "Initialized");
-		telemetry.update();
-		colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
+		//telemetry.addData("Gyro", "Initializing");
+		//telemetry.update();
+		//gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
+		//telemetry.addData("Gyro", "Initialized");
+		//telemetry.update();
+		//colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
 		//colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
-		//colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
+		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 		rangeF = new SensorMRRange(hardwareMap.i2cDevice.get("rangeF"));
 		rangeB = new SensorMRRange(hardwareMap.i2cDevice.get("rangeB"));
-		colorC.sensorSetup(0x2e);
+		//colorC.sensorSetup(0x2e);
 		//colorR.sensorSetup(0x2a);
-		//colorB.sensorSetup(0x2c);
+		colorB.sensorSetup(0x2c);
 		rangeF.sensorSetup(0x4a);
 		rangeB.sensorSetup(0x4c);
 	}
@@ -177,8 +177,6 @@ public abstract class MyOpMode extends LinearOpMode {
 //		servoRangeB.setPosition(.65); //NEEDS TO be TESTED, will be angled to wall
 //		servoRangeF.setPosition(0.5); // NEEDS TO BE TESTED, will be PARALLEL to wall
 //	}
-
-
 
 	/**
 	 * Moves all the drive motors with given speed for the left and right sides
@@ -304,6 +302,14 @@ public abstract class MyOpMode extends LinearOpMode {
 		turnRight(-speed);
 	}
 
+	public void arcTurnRight(double speed) {
+		move(-speed, 0);
+	}
+
+	public void arcTurnLeft(double speed) {
+		move(0, speed);
+	}
+
 	/**
 	 * This method will be used to turn to the right when we need to adjust to shoot after
 	 * getting the beacon.
@@ -315,16 +321,16 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 * @param targetAngle
 	 */
-	public void gyroTurnRight(double speed, double targetAngle) throws InterruptedException {
-		double startAngle = gyro.getYaw();		//angle of the robot before the turn
-		double newAngle = gyro.getYaw();		//angle of the robot during the turn
-		turnRight(speed);		//starts the turn
-		while (getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
-			newAngle = gyro.getYaw();		//updates the new angle constantly
-			idle();
-		}
-		stopMotors();
-	}
+//	public void gyroTurnRight(double speed, double targetAngle) throws InterruptedException {
+//		double startAngle = gyro.getYaw();		//angle of the robot before the turn
+//		double newAngle = gyro.getYaw();		//angle of the robot during the turn
+//		turnRight(speed);		//starts the turn
+//		while (getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
+//			newAngle = gyro.getYaw();		//updates the new angle constantly
+//			idle();
+//		}
+//		stopMotors();
+//	}
 
 	/**
 	 * This method will be used to turn to the left for when we are on the other side of the field
@@ -335,47 +341,47 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 * @param targetAngle
 	 */
-	public void gyroTurnLeft(double speed, double targetAngle) throws InterruptedException {
-		gyroTurnRight(-speed, -targetAngle);
-	}
+//	public void gyroTurnLeft(double speed, double targetAngle) throws InterruptedException {
+//		gyroTurnRight(-speed, -targetAngle);
+//	}
 
-	public double getAngleDiff(double angle1, double angle2)
-	{
-		if(Math.abs(angle1 - angle2) < 180.0)
-			return Math.abs(angle1-angle2);
-		else if(angle1 > angle2)
-		{
-			angle1 -= 360;
-			return Math.abs(angle2-angle1);
-		}
-		else
-		{
-			angle2 -= 360;
-			return Math.abs(angle1-angle2);
-		}
-	}
-	public void gyroTurnRightCorrection(double speed, double targetAngle) throws InterruptedException {
-		double startAngle = gyro.getYaw();
-		double newAngle = gyro.getYaw();
-		turnRight(speed);
-		double angleDiff = getAngleDiff(startAngle, newAngle);
-		while(angleDiff < targetAngle) {
-			newAngle = gyro.getYaw();
-			angleDiff = getAngleDiff(startAngle, newAngle);
-			idle();
-		}
-		turnLeft(speed * .25);
-		while(angleDiff > targetAngle) {
-			newAngle = gyro.getYaw();
-			angleDiff = getAngleDiff(startAngle, newAngle);
-			idle();
-		}
-		stopMotors();
-	}
+//	public double getAngleDiff(double angle1, double angle2)
+//	{
+//		if(Math.abs(angle1 - angle2) < 180.0)
+//			return Math.abs(angle1-angle2);
+//		else if(angle1 > angle2)
+//		{
+//			angle1 -= 360;
+//			return Math.abs(angle2-angle1);
+//		}
+//		else
+//		{
+//			angle2 -= 360;
+//			return Math.abs(angle1-angle2);
+//		}
+//	}
+//	public void gyroTurnRightCorrection(double speed, double targetAngle) throws InterruptedException {
+//		double startAngle = gyro.getYaw();
+//		double newAngle = gyro.getYaw();
+//		turnRight(speed);
+//		double angleDiff = getAngleDiff(startAngle, newAngle);
+//		while(angleDiff < targetAngle) {
+//			newAngle = gyro.getYaw();
+//			angleDiff = getAngleDiff(startAngle, newAngle);
+//			idle();
+//		}
+//		turnLeft(speed * .25);
+//		while(angleDiff > targetAngle) {
+//			newAngle = gyro.getYaw();
+//			angleDiff = getAngleDiff(startAngle, newAngle);
+//			idle();
+//		}
+//		stopMotors();
+//	}
 
-	public void gyroTurnLeftCorrection(double speed, double targetAngle) throws InterruptedException {
-		gyroTurnRightCorrection(-speed, -targetAngle);
-	}
+//	public void gyroTurnLeftCorrection(double speed, double targetAngle) throws InterruptedException {
+//		gyroTurnRightCorrection(-speed, -targetAngle);
+//	}
 
 	/**
 	 * This method moves the robot forward until the first color sensor contacts the white line
@@ -386,22 +392,22 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * </p>
 	 * @param speed
 	 */
-	public void moveToWhiteLine(double speed) throws InterruptedException {
-		telemetry.addData("current alpha", colorC.getAlpha());
-		telemetry.update();
-		moveForwards(speed);
-		while (colorC.groundColor().equals("Gray")) {
-			telemetry.addData("speed", speed);
-			telemetry.addData("current alpha", colorC.getAlpha());
-			telemetry.addData("Ground Color", colorC.groundColor());
-			telemetry.update();
-			idle();
-		}
-		telemetry.addData("at white line", "");
-		telemetry.addData("ground Color", colorC.groundColor());
-		telemetry.update();
-		stopMotors();
-	}
+//	public void moveToWhiteLine(double speed) throws InterruptedException {
+//		telemetry.addData("current alpha", colorC.getAlpha());
+//		telemetry.update();
+//		moveForwards(speed);
+//		while (colorC.groundColor().equals("Gray")) {
+//			telemetry.addData("speed", speed);
+//			telemetry.addData("current alpha", colorC.getAlpha());
+//			telemetry.addData("Ground Color", colorC.groundColor());
+//			telemetry.update();
+//			idle();
+//		}
+//		telemetry.addData("at white line", "");
+//		telemetry.addData("ground Color", colorC.groundColor());
+//		telemetry.update();
+//		stopMotors();
+//	}
 
 	/**
 	 * This method will align the robot with the white line with the second color sensor.
@@ -412,13 +418,13 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * </p>
 	 * @param speed
 	 */
-	public void turnRightToWhiteLine(double speed) throws InterruptedException {
-		turnRight(speed);
-		while (!colorR.groundColor().equals("White")) {
-			idle();
-		}
-		stopMotors();
-	}
+//	public void turnRightToWhiteLine(double speed) throws InterruptedException {
+//		turnRight(speed);
+//		while (!colorR.groundColor().equals("White")) {
+//			idle();
+//		}
+//		stopMotors();
+//	}
 
 
 	/**
@@ -431,27 +437,27 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * </p>
 	 * @param speed
 	 */
-	public void turnLeftToWhiteLine(double speed) throws InterruptedException {
-		turnRightToWhiteLine(-speed);
-	}
+//	public void turnLeftToWhiteLine(double speed) throws InterruptedException {
+//		turnRightToWhiteLine(-speed);
+//	}
 
-	public void moveBackToBeacon(String side)
-	{
-		while (!(colorB.getColor().equals(side)))
-		{
-			moveBackwards(1.0);
-		}
-		stopMotors();
-	}
+//	public void moveBackToBeacon(String side)
+//	{
+//		while (!(colorB.getColor().equals(side)))
+//		{
+//			moveBackwards(1.0);
+//		}
+//		stopMotors();
+//	}
 
-	public void moveForwardToBeacon(String side)
-	{
-		while (!(colorB.getColor().equals(side)))
-		{
-			moveForwards(1.0);
-		}
-		stopMotors();
-	}
+//	public void moveForwardToBeacon(String side)
+//	{
+//		while (!(colorB.getColor().equals(side)))
+//		{
+//			moveForwards(1.0);
+//		}
+//		stopMotors();
+//	}
 
 
 
@@ -509,7 +515,106 @@ public abstract class MyOpMode extends LinearOpMode {
 		runSpinner(0.0);
 	}
 
-	//sets range servos to be paralled with Wall
+	public void moveToRangeFromWall(double speed, int range, boolean isBlue) {
+		int rawUSD;
+		if (opModeIsActive()) {
+			if (isBlue) {
+				rawUSD = rangeF.getRawUltraSonicDistance();
+				moveForwards(speed);
+				while (rawUSD > range) {
+					rawUSD = rangeF.getRawUltraSonicDistance();
+				}
+				stopMotors();
+			} else {
+				rawUSD = rangeB.getRawUltraSonicDistance();
+				moveBackwards(speed);
+				while (rawUSD > range) {
+					rawUSD = rangeB.getRawUltraSonicDistance();
+				}
+			}
+		}
+	}
+
+	public void turnParallelToWall(double speed) {
+		int USDF;
+		int USDB;
+		if (opModeIsActive()) {
+			USDF = rangeF.getRawUltraSonicDistance();
+			USDB = rangeB.getRawUltraSonicDistance();
+			if (USDF < USDB) {
+				arcTurnRight(speed);
+				while (USDF < USDB) {
+					USDF = rangeF.getRawUltraSonicDistance();
+					USDB = rangeB.getRawUltraSonicDistance();
+				}
+				stopMotors();
+			} else {
+				if (USDF > USDB) {
+					arcTurnLeft(speed);
+					while (USDF > USDB) {
+						USDF = rangeF.getRawUltraSonicDistance();
+						USDB = rangeB.getRawUltraSonicDistance();
+					}
+					stopMotors();
+				}
+			}
+		}
+	}
+
+	public void moveAlongWallToBeacon(double speed, int threshold, boolean isBlue) {
+		int USDF;
+		int USDB;
+		String color = "neither";
+		if (opModeIsActive()) {
+			if (isBlue) {
+				moveForwards(speed);
+				while (!color.equals("Blue")) {
+					if (colorB.beaconColor().equals("Blue")) {
+						color = "Blue";
+					} else if (colorB.beaconColor().equals("Red")) {
+						color = "Red";
+					} else {
+						color = "neither";
+					}
+
+					USDF = rangeF.getRawUltraSonicDistance();
+					USDB = rangeB.getRawUltraSonicDistance();
+
+					if ((USDF - USDB) > threshold) {
+						move(-speed, speed * .75);
+					} else if ((USDB - USDF) > threshold) {
+						move(-speed * .75, speed);
+					} else {
+						moveForwards(speed);
+					}
+				}
+				stopMotors();
+			} else {
+				moveBackwards(speed);
+				while (!color.equals("Blue")) {
+					if (colorB.beaconColor().equals("Blue")) {
+						color = "Blue";
+					} else if (colorB.beaconColor().equals("Red")) {
+						color = "Red";
+					} else {
+						color = "neither";
+					}
+
+					USDF = rangeF.getRawUltraSonicDistance();
+					USDB = rangeB.getRawUltraSonicDistance();
+
+					if ((USDF - USDB) > threshold) {
+						move(speed, -speed * .75);
+					} else if ((USDB - USDF) > threshold) {
+						move(speed * .75, -speed);
+					} else {
+						moveBackwards(speed);
+					}
+				}
+				stopMotors();
+			}
+		}
+	}
 
 //	public void setServosParallel()
 //	{
@@ -558,26 +663,26 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	}
 
-	public void moveBackToWhiteLineODS(double speed)
-	{
-		while(ods.lightDetected()<.5) //random number!!! needs to be replaced!!!
-		{
-			while(rangeF.getUltraSonicDistance() > rangeB.getUltraSonicDistance())
-			{
-				move(-0.5,-0.8);
-			}
-			while(rangeF.getUltraSonicDistance() < rangeB.getUltraSonicDistance())
-			{
-				move(-0.8,-0.5);
-			}
-			while (rangeF.getUltraSonicDistance() == rangeB.getUltraSonicDistance())
-			{
-				move(-0.5, -0.5);
-			}
-		}
-		stopMotors();
-
-	}
+//	public void moveBackToWhiteLineODS(double speed)
+//	{
+//		while(ods.lightDetected()<.5) //random number!!! needs to be replaced!!!
+//		{
+//			while(rangeF.getUltraSonicDistance() > rangeB.getUltraSonicDistance())
+//			{
+//				move(-0.5,-0.8);
+//			}
+//			while(rangeF.getUltraSonicDistance() < rangeB.getUltraSonicDistance())
+//			{
+//				move(-0.8,-0.5);
+//			}
+//			while (rangeF.getUltraSonicDistance() == rangeB.getUltraSonicDistance())
+//			{
+//				move(-0.5, -0.5);
+//			}
+//		}
+//		stopMotors();
+//
+//	}
 
 	public void pause(double t) throws InterruptedException {
 		initCurtime();
