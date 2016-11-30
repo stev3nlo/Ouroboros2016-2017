@@ -58,8 +58,8 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	protected Servo servoDropper;	// servo for manipulator
 	protected Servo servoBeaconPusher;
-	protected Servo servoRangeF;
-	protected Servo servoRangeB;
+	//protected Servo servoRangeF;
+	//protected Servo servoRangeB;
 
 
 
@@ -166,17 +166,17 @@ public abstract class MyOpMode extends LinearOpMode {
 		rangeB.sensorSetup(0x4c);
 	}
 
-	public void initializeBlueServos()
-	{
-		servoRangeF.setPosition(.35); //NEEDS TO be TESTED, will be angled to wall
-		servoRangeB.setPosition(0.5); // NEEDS TO BE TESTED, will be PARALLEL to wall
-	}
-
-	public void initializeRedServos()
-	{
-		servoRangeB.setPosition(.65); //NEEDS TO be TESTED, will be angled to wall
-		servoRangeF.setPosition(0.5); // NEEDS TO BE TESTED, will be PARALLEL to wall
-	}
+//	public void initializeBlueServos()
+//	{
+//		servoRangeF.setPosition(.35); //NEEDS TO be TESTED, will be angled to wall
+//		servoRangeB.setPosition(0.5); // NEEDS TO BE TESTED, will be PARALLEL to wall
+//	}
+//
+//	public void initializeRedServos()
+//	{
+//		servoRangeB.setPosition(.65); //NEEDS TO be TESTED, will be angled to wall
+//		servoRangeF.setPosition(0.5); // NEEDS TO BE TESTED, will be PARALLEL to wall
+//	}
 
 
 
@@ -214,13 +214,13 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void openServoDropper()
 	{
 		if(opModeIsActive())
-			setServoDropperPosition(0.0);
+			setServoDropperPosition(0.15);
 	}
 
 	public void closeServoDropper()
 	{
 		if(opModeIsActive())
-		setServoDropperPosition(1.0);
+		setServoDropperPosition(.65);
 	}
 
 	public long getSpinnerEncoderVal()
@@ -512,11 +512,11 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	//sets range servos to be paralled with Wall
 
-	public void setServosParallel()
-	{
-		servoRangeB.setPosition(0.5);
-		servoRangeF.setPosition(0.5);
-	}
+//	public void setServosParallel()
+//	{
+//		servoRangeB.setPosition(0.5);
+//		servoRangeF.setPosition(0.5);
+//	}
 
 	//Methods to control button pushing
 	public void pushButton() {
@@ -540,14 +540,6 @@ public abstract class MyOpMode extends LinearOpMode {
 		double v = 0.0;
 		servoBeaconPusher.setPosition(v);
 	}
-
-	/*
-	public void resetButtonPress()
-	{
-		double v = 0.5;
-		servoBeaconPusher.setPosition(v);
-	}
-	*/
 
 
 	public void reset() {
