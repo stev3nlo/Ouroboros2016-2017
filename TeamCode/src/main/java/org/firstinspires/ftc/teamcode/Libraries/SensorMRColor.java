@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.Hardware;
 /**
  * Created by Steven on 9/20/2016.
  */
-public class SensorMRColor extends MyOpMode {
+public class SensorMRColor {
 
 	//color sensor object
 	ColorSensor RGB;

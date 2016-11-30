@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
-public class MROpticalDistanceSensor extends MyOpMode{
+public class MROpticalDistanceSensor{
 
   OpticalDistanceSensor ods;
 

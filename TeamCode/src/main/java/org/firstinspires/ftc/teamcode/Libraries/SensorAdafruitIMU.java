@@ -27,7 +27,7 @@ import java.util.Locale;
  *
  * @see <a href="http://www.adafruit.com/products/2472">Adafruit IMU</a>
  */
-public class SensorAdafruitIMU extends MyOpMode
+public class SensorAdafruitIMU
 {
     // The IMU sensor object
     BNO055IMU imu;
