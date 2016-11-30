@@ -214,13 +214,12 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void openServoDropper()
 	{
 		if(opModeIsActive())
-			setServoDropperPosition(0.15);
+			setServoDropperPosition(0.45);
 	}
 
 	public void closeServoDropper()
 	{
-		if(opModeIsActive())
-		setServoDropperPosition(.65);
+		setServoDropperPosition(.85);
 	}
 
 	public long getSpinnerEncoderVal()
