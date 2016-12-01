@@ -17,17 +17,17 @@ public class ShootOnlyAutoBlue extends MyAutonomous {
 		waitForStart();
 		initCurtime();
 		initTime = getCurTime();
-		simpleStabilizingLoop(10.0);
-		moveWithEncoders(-.3, 2150);
+		//simpleStabilizingLoop(10.0);
+		moveWithEncoders(-.1, 550);
 		simpleStabilizingLoop(1.0);
 		openServoDropper();
-		//initTime = getCurTime();
+		initTime = getCurTime();
 		simpleStabilizingLoop(0.7);
 		closeServoDropper();
 		simpleStabilizingLoop(10.0);
 		openServoDropper();
 		simpleStabilizingLoop(0.7);
 		closeServoDropper();
-		simpleStabilizingLoop(6.0);
+		//simpleStabilizingLoop(6.0);
 	}
 }

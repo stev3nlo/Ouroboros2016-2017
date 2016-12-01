@@ -140,6 +140,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 
 		curPowerOfMotorSpinner = 0.9;
+		motorSpinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		//motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 		//motorSpinner.setMaxSpeed((int)(((double)(encoderTicksPerRotation*goalRPM))/60.0));
 
