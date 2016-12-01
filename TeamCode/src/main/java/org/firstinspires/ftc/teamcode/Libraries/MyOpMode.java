@@ -811,13 +811,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		if(opModeIsActive()) {
 			int currEnc = getAvgEnc();
 			int avgEnc = currEnc;
-			moveForwards(speed);
+			move(-speed,speed*.7);
 			int distMoved = Math.abs(avgEnc - currEnc);
 			while (distMoved < goal && opModeIsActive()) {
 				avgEnc = getAvgEnc();
 				telemetry.addData("avg Enc", avgEnc);
 				telemetry.addData("curr Enc", currEnc);
-				moveForwards(speed * ((1 - (((double) distMoved / (double) goal) / 2))));
+				move((-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))*.7));
 				distMoved = Math.abs(avgEnc - currEnc);
 				telemetry.update();
 				try {
