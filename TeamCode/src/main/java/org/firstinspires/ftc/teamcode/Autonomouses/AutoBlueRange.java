@@ -27,9 +27,9 @@ public class AutoBlueRange extends MyOpMode {
         waitForStart();
 
         //travel forward to prine shooting spot
-        moveWithEncoders(-.3, 2150); //needs to be tested
+        moveWithEncoders(-1, 550); //needs to be tested
 
-        //shoot
+        //shoot sequence
         //runs spinner
         initCurtime();
         double timeAtSpinnerStart = getCurTime();

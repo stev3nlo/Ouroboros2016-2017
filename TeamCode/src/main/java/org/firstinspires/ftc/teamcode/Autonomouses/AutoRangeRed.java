@@ -43,19 +43,29 @@ public class AutoRangeRed extends MyOpMode {
         }
 
         //drops preplaced balls into spinner
+        //drops preplaced balls into spinner
         openServoDropper();
         initCurtime();
         double timeAtBallDrop = getCurTime();
-        while(getCurTime()<timeAtBallDrop+5.0)
+        while(getCurTime()<timeAtBallDrop+2.0)
         {
             initCurtime();
-            //shoot();
+            runSpinner(1.0);
             idle();
         }
         closeServoDropper();
 
         //turns off spinnner
-        runSpinner(0.0);
+        numCyclesOfSlowingSpinner = 10;
+        while(opModeIsActive() && numCyclesOfSlowingSpinner >= 0) {
+            initCurtime();
+            if (numCyclesOfSlowingSpinner >= 0 && getCurTime() - timeAtLastSpinnerSlowdown >= 0.2) {
+                runSpinner(curPowerOfMotorSpinner * ((double) numCyclesOfSlowingSpinner / 10.0));
+                timeAtLastSpinnerSlowdown = getCurTime();
+                if (numCyclesOfSlowingSpinner > 0)
+                    numCyclesOfSlowingSpinner--;
+            }
+        }
 
         //travel across the field to far beacon
         //using range1, stop x distance away
