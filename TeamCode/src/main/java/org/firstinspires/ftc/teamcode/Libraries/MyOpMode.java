@@ -817,7 +817,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				avgEnc = getAvgEnc();
 				telemetry.addData("avg Enc", avgEnc);
 				telemetry.addData("curr Enc", currEnc);
-				move((-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))*.7));
+				//move((-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))*.7));
 				distMoved = Math.abs(avgEnc - currEnc);
 				telemetry.update();
 				try {
