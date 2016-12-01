@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
+
 import org.firstinspires.ftc.teamcode.Libraries.MotorScaler;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
@@ -106,6 +108,10 @@ public class TeleOp extends MyOpMode
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
+        motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         waitForStart();
         timeAtLastLoop = getCurTime();
         while (opModeIsActive())
@@ -113,13 +119,13 @@ public class TeleOp extends MyOpMode
             updateControllerVals();
             initCurtime(); //gets real time timer
             if(driverMode == 0)
-                move(-g1y2, g1y1); // moves drive wheels
+                move(-g1y2, 0.7*g1y1); // moves drive wheels
             else if(driverMode == 1)
-                move(-g1y2 * 0.75, g1y1 * 0.75);
+                move(-g1y2 * 0.75, 0.7*g1y1 * 0.75);
             else if(driverMode == 2)
-                move(-g1y2*0.5, g1y1*0.5);
+                move(-g1y2*0.5, 0.7*g1y1*0.5);
             else if(driverMode == 3)
-                move(-g1y2*0.25, g1y1*0.25);
+                move(-g1y2*0.25, 0.7*g1y1*0.25);
             if(g1APressed)
                 driverMode = 0;
             else if(g1BPressed)
@@ -138,12 +144,12 @@ public class TeleOp extends MyOpMode
                 firstCycleOfSpinner = true;
                 if(numCyclesOfSlowingSpinner==-1)
                 {
-                    numCyclesOfSlowingSpinner = 10;
+                    numCyclesOfSlowingSpinner = 20;
                     timeAtLastSpinnerSlowdown = getCurTime();
                 }
-                if(numCyclesOfSlowingSpinner >= 0 && getCurTime() - timeAtLastSpinnerSlowdown >= 0.2)
+                if(numCyclesOfSlowingSpinner >= 0 && getCurTime() - timeAtLastSpinnerSlowdown >= 0.3)
                 {
-                    runSpinner(curPowerOfMotorSpinner*((double)numCyclesOfSlowingSpinner/10.0));
+                    runSpinner(curPowerOfMotorSpinner*((double)numCyclesOfSlowingSpinner/20.0));
                     timeAtLastSpinnerSlowdown = getCurTime();
                     if(numCyclesOfSlowingSpinner > 0)
                         numCyclesOfSlowingSpinner--;
