@@ -522,14 +522,14 @@ public abstract class MyOpMode extends LinearOpMode {
 			if (isBlue) {
 				rawUSD = rangeF.getRawUltraSonicDistance();
 				moveForwards(speed);
-				while (rawUSD > range) {
+				while ((rawUSD > range) && opModeIsActive()) {
 					rawUSD = rangeF.getRawUltraSonicDistance();
 				}
 				stopMotors();
 			} else {
 				rawUSD = rangeB.getRawUltraSonicDistance();
 				moveBackwards(speed);
-				while (rawUSD > range) {
+				while ((rawUSD > range) && opModeIsActive()) {
 					rawUSD = rangeB.getRawUltraSonicDistance();
 				}
 			}
@@ -544,7 +544,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			USDB = rangeB.getRawUltraSonicDistance();
 			if (USDF < USDB) {
 				arcTurnRight(speed);
-				while (USDF < USDB) {
+				while ((USDF < USDB) && opModeIsActive()) {
 					USDF = rangeF.getRawUltraSonicDistance();
 					USDB = rangeB.getRawUltraSonicDistance();
 				}
@@ -552,7 +552,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			} else {
 				if (USDF > USDB) {
 					arcTurnLeft(speed);
-					while (USDF > USDB) {
+					while ((USDF > USDB) && opModeIsActive()) {
 						USDF = rangeF.getRawUltraSonicDistance();
 						USDB = rangeB.getRawUltraSonicDistance();
 					}
@@ -565,17 +565,17 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void moveAlongWallToBeacon(double speed, int threshold, boolean isBlue) {
 		int USDF;
 		int USDB;
-		String color = "neither";
+		String color = "Neither";
 		if (opModeIsActive()) {
 			if (isBlue) {
 				moveForwards(speed);
-				while (!color.equals("Blue")) {
+				while ((!color.equals("Blue")) && opModeIsActive()) {
 					if (colorB.beaconColor().equals("Blue")) {
 						color = "Blue";
 					} else if (colorB.beaconColor().equals("Red")) {
 						color = "Red";
 					} else {
-						color = "neither";
+						color = "Neither";
 					}
 
 					USDF = rangeF.getRawUltraSonicDistance();
@@ -592,13 +592,13 @@ public abstract class MyOpMode extends LinearOpMode {
 				stopMotors();
 			} else {
 				moveBackwards(speed);
-				while (!color.equals("Blue")) {
+				while ((!color.equals("Red")) && opModeIsActive()) {
 					if (colorB.beaconColor().equals("Blue")) {
 						color = "Blue";
 					} else if (colorB.beaconColor().equals("Red")) {
 						color = "Red";
 					} else {
-						color = "neither";
+						color = "Neither";
 					}
 
 					USDF = rangeF.getRawUltraSonicDistance();
