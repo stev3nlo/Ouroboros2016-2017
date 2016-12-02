@@ -30,7 +30,7 @@ public class TeleOp extends MyOpMode
     int numLoopsRemainining;
     double timeAtLastLoop;
     double timePerLoop = 1.0;
-    public int driverMode = 0;
+    public int driverMode = 1;
 
     public double g2y1;    //lift
     public double g2y2;    //manipulator
@@ -126,8 +126,9 @@ public class TeleOp extends MyOpMode
                 move(-g1y2*0.5, 0.7*g1y1*0.5);
             else if(driverMode == 3)
                 move(-g1y2*0.25, 0.7*g1y1*0.25);
-            if(g1APressed)
-                driverMode = 0;
+            if(g1APressed) {
+            }
+                //driverMode = 0;
             else if(g1BPressed)
                 driverMode = 1;
             else if(g1YPressed)
