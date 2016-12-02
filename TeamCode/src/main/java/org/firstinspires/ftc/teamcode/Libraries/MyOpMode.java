@@ -40,7 +40,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * DcMotor variable for the second motor on the right
 	 */
-	protected DcMotor motorR2;
+	//protected DcMotor motorR2;
 	/**
 	 * DcMotor variable for the first motor on the left
 	 */
@@ -48,7 +48,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * DcMotor variable for the second motor on the left
 	 */
-	protected DcMotor motorL2;
+	//protected DcMotor motorL2;
 	/**
 	 * DcMotor variable for the motor on the manipulator
 	 */
@@ -125,9 +125,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		//hardware maps the drive motors
 		motorR1 = hardwareMap.dcMotor.get("motorR1");
-		motorR2 = hardwareMap.dcMotor.get("motorR2");
+		//motorR2 = hardwareMap.dcMotor.get("motorR2");
 		motorL1 = hardwareMap.dcMotor.get("motorL1");
-		motorL2 = hardwareMap.dcMotor.get("motorL2");
+		//motorL2 = hardwareMap.dcMotor.get("motorL2");
 		motorManip = hardwareMap.dcMotor.get("motorManip");
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
 		servoDropper = hardwareMap.servo.get("servoDropper");
@@ -190,9 +190,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void move(double speedL, double speedR)
 	{
 		motorL1.setPower(speedL);
-		motorL2.setPower(speedL);
+		//motorL2.setPower(speedL);
 		motorR1.setPower(speedR);
-		motorR2.setPower(speedR);
+		//motorR2.setPower(speedR);
 	}
 
 	public void moveManip(double speed)
@@ -231,10 +231,10 @@ public abstract class MyOpMode extends LinearOpMode {
 		return motorL1.getCurrentPosition();
 	}
 
-	public long getMotorL2EncoderVal()
+	/*public long getMotorL2EncoderVal()
 	{
 		return motorL2.getCurrentPosition();
-	}
+	}*/
 
 	public long getMotorR1EncoderVal()
 	{
@@ -249,9 +249,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	public void stopMotors() {
 		motorR1.setPower(0.0);
-		motorR2.setPower(0.0);
+		//motorR2.setPower(0.0);
 		motorL1.setPower(0.0);
-		motorL2.setPower(0.0);
+		//motorL2.setPower(0.0);
 	}
 
 	/**
@@ -649,9 +649,9 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void reset() {
 		motorR1.setPower(0);
-		motorR2.setPower(0);
+		//motorR2.setPower(0);
 		motorL1.setPower(0);
-		motorL2.setPower(0);
+		//motorL2.setPower(0);
 	}
 
 	public void updateMotorSpeeds()
@@ -832,15 +832,15 @@ public abstract class MyOpMode extends LinearOpMode {
 	public int getAvgEnc() {
 		int encL1 = motorL1.getCurrentPosition();
 		//telemetry.addData("encL1",encL1);
-		int encL2 = motorL2.getCurrentPosition();
+		//int encL2 = motorL2.getCurrentPosition();
 		//telemetry.addData("encL2",encL2);
 		int encR1 = motorR1.getCurrentPosition();
 		//telemetry.addData("encR1",encR1);
-		int encR2 = motorR2.getCurrentPosition();
+		//int encR2 = motorR2.getCurrentPosition();
 		//telemetry.addData("encR2",encR2);
-		int avg = encL1 + encL2 + encR1 + encR2;
-		avg /= 4;
-		return encR1/4;
+		int avg = Math.abs(encL1) + Math.abs(encR1);
+		avg /= 2;
+		return avg;
 	}
 
 	@Override

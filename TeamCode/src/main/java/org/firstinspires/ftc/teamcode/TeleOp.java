@@ -30,7 +30,7 @@ public class TeleOp extends MyOpMode
     int numLoopsRemainining;
     double timeAtLastLoop;
     double timePerLoop = 1.0;
-    public int driverMode = 0;
+    public int driverMode = 2;
 
     public double g2y1;    //lift
     public double g2y2;    //manipulator
@@ -109,9 +109,9 @@ public class TeleOp extends MyOpMode
     {
         super.runOpMode();
         motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        //motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        //motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         waitForStart();
         timeAtLastLoop = getCurTime();
         while (opModeIsActive())
