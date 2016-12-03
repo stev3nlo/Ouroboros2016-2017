@@ -13,7 +13,20 @@ public class AutoBlueGyroBased extends MyAutonomous {
 	@Override
 	public void runOpMode() throws InterruptedException {
 		super.runOpMode();
+		//telemetry.addData("test1","");
+		//telemetry.update();
 		waitForStart();
+		//telemetry.addData("test2","");
+		//telemetry.update();
+		while(opModeIsActive())
+		{
+			//motorL1.setPower(.5);
+			telemetry.addData("yaw",gyro.getYaw());
+			telemetry.update();
+			idle();
+		}
+		//gyroTurnRight(0.6,40.0);
+		/*
 		initCurtime();
 		moveWithEncoders(-.2, 500);	//needs to test goal
 		pause(1.0);
@@ -21,6 +34,7 @@ public class AutoBlueGyroBased extends MyAutonomous {
 		pause(1.0);
 		moveWithEncoders(1, 200);	//need to test goal
 		pause(1.0);
+		*/
 //		moveToWhiteLine(-.085);
 //		pause();
 //		gyroTurnRightCorrection(-.085, 45);

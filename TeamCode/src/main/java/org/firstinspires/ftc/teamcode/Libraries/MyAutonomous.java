@@ -33,4 +33,31 @@ public class MyAutonomous extends MyOpMode
             }
         }
     }
+
+    public double getDegreesToTurnFromDistances(double d1, double d2)
+    {
+        double degrees;
+        if(d1>d2)
+        {
+            double a = d1;
+            double b = d2;
+            double c = 25.0;
+            double radians = Math.atan(c/(a-b));
+            degrees = Math.toDegrees(radians);
+            degrees = Math.abs(degrees);
+            degrees = 90-degrees;
+            degrees *= -1;
+        }
+        else
+        {
+            double a = d2;
+            double b = d1;
+            double c = 25.0;
+            double radians = Math.atan(c/(a-b));
+            degrees = Math.toDegrees(radians);
+            degrees = Math.abs(degrees);
+            degrees = 90-degrees;
+        }
+        return degrees;
+    }
 }

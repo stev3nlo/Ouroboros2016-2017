@@ -2,26 +2,38 @@ package org.firstinspires.ftc.teamcode.Autonomouses;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 
-
 /**
- * Created by Steven on 10/20/2016.
+ * Created by Steven on 11/11/2016.
  */
-@Autonomous(name = "Autonomous Blue", group = "Test")
+
+@Autonomous(name="AutonomousBlue", group="Auto")
 public class AutonomousBlue extends MyAutonomous {
+
 	@Override
 	public void runOpMode() throws InterruptedException {
 		super.runOpMode();
+		waitForStart();
 		initCurtime();
+		initTime = getCurTime();
+		simpleStabilizingLoop(1.0);
+		moveWithEncoders(.8, 4200);
+		simpleStabilizingLoop(1.0);
+		openServoDropper();
+		initTime = getCurTime();
+		simpleStabilizingLoop(1.5);
+		closeServoDropper();
 
-		//moveToWhiteLine(.085);
-		//pause();
-		//turnRightToWhiteLine(.15);
-//		moveForwardToBeacon(.25);
-//		pushButton("Blue");
-//		moveAwayFromBeacon(.5, 25);		//needs to be tested
-		//gyroTurnRightCorrection(.25, 90);
-//		shoot();
+		moveWithEncoders(.8, 3700);
+		double degreesToTurn = getDegreesToTurnFromDistances(rangeF.getDistance(DistanceUnit.CM),rangeB.getDistance(DistanceUnit.CM));
+		if(degreesToTurn > 0)
+			gyroTurnRightCorrection(0.6,degreesToTurn);
+		else
+			gyroTurnLeftCorrection(0.6,degreesToTurn);
+		moveAlongWallToBeacon(0.7,4.0,true);
+		pushButton();
+
 	}
 }

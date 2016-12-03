@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Libraries;
 
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -29,22 +30,19 @@ public class SensorMRRange {
 	public static final int RANGE_REG_START = 0x04; //Register to start reading
 	public static final int RANGE_READ_LENGTH = 2; //Number of byte to read
 
-	I2cDevice rangeSensor;
+	ModernRoboticsI2cRangeSensor rangeSensor;
 	I2cDeviceSynch rangeReader;
 
 	int ultraSonicDistanceValue;
 
-	public SensorMRRange(I2cDevice rangeSensor) {
+	public SensorMRRange(ModernRoboticsI2cRangeSensor rangeSensor) {
 		this.rangeSensor = rangeSensor;
-		initReader();
+		rangeSensor.getDistance(DistanceUnit.CM);
 		ultraSonicDistanceValue = -1;
 		prevUSDVal = ultraSonicDistanceValue;
+		//ModernRoboticsI2cRangeSensor modernRoboticsI2cRangeSensor =
 	}
 
-	public void initReader() {
-		rangeReader = new I2cDeviceSynchImpl(rangeSensor, rangeAddress, false);
-		rangeReader.engage();
-	}
 
 	public void sensorSetup(int i) {
 		rangeReader.setI2cAddress(I2cAddr.create8bit(i));

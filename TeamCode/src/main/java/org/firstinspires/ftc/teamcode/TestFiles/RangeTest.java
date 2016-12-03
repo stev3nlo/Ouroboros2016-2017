@@ -18,7 +18,7 @@ public class RangeTest extends MyOpMode {
 
     public void initialize()
     {
-        range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
+        //range = new SensorMRRange(hardwareMap.i2cDevice.get("range"));
     }
 
     public void runOpMode() throws InterruptedException {

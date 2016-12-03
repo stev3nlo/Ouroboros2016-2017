@@ -30,7 +30,7 @@ public class TeleOp extends MyOpMode
     int numLoopsRemainining;
     double timeAtLastLoop;
     double timePerLoop = 1.0;
-    public int driverMode = 0;
+    public int driverMode = 1;
 
     public double g2y1;    //lift
     public double g2y2;    //manipulator
@@ -84,11 +84,11 @@ public class TeleOp extends MyOpMode
     {
         telemetry.addData("BEACON PUSH INFO","");
         telemetry.addData("curPowerOfMotorSpinner",curPowerOfMotorSpinner);
-        if(g2Ltrig > 0.1)
+        if(g2Ltrig > 0.4)
         {
             telemetry.addData("g2Ltrig being pressed", "LEFT");
         }
-        else if(g2Rtrig > 0.1)
+        else if(g2Rtrig > 0.4)
         {
             telemetry.addData("g2Rtrig being pressed", "RIGHT");
         }
@@ -101,16 +101,16 @@ public class TeleOp extends MyOpMode
             telemetry.addData("No beacon control being pressed","");
         }
         telemetry.addData("motorL1EncoderVal",getMotorL1EncoderVal());
-        telemetry.addData("motorL2EncoderVal",getMotorL2EncoderVal());
+        telemetry.addData("motorR1EncoderVal",getMotorR1EncoderVal());
         telemetry.update();
     }
 
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
-        motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         waitForStart();
         timeAtLastLoop = getCurTime();
@@ -119,13 +119,13 @@ public class TeleOp extends MyOpMode
             updateControllerVals();
             initCurtime(); //gets real time timer
             if(driverMode == 0)
-                move(-g1y2, g1y1); // moves drive wheels
+                move(-g1y1, 0.76*g1y2); // moves drive wheels
             else if(driverMode == 1)
-                move(-g1y2 * 0.75, g1y1 * 0.75);
+                move(-g1y1 * 0.75, 0.76*g1y2 * 0.75);
             else if(driverMode == 2)
-                move(-g1y2*0.5, g1y1*0.5);
+                move(-g1y1*0.5, 0.76*g1y2*0.5);
             else if(driverMode == 3)
-                move(-g1y2*0.25, g1y1*0.25);
+                move(-g1y1*0.25, 0.76*g1y2*0.25);
             if(g1APressed) {
                 driverMode = 0;
             }

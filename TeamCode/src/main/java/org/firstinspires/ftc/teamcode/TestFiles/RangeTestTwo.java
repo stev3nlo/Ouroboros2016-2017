@@ -20,8 +20,10 @@ public class RangeTestTwo extends MyOpMode {
 	public void initialize()
 	{
 
+		/*
 		 rangeF = new SensorMRRange(hardwareMap.i2cDevice.get("rangeF"));
 		 rangeB = new SensorMRRange(hardwareMap.i2cDevice.get("rangeB"));
+		 */
 		rangeF.sensorSetup(0x4a);
 		rangeB.sensorSetup(0x4c);
 	}
