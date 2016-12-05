@@ -30,12 +30,12 @@ public class SensorMRRange {
 	public static final int RANGE_REG_START = 0x04; //Register to start reading
 	public static final int RANGE_READ_LENGTH = 2; //Number of byte to read
 
-	ModernRoboticsI2cRangeSensor rangeSensor;
+	I2cDevice rangeSensor;
 	I2cDeviceSynch rangeReader;
 
 	int ultraSonicDistanceValue;
 
-	public SensorMRRange(ModernRoboticsI2cRangeSensor rangeSensor) {
+	public SensorMRRange(I2cDevice rangeSensor) {
 		this.rangeSensor = rangeSensor;
 		//rangeSensor.getDistance(DistanceUnit.CM);
 		//ultraSonicDistanceValue = -1;
@@ -103,11 +103,13 @@ public class SensorMRRange {
 		return output;
 	}
 
+	/*
 	public double getDistanceCM()
 	{
 		return rangeSensor.getDistance(DistanceUnit.CM);
 
 	}
+	*/
 
 	public int getAverageChange(){
 		return averageROC;

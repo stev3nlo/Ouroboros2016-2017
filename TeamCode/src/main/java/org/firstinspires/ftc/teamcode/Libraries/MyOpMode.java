@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.I2cAddr;
+import com.qualcomm.robotcore.hardware.I2cDevice;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.adafruit.BNO055IMU;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
@@ -152,25 +153,45 @@ public abstract class MyOpMode extends LinearOpMode {
 	}
 
 	//initialize sensors
-	public void initializeSensors()
+	public void initializeSensors() throws InterruptedException
 	{
 		//telemetry.addData("Gyro", "Initializing");
 		//telemetry.update();
 		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
-		//telemetry.addData("Gyro", "Initialized");
-		//telemetry.update();
+		telemetry.addData("Gyro", "Initialized");
+		telemetry.update();
+		pause(1.0);
 		//colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
 		//colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
-		rangeF = new SensorMRRange(hardwareMap.get(ModernRoboticsI2cRangeSensor.class,"rangeF"));
-		rangeB = new SensorMRRange(hardwareMap.get(ModernRoboticsI2cRangeSensor.class,"rangeB"));
+		telemetry.addData("ColorB", "Initialized");
+		telemetry.update();
+		pause(1.0);
+		rangeF = new SensorMRRange(hardwareMap.get(I2cDevice.class,"rangeF"));
+		telemetry.addData("RangeF", "Initialized");
+		telemetry.update();
+		pause(1.0);
+		rangeB = new SensorMRRange(hardwareMap.get(I2cDevice.class,"rangeB"));
+		telemetry.addData("RangeB", "Initialized");
+		telemetry.update();
+		pause(1.0);
 		//colorC.sensorSetup(0x2e);
 		//colorR.sensorSetup(0x2a);
 		colorB.sensorSetup(0x2c);
+		telemetry.addData("ColorB", "I2C address");
+		telemetry.update();
+		pause(1.0);
 		rangeF.sensorSetup(0x4a);
+		telemetry.addData("RangeF", "I2C address");
+		telemetry.update();
+		pause(1.0);
 		rangeB.sensorSetup(0x4c);
+		telemetry.addData("RangeB", "I2C address");
+		telemetry.update();
+		pause(1.0);
 		telemetry.addData("sensors", "initialized");
 		telemetry.update();
+		pause(1.0);
 	}
 
 //	public void initializeBlueServos()

@@ -17,7 +17,7 @@ public class RangeTestTwo extends MyAutonomous {
 
 	public void initialize()
 	{
-		initializeSensors();
+		//initializeSensors();
 		/*
 		 rangeF = new SensorMRRange(hardwareMap.i2cDevice.get("rangeF"));
 		 rangeB = new SensorMRRange(hardwareMap.i2cDevice.get("rangeB"));
@@ -32,8 +32,8 @@ public class RangeTestTwo extends MyAutonomous {
 		while (opModeIsActive())
 		{
 
-			telemetry.addData("Range F", rangeF.getDistanceCM());
-			telemetry.addData("Range B", rangeB.getDistanceCM());
+			telemetry.addData("Range F", rangeF.getUltraSonicDistance());
+			telemetry.addData("Range B", rangeB.getUltraSonicDistance());
 			telemetry.update();
 
 			idle();
