@@ -89,8 +89,8 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * Modern Robotics Range Sensor that uses ultraSonic and Optical Distance
 	 */
-	protected ModernRoboticsI2cRangeSensor rangeF;
-	protected ModernRoboticsI2cRangeSensor rangeB;
+	protected SensorMRRange rangeF;
+	protected SensorMRRange rangeB;
 	//protected MROpticalDistanceSensor ods;
 
 	//Speed values for motors
@@ -162,13 +162,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		//colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
 		//colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
-		rangeF = hardwareMap.get(ModernRoboticsI2cRangeSensor.class,"rangeF");
-		rangeB = hardwareMap.get(ModernRoboticsI2cRangeSensor.class,"rangeB");
+		rangeF = new SensorMRRange(hardwareMap.get(ModernRoboticsI2cRangeSensor.class,"rangeF"));
+		rangeB = new SensorMRRange(hardwareMap.get(ModernRoboticsI2cRangeSensor.class,"rangeB"));
 		//colorC.sensorSetup(0x2e);
 		//colorR.sensorSetup(0x2a);
 		colorB.sensorSetup(0x2c);
-		rangeF.setI2cAddress((I2cAddr.create8bit(0x4a)));
-		rangeB.setI2cAddress((I2cAddr.create8bit(0x4c)));
+		rangeF.sensorSetup(0x4a);
+		rangeB.sensorSetup(0x4c);
 		telemetry.addData("sensors", "initialized");
 		telemetry.update();
 	}
@@ -486,7 +486,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void moveAwayFromBeacon(double speed, int distance) throws InterruptedException {
 		moveBackwards(speed);
-		while (!(rangeF.getDistance(DistanceUnit.CM) > distance)) {
+		while (!(rangeF.getDistanceCM() > distance)) {
 			idle();
 		}
 		stopMotors();
@@ -531,17 +531,17 @@ public abstract class MyOpMode extends LinearOpMode {
 		double rawUSD;
 		if (opModeIsActive()) {
 			if (isBlue) {
-				rawUSD = rangeF.getDistance(DistanceUnit.CM);
+				rawUSD = rangeF.getDistanceCM();
 				moveForwards(speed);
 				while ((rawUSD > range) && opModeIsActive()) {
-					rawUSD = rangeF.getDistance(DistanceUnit.CM);
+					rawUSD = rangeF.getDistanceCM();
 				}
 				stopMotors();
 			} else {
-				rawUSD = rangeB.getDistance(DistanceUnit.CM);
+				rawUSD = rangeB.getDistanceCM();
 				moveBackwards(speed);
 				while ((rawUSD > range) && opModeIsActive()) {
-					rawUSD = rangeB.getDistance(DistanceUnit.CM);
+					rawUSD = rangeB.getDistanceCM();;
 				}
 			}
 		}
@@ -551,21 +551,21 @@ public abstract class MyOpMode extends LinearOpMode {
 		double USDF;
 		double USDB;
 		if (opModeIsActive()) {
-			USDF = rangeF.getDistance(DistanceUnit.CM);
-			USDB = rangeB.getDistance(DistanceUnit.CM);
+			USDF = rangeF.getDistanceCM();
+			USDB = rangeB.getDistanceCM();
 			if (USDF < USDB) {
 				arcTurnRight(speed);
 				while ((USDF < USDB) && opModeIsActive()) {
-					USDF = rangeF.getDistance(DistanceUnit.CM);
-					USDB = rangeB.getDistance(DistanceUnit.CM);
+					USDF = rangeF.getDistanceCM();
+					USDB = rangeB.getDistanceCM();
 				}
 				stopMotors();
 			} else {
 				if (USDF > USDB) {
 					arcTurnLeft(speed);
 					while ((USDF > USDB) && opModeIsActive()) {
-						USDF = rangeF.getDistance(DistanceUnit.CM);
-						USDB = rangeB.getDistance(DistanceUnit.CM);
+						USDF = rangeF.getDistanceCM();
+						USDB = rangeB.getDistanceCM();
 					}
 					stopMotors();
 				}

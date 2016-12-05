@@ -18,8 +18,12 @@ public class AutonomousBlue extends MyAutonomous {
 		waitForStart();
 		initCurtime();
 		initTime = getCurTime();
+
+		//starts spinner
 		simpleStabilizingLoop(1.0);
-		moveWithEncoders(.8, 4200);
+
+		//move with range sensors to right location
+		//moveWithEncoders(.8, 4200);
 		simpleStabilizingLoop(1.0);
 		openServoDropper();
 		initTime = getCurTime();
@@ -27,7 +31,8 @@ public class AutonomousBlue extends MyAutonomous {
 		closeServoDropper();
 
 		moveWithEncoders(.8, 3700);
-		double degreesToTurn = getDegreesToTurnFromDistances(rangeF.getDistance(DistanceUnit.CM),rangeB.getDistance(DistanceUnit.CM));
+		double degreesToTurn = 0.0;
+		//double degreesToTurn = getDegreesToTurnFromDistances(rangeF.getDistance(DistanceUnit.CM),rangeB.getDistance(DistanceUnit.CM));
 		if(degreesToTurn > 0)
 			gyroTurnRightCorrection(0.6,degreesToTurn);
 		else

@@ -37,9 +37,9 @@ public class SensorMRRange {
 
 	public SensorMRRange(ModernRoboticsI2cRangeSensor rangeSensor) {
 		this.rangeSensor = rangeSensor;
-		rangeSensor.getDistance(DistanceUnit.CM);
-		ultraSonicDistanceValue = -1;
-		prevUSDVal = ultraSonicDistanceValue;
+		//rangeSensor.getDistance(DistanceUnit.CM);
+		//ultraSonicDistanceValue = -1;
+		//prevUSDVal = ultraSonicDistanceValue;
 		//ModernRoboticsI2cRangeSensor modernRoboticsI2cRangeSensor =
 	}
 
@@ -101,6 +101,12 @@ public class SensorMRRange {
 		output += "\nStatus: " + String.valueOf(cache.get(2));
 
 		return output;
+	}
+
+	public double getDistanceCM()
+	{
+		return rangeSensor.getDistance(DistanceUnit.CM);
+
 	}
 
 	public int getAverageChange(){
