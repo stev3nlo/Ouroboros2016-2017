@@ -23,6 +23,7 @@ public class AutonomousBlue extends MyAutonomous {
 		simpleStabilizingLoop(1.0);
 
 		//move with range sensors to right location
+
 		//moveWithEncoders(.8, 4200);
 		simpleStabilizingLoop(1.0);
 		openServoDropper();

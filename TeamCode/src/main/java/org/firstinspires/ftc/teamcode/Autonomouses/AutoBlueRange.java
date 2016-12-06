@@ -18,16 +18,17 @@ public class AutoBlueRange extends MyOpMode {
     //back up until at closest beacon using color sensor
     //press beacon
 
-    /*
+
     public void runOpMode() throws InterruptedException {
         //rangeF.initializeSensors();
         //rangeB.initializeSensors();
         //initializeBlueServos();
         super.runOpMode();
-        initializeSensors();
+        //initializeSensors();
         waitForStart();
+        moveAlongWallToBeacon(.3,2.0,true);
 
-        //travel forward to prine shooting spot
+       /* //travel forward to prine shooting spot
         moveWithEncoders(-1, 550); //needs to be tested
 
         //shoot sequence
@@ -101,4 +102,5 @@ public class AutoBlueRange extends MyOpMode {
 
     }
     */
+    }
 }

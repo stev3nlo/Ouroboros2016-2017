@@ -613,17 +613,17 @@ public abstract class MyOpMode extends LinearOpMode {
 						color = "Neither";
 					}
 
-					/*
-					USDF = rangeF.getDistance(DistanceUnit.CM);
-					USDB = rangeB.getDistance(DistanceUnit.CM);
 
-					if ((USDF - USDB) > threshold) {
-						move(speed, -speed * .76*0.75);
-					} else if ((USDB - USDF) > threshold) {
-						move(speed * .75, -speed*0.76);
-					} else {*/
-						move(speed, -speed * 0.76);
-					//}
+					USDF = rangeF.getUltraSonicDistance();
+					USDB = rangeB.getUltraSonicDistance();
+
+					if ((USDF - USDB) >= threshold) {
+						move(-speed, speed * .76*0.75);
+					} else if ((USDB - USDF) >= threshold) {
+						move(-speed * .75, speed*0.76);
+					} else {
+						move(-speed, speed * 0.76);
+					}
 				}
 				stopMotors();
 			} else {
@@ -640,17 +640,17 @@ public abstract class MyOpMode extends LinearOpMode {
 						color = "Neither";
 					}
 
-					/*
-					USDF = rangeF.getDistance(DistanceUnit.CM);
-					USDB = rangeB.getDistance(DistanceUnit.CM);
 
-					if ((USDF - USDB) > threshold) {
-						move(-speed, speed * .76*0.75);
-					} else if ((USDB - USDF) > threshold) {
-						move(-speed * .75, speed*0.76);
-					} else {*/
-						move(-speed, speed * 0.76);
-					//}
+					USDF = rangeF.getUltraSonicDistance();
+					USDB = rangeB.getUltraSonicDistance();
+
+					if ((USDF - USDB) >= threshold) {
+						move(speed, -speed * .76*0.75);
+					} else if ((USDB - USDF) >= threshold) {
+						move(speed * .75, -speed*0.76);
+					} else {
+						move(speed, -speed * 0.76);
+					}
 				}
 				stopMotors();
 			}
