@@ -372,9 +372,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 * @param targetAngle
 	 */
-//	public void gyroTurnLeft(double speed, double targetAngle) throws InterruptedException {
-//		gyroTurnRight(-speed, -targetAngle);
-//	}
+	public void gyroTurnLeft(double speed, double targetAngle) throws InterruptedException {
+		gyroTurnRight(-speed, -targetAngle);
+	}
 
 	public double getAngleDiff(double angle1, double angle2)
 	{
@@ -507,9 +507,9 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void moveAwayFromBeacon(double speed, int distance) throws InterruptedException {
 		moveBackwards(speed);
-		while (!(rangeF.getDistanceCM() > distance)) {
-			idle();
-		}
+//		while (!(rangeF.getDistanceCM() > distance)) {
+//			idle();
+//		}
 		stopMotors();
 	}
 
@@ -551,47 +551,47 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void moveToRangeFromWall(double speed, int range, boolean isBlue) {
 		double rawUSD;
 		if (opModeIsActive()) {
-			if (isBlue) {
-				rawUSD = rangeF.getDistanceCM();
-				moveForwards(speed);
-				while ((rawUSD > range) && opModeIsActive()) {
-					rawUSD = rangeF.getDistanceCM();
-				}
-				stopMotors();
-			} else {
-				rawUSD = rangeB.getDistanceCM();
-				moveBackwards(speed);
-				while ((rawUSD > range) && opModeIsActive()) {
-					rawUSD = rangeB.getDistanceCM();;
-				}
-			}
+//			if (isBlue) {
+//				rawUSD = rangeF.getDistanceCM();
+//				moveForwards(speed);
+//				while ((rawUSD > range) && opModeIsActive()) {
+//					rawUSD = rangeF.getDistanceCM();
+//				}
+//				stopMotors();
+//			} else {
+//				rawUSD = rangeB.getDistanceCM();
+//				moveBackwards(speed);
+//				while ((rawUSD > range) && opModeIsActive()) {
+//					rawUSD = rangeB.getDistanceCM();;
+//				}
+//			}
 		}
 	}
 
 	public void turnParallelToWall(double speed) {
 		double USDF;
 		double USDB;
-		if (opModeIsActive()) {
-			USDF = rangeF.getDistanceCM();
-			USDB = rangeB.getDistanceCM();
-			if (USDF < USDB) {
-				arcTurnRight(speed);
-				while ((USDF < USDB) && opModeIsActive()) {
-					USDF = rangeF.getDistanceCM();
-					USDB = rangeB.getDistanceCM();
-				}
-				stopMotors();
-			} else {
-				if (USDF > USDB) {
-					arcTurnLeft(speed);
-					while ((USDF > USDB) && opModeIsActive()) {
-						USDF = rangeF.getDistanceCM();
-						USDB = rangeB.getDistanceCM();
-					}
-					stopMotors();
-				}
-			}
-		}
+//		if (opModeIsActive()) {
+//			USDF = rangeF.getDistanceCM();
+//			USDB = rangeB.getDistanceCM();
+//			if (USDF < USDB) {
+//				arcTurnRight(speed);
+//				while ((USDF < USDB) && opModeIsActive()) {
+//					USDF = rangeF.getDistanceCM();
+//					USDB = rangeB.getDistanceCM();
+//				}
+//				stopMotors();
+//			} else {
+//				if (USDF > USDB) {
+//					arcTurnLeft(speed);
+//					while ((USDF > USDB) && opModeIsActive()) {
+//						USDF = rangeF.getDistanceCM();
+//						USDB = rangeB.getDistanceCM();
+//					}
+//					stopMotors();
+//				}
+//			}
+//		}
 	}
 
 	public void moveAlongWallToBeacon(double speed, double threshold, boolean isBlue) {
