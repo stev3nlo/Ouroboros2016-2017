@@ -37,6 +37,7 @@ public class SensorMRRange {
 
 	public SensorMRRange(I2cDevice rangeSensor) {
 		this.rangeSensor = rangeSensor;
+		initReader();
 		//rangeSensor.getDistance(DistanceUnit.CM);
 		//ultraSonicDistanceValue = -1;
 		//prevUSDVal = ultraSonicDistanceValue;
@@ -51,8 +52,14 @@ public class SensorMRRange {
 	public int getRawUltraSonicDistance() {
 		return rangeCache[0] & 0xFF;
 	}
+	public void initReader() {
+		rangeReader = new I2cDeviceSynchImpl(rangeSensor, rangeAddress, false);
+		rangeReader.engage();
+	}
 
 	public int getUltraSonicDistance() {
+		getRangeCache();
+		
 		int usd = rangeCache[0] & 0xFF;
 		if (usd == 255) {
 			return prevUSDVal;
