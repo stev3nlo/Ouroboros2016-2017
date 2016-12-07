@@ -38,7 +38,7 @@ public class AutonomousBlue extends MyAutonomous {
 			gyroTurnRightCorrection(0.6,degreesToTurn);
 		else
 			gyroTurnLeftCorrection(0.6,degreesToTurn);
-		moveAlongWallToBeacon(0.7,4.0,true);
+		//moveAlongWallToBeacon(0.7,4.0,true);
 		pushButton();
 
 	}

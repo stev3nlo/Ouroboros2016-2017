@@ -331,12 +331,43 @@ public abstract class MyOpMode extends LinearOpMode {
 		turnRight(-speed);
 	}
 
-	public void arcTurnRight(double speed) {
+	public void arcTurnRight(double speed)
+	{
 		move(speed, 0);
 	}
 
 	public void arcTurnLeft(double speed) {
 		move(0, -speed);
+	}
+
+	public void gyroArcTurnRight(double speed, double targetAngle) throws InterruptedException
+	{
+		double startAngle = gyro.getYaw();		//angle of the robot before the turn
+		double newAngle = gyro.getYaw();		//angle of the robot during the turn
+		arcTurnRight(speed);		//starts the turn
+		while (opModeIsActive() && getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
+			telemetry.addData("startAngle",startAngle);
+			telemetry.addData("newAngle",newAngle);
+			telemetry.update();
+			newAngle = gyro.getYaw();		//updates the new angle constantly
+			idle();
+		}
+		stopMotors();
+	}
+
+	public void gyroArcTurnLeft(double speed, double targetAngle) throws InterruptedException
+	{
+		double startAngle = gyro.getYaw();		//angle of the robot before the turn
+		double newAngle = gyro.getYaw();		//angle of the robot during the turn
+		arcTurnLeft(speed);		//starts the turn
+		while (opModeIsActive() && getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
+			telemetry.addData("startAngle",startAngle);
+			telemetry.addData("newAngle",newAngle);
+			telemetry.update();
+			newAngle = gyro.getYaw();		//updates the new angle constantly
+			idle();
+		}
+		stopMotors();
 	}
 
 	/**
@@ -595,7 +626,7 @@ public abstract class MyOpMode extends LinearOpMode {
 //		}
 	}
 
-	public void moveAlongWallToBeacon(double speed, double threshold, boolean isBlue) {
+	public void moveAlongWallToBeacon(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue) {
 		double USDF;
 		double USDB;
 		String color = "Neither";
@@ -613,19 +644,35 @@ public abstract class MyOpMode extends LinearOpMode {
 						color = "Neither";
 					}
 
-
 					USDF = rangeF.getUltraSonicDistance();
 					USDB = rangeB.getUltraSonicDistance();
 					telemetry.addData("range F", USDF);
 					telemetry.addData("range B", USDB);
 					telemetry.update();
 
-					if (USDF >= 23 || USDB > 23 || (USDF - USDB) >= threshold) {
-						move(-speed*0.5, speed * .76);
-					} else if (USDF <= 17 || USDB <= 17 || (USDB - USDF) >= threshold) {
-						move(-speed , speed*0.76*0.5);
-					} else {
-						move(-speed, speed * 0.76);
+					if(USDF >= targetDist + thresholdW) //turn right, slow right side
+					{
+						double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
+						move(speed, -speed * .76 * multiplier);
+					}
+					else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+					{
+						double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
+						move(speed*multiplier, -speed * 0.76 );
+					}
+					else if(USDF - USDB >= thresholdA) //turn right, slow right side
+					{
+						double multiplier = 0.7 + (((double)USDF-USDB)/thresholdA*5);
+						move(speed, -speed * .76 * multiplier);
+					}
+					else if(USDB - USDF >= thresholdA)
+					{
+						double multiplier = 0.7 + (((double)USDB-USDF)/thresholdA*5);
+						move(speed*multiplier, -speed * 0.76 );
+					}
+					else
+					{
+						move(speed, -speed * 0.76);
 					}
 				}
 				stopMotors();
@@ -649,11 +696,28 @@ public abstract class MyOpMode extends LinearOpMode {
 					telemetry.addData("range B", USDB);
 					telemetry.update();
 
-					if (USDF > 20 || USDB > 20 || (USDF - USDB) >= threshold) {
-						move(speed, -speed * .76*0.5);
-					} else if ((USDB - USDF) >= threshold) {
-						move(speed * .5, -speed*0.76);
-					} else {
+					if(USDF >= targetDist + thresholdW) //turn right, slow right side
+					{
+						double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
+						move(speed, -speed * .76 * multiplier);
+					}
+					else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+					{
+						double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
+						move(speed*multiplier, -speed * 0.76 );
+					}
+					else if(USDF - USDB >= thresholdA) //turn right, slow right side
+					{
+						double multiplier = 0.7 + (((double)USDF-USDB)/thresholdA*5);
+						move(speed, -speed * .76 * multiplier);
+					}
+					else if(USDB - USDF >= thresholdA)
+					{
+						double multiplier = 0.7 + (((double)USDB-USDF)/thresholdA*5);
+						move(speed*multiplier, -speed * 0.76 );
+					}
+					else
+					{
 						move(speed, -speed * 0.76);
 					}
 				}
@@ -662,75 +726,161 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
-
-
-	public void moveAlongWallForUnits(double speed, double threshold, boolean isBlue, int goal) {
+	public void moveAlongWallForUnits(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue, int goal) {
 		double USDF;
 		double USDB;
 		String color = "Neither";
-		if (opModeIsActive()) {
-			if (isBlue) {
-				//moveForwards(speed);
-				int currEnc = getAvgEnc();
-				int avgEnc = currEnc;
-				move(speed,-speed*0.76);
-				int distMoved = Math.abs(avgEnc - currEnc);
-				while (distMoved < goal && opModeIsActive()) {
-					avgEnc = getAvgEnc();
-					telemetry.addData("avg Enc", avgEnc);
-					telemetry.addData("curr Enc", currEnc);
-					//move((-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))*.7));
-					distMoved = Math.abs(avgEnc - currEnc);
-					telemetry.update();
+		if (opModeIsActive())
+		{
+			if (isBlue)
+			{
+				if(speed > 0)
+				{
+					int currEnc = getAvgEnc();
+					int avgEnc = currEnc;
+					move(speed, -speed * 0.76);
+					int distMoved = Math.abs(avgEnc - currEnc);
+					while (distMoved < goal && opModeIsActive())
+					{
+						avgEnc = getAvgEnc();
+						telemetry.addData("avg Enc", avgEnc);
+						telemetry.addData("curr Enc", currEnc);
+						distMoved = Math.abs(avgEnc - currEnc);
+						telemetry.update();
 
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						telemetry.addData("range F", USDF);
+						telemetry.addData("range B", USDB);
+						telemetry.update();
 
-
-					USDF = rangeF.getUltraSonicDistance();
-					USDB = rangeB.getUltraSonicDistance();
-					telemetry.addData("range F", USDF);
-					telemetry.addData("range B", USDB);
-					telemetry.update();
-
-					if (USDF <= 17 || USDB <= 17 || (USDF - USDB) >= threshold) {
-						move(-speed*0.5, speed * .76);
-					} else if (USDF >= 23 || USDB >= 23 || (USDB - USDF) >= threshold) {
-						move(-speed , speed*0.76*0.5);
-					} else {
-						move(-speed, speed * 0.76);
+						if(USDF >= targetDist + thresholdW) //turn right, slow right side
+						{
+							double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
+							move(speed, -speed * .76 * multiplier);
+						}
+						else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+						{
+							double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
+							move(speed*multiplier, -speed * 0.76 );
+						}
+						else if(USDF - USDB >= thresholdA) //turn right, slow right side
+						{
+							double multiplier = 0.7 + (((double)USDF-USDB)/thresholdA*5);
+							move(speed, -speed * .76 * multiplier);
+						}
+						else if(USDB - USDF >= thresholdA)
+						{
+							double multiplier = 0.7 + (((double)USDB-USDF)/thresholdA*5);
+							move(speed*multiplier, -speed * 0.76 );
+						}
+						else
+						{
+							move(speed, -speed * 0.76);
+						}
 					}
 				}
-				stopMotors();
-			} else {
-				//moveForwards(speed);
-				while ((!color.equals("Red")) && opModeIsActive()) {
-					telemetry.addData("move Along wall to beacon red","");
-					telemetry.addData("color sensor Color", colorB.beaconColor());
-					if (colorB.beaconColor().equals("Blue")) {
-						color = "Blue";
-					} else if (colorB.beaconColor().equals("Red")) {
-						color = "Red";
-					} else {
-						color = "Neither";
-					}
+				else
+				{
+					int currEnc = getAvgEnc();
+					int avgEnc = currEnc;
+					move(speed, -speed * 0.76);
+					int distMoved = Math.abs(avgEnc - currEnc);
+					while (distMoved < goal && opModeIsActive())
+					{
+						avgEnc = getAvgEnc();
+						telemetry.addData("avg Enc", avgEnc);
+						telemetry.addData("curr Enc", currEnc);
+						distMoved = Math.abs(avgEnc - currEnc);
+						telemetry.update();
 
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						telemetry.addData("range F", USDF);
+						telemetry.addData("range B", USDB);
+						telemetry.update();
 
-					USDF = rangeF.getUltraSonicDistance();
-					USDB = rangeB.getUltraSonicDistance();
-					telemetry.addData("range F", USDF);
-					telemetry.addData("range B", USDB);
-					telemetry.update();
-
-					if (USDF > 20 || USDB > 20 || (USDF - USDB) >= threshold) {
-						move(speed, -speed * .76*0.5);
-					} else if ((USDB - USDF) >= threshold) {
-						move(speed * .5, -speed*0.76);
-					} else {
-						move(speed, -speed * 0.76);
+						if(USDF >= targetDist + thresholdW) //turn right, slow right side
+						{
+							double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
+							move(multiplier * speed, -speed * .76 * multiplier);
+						}
+						else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+						{
+							double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
+							move(speed*multiplier, -speed * 0.76 );
+						}
+						else if(USDF - USDB >= thresholdA) //turn right, slow right side
+						{
+							double multiplier = 0.7 + (((double)USDF-USDB)/thresholdA*5);
+							move(speed, -speed * .76 * multiplier);
+						}
+						else if(USDB - USDF >= thresholdA)
+						{
+							double multiplier = 0.7 + (((double)USDB-USDF)/thresholdA*5);
+							move(speed*multiplier, -speed * 0.76 );
+						}
+						else
+						{
+							move(speed, -speed * 0.76);
+						}
 					}
 				}
 				stopMotors();
 			}
+			else
+			{
+				if(speed > 0)
+				{
+					//moveForwards(speed);
+					while ((!color.equals("Red")) && opModeIsActive())
+					{
+						telemetry.addData("move Along wall to beacon red", "");
+						telemetry.addData("color sensor Color", colorB.beaconColor());
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+
+
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						telemetry.addData("range F", USDF);
+						telemetry.addData("range B", USDB);
+						telemetry.update();
+
+						if(USDF >= targetDist + thresholdW)
+						{
+							double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
+							move(speed*multiplier, -speed * .76);
+						}
+						else if (USDB >= targetDist + thresholdW)
+						{
+							double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
+							move(speed, -speed * 0.76 * multiplier);
+						}
+						else if(USDF - USDB >= thresholdA) //turn right, slow right side
+						{
+							double multiplier = 0.7 + (((double)USDF-USDB)/thresholdA*5);
+							move(speed, -speed * .76 * multiplier);
+						}
+						else if(USDB - USDF >= thresholdA)
+						{
+							double multiplier = 0.7 + (((double)USDB-USDF)/thresholdA*5);
+							move(speed*multiplier, -speed * 0.76 );
+						}
+						else
+						{
+							move(speed, -speed * 0.76);
+						}
+					}
+				}
+			}
 		}
+		stopMotors();
 	}
 
 //	public void setServosParallel()

@@ -39,7 +39,7 @@ public class AutonomousRed extends MyAutonomous
 		telemetry.addData("done turning","");
 		telemetry.addData("moving along wall to beacon","");
 		telemetry.update();
-		moveAlongWallToBeacon(-0.23, 4.0, false);
+		//moveAlongWallToBeacon(-0.23, 4.0, false);
 		pushButton();
 
 	}

@@ -45,9 +45,10 @@ public class AutoBlueRange extends MyAutonomous {
         runSpinner(0.0);
         pause(1.0);
 
-        moveWithEncoders(.5, 3000);
+        //moveWithEncoders(.5, 1000);
+        gyroArcTurnLeft(0.3,45.0);
 
-        moveAlongWallForUnits(0.6,2.0,true,3000);
+        //moveAlongWallForUnits(0.6,1.0,2.0,20,true,3000);
 
         /*
         double degreesToTurn = -26.0;
@@ -59,15 +60,15 @@ public class AutoBlueRange extends MyAutonomous {
         gyroTurnRight(0.3, degreesToTurn);
         */
 
-        moveAlongWallToBeacon(0.3, 2.0, true);
+        moveAlongWallToBeacon(0.3, 1.0,2.0, 20,true);
         telemetry.addData("Pressing","beacon");
         telemetry.update();
         pause(3.0);
 
-        moveAlongWallForUnits(0.6,2.0,false,2000);
+        moveAlongWallForUnits(-0.6,1.0,2.0,20,false,1000);
         telemetry.addData("Moving to","beacon");
         telemetry.update();
-        moveAlongWallToBeacon(0.3, 2.0, true);
+        moveAlongWallToBeacon(-0.3, 1.0,2.0,20, true);
         telemetry.addData("Pressing","beacon");
         telemetry.update();
         pause(3.0);
