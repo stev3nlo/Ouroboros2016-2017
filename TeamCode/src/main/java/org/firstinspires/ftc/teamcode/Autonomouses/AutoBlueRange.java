@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomouses;
 
+import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
@@ -8,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-public class AutoBlueRange extends MyOpMode {
+public class AutoBlueRange extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -26,7 +27,27 @@ public class AutoBlueRange extends MyOpMode {
         super.runOpMode();
         //initializeSensors();
         waitForStart();
-        moveAlongWallToBeacon(.3,2.0,true);
+        simpleStabilizingLoop(1.0);
+        moveAlongWallToBeacon(.3, 2.0, true);
+        moveWithEncoders(.5, 4200);
+        openServoDropper();
+        simpleStabilizingLoop(1.5);
+        closeServoDropper();
+
+        moveWithEncoders(.5, 3700);
+
+        double degreesToTurn = -26.0;
+        telemetry.addData("degreesToTurn",degreesToTurn);
+        //telemetry.addData("rangeBDist",rangeB.getDistance(DistanceUnit.CM));
+        //telemetry.addData("rangeFDist",rangeF.getDistance(DistanceUnit.CM));
+        telemetry.addData("turning", "");
+        telemetry.update();
+        gyroTurnRight(0.3, degreesToTurn);
+
+        moveAlongWallToBeacon(0.3, 2.0, true);
+        pause(3.0);
+        moveAlongWallToBeacon(0.3,2.0,true);
+        pause(3.0);
 
        /* //travel forward to prine shooting spot
         moveWithEncoders(-1, 550); //needs to be tested

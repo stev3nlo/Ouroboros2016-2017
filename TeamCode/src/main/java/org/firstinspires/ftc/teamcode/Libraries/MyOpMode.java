@@ -157,41 +157,42 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		//telemetry.addData("Gyro", "Initializing");
 		//telemetry.update();
-		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
-		telemetry.addData("Gyro", "Initialized");
-		telemetry.update();
-		pause(1.0);
+
+		//pause(1.0);
 		//colorC = new SensorMRColor(hardwareMap.colorSensor.get("colorC"));
 		//colorR = new SensorMRColor(hardwareMap.colorSensor.get("colorR"));
 		colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
 		telemetry.addData("ColorB", "Initialized");
 		telemetry.update();
-		pause(1.0);
+		//pause(1.0);
 		rangeF = new SensorMRRange(hardwareMap.get(I2cDevice.class,"rangeF"));
 		telemetry.addData("RangeF", "Initialized");
 		telemetry.update();
-		pause(1.0);
+		//pause(1.0);
 		rangeB = new SensorMRRange(hardwareMap.get(I2cDevice.class,"rangeB"));
 		telemetry.addData("RangeB", "Initialized");
 		telemetry.update();
-		pause(1.0);
+		//pause(1.0);
 		//colorC.sensorSetup(0x2e);
 		//colorR.sensorSetup(0x2a);
 		colorB.sensorSetup(0x2c);
 		telemetry.addData("ColorB", "I2C address");
 		telemetry.update();
-		pause(1.0);
+		//pause(1.0);
 		rangeF.sensorSetup(0x4a);
 		telemetry.addData("RangeF", "I2C address");
 		telemetry.update();
-		pause(1.0);
+		//pause(1.0);
 		rangeB.sensorSetup(0x4c);
 		telemetry.addData("RangeB", "I2C address");
 		telemetry.update();
-		pause(1.0);
+		//pause(1.0);
 		telemetry.addData("sensors", "initialized");
 		telemetry.update();
-		pause(1.0);
+		//pause(1.0);
+		gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
+		telemetry.addData("Gyro", "Initialized");
+		telemetry.update();
 	}
 
 //	public void initializeBlueServos()

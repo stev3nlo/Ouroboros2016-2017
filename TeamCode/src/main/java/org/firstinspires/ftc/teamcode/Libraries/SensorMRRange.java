@@ -71,10 +71,12 @@ public class SensorMRRange {
 
 	//
 	public int getOpticDistance() {
+		getRangeCache();
 		return rangeCache[1] & 0xFF;
 	}
 
 	public String getRunTime() {
+		getRangeCache();
 		return runtime.toString();
 	}
 
