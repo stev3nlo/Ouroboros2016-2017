@@ -1,5 +1,10 @@
 package org.firstinspires.ftc.teamcode.Autonomouses;
 
+<<<<<<< HEAD
+=======
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+>>>>>>> origin/master
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
@@ -9,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
+@Autonomous(name="Auto Blue Range", group="Test")
 public class AutoBlueRange extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
