@@ -1,10 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomouses;
 
-<<<<<<< HEAD
-=======
+import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
->>>>>>> origin/master
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
@@ -52,7 +51,7 @@ public class AutoBlueRange extends MyAutonomous {
 
         moveAlongWallToBeacon(0.3, 2.0, true);
         pause(3.0);
-        moveAlongWallToBeacon(0.3,2.0,true);
+        moveAlongWallToBeacon(0.3, 2.0, true);
         pause(3.0);
 
        /* //travel forward to prine shooting spot

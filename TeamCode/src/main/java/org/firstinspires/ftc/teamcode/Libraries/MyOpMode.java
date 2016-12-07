@@ -620,10 +620,10 @@ public abstract class MyOpMode extends LinearOpMode {
 					telemetry.addData("range B", USDB);
 					telemetry.update();
 
-					if ((USDF - USDB) >= threshold) {
-						move(-speed*0.75, speed * .76);
-					} else if ((USDB - USDF) >= threshold) {
-						move(-speed , speed*0.76*0.75);
+					if (USDF >= 23 || USDB > 23 || (USDF - USDB) >= threshold) {
+						move(-speed*0.5, speed * .76);
+					} else if (USDF <= 17 || USDB <= 17 || (USDB - USDF) >= threshold) {
+						move(-speed , speed*0.76*0.5);
 					} else {
 						move(-speed, speed * 0.76);
 					}
@@ -649,10 +649,10 @@ public abstract class MyOpMode extends LinearOpMode {
 					telemetry.addData("range B", USDB);
 					telemetry.update();
 
-					if ((USDF - USDB) >= threshold) {
-						move(speed, -speed * .76*0.75);
+					if (USDF > 20 || USDB > 20 || (USDF - USDB) >= threshold) {
+						move(speed, -speed * .76*0.5);
 					} else if ((USDB - USDF) >= threshold) {
-						move(speed * .75, -speed*0.76);
+						move(speed * .5, -speed*0.76);
 					} else {
 						move(speed, -speed * 0.76);
 					}
