@@ -32,15 +32,24 @@ public class AutoBlueRange extends MyAutonomous {
         super.runOpMode();
         //initializeSensors();
         waitForStart();
-        simpleStabilizingLoop(1.0);
-        moveAlongWallToBeacon(.3, 2.0, true);
+        runSpinner(1.0);
+        pause(0.5);
+        //moveAlongWallToBeacon(.3, 2.0, true);
         moveWithEncoders(.5, 4200);
+        runSpinner(1.0);
+        pause(1.0);
         openServoDropper();
-        simpleStabilizingLoop(1.5);
+        runSpinner(1.0);
+        pause(1.5);
         closeServoDropper();
+        runSpinner(0.0);
+        pause(1.0);
 
-        moveWithEncoders(.5, 3700);
+        moveWithEncoders(.5, 3000);
 
+        moveAlongWallForUnits(0.6,2.0,true,3000);
+
+        /*
         double degreesToTurn = -26.0;
         telemetry.addData("degreesToTurn",degreesToTurn);
         //telemetry.addData("rangeBDist",rangeB.getDistance(DistanceUnit.CM));
@@ -48,10 +57,19 @@ public class AutoBlueRange extends MyAutonomous {
         telemetry.addData("turning", "");
         telemetry.update();
         gyroTurnRight(0.3, degreesToTurn);
+        */
 
         moveAlongWallToBeacon(0.3, 2.0, true);
+        telemetry.addData("Pressing","beacon");
+        telemetry.update();
         pause(3.0);
+
+        moveAlongWallForUnits(0.6,2.0,false,2000);
+        telemetry.addData("Moving to","beacon");
+        telemetry.update();
         moveAlongWallToBeacon(0.3, 2.0, true);
+        telemetry.addData("Pressing","beacon");
+        telemetry.update();
         pause(3.0);
 
        /* //travel forward to prine shooting spot

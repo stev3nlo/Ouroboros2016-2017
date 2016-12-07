@@ -662,6 +662,77 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+
+
+	public void moveAlongWallForUnits(double speed, double threshold, boolean isBlue, int goal) {
+		double USDF;
+		double USDB;
+		String color = "Neither";
+		if (opModeIsActive()) {
+			if (isBlue) {
+				//moveForwards(speed);
+				int currEnc = getAvgEnc();
+				int avgEnc = currEnc;
+				move(speed,-speed*0.76);
+				int distMoved = Math.abs(avgEnc - currEnc);
+				while (distMoved < goal && opModeIsActive()) {
+					avgEnc = getAvgEnc();
+					telemetry.addData("avg Enc", avgEnc);
+					telemetry.addData("curr Enc", currEnc);
+					//move((-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))*.7));
+					distMoved = Math.abs(avgEnc - currEnc);
+					telemetry.update();
+
+
+
+					USDF = rangeF.getUltraSonicDistance();
+					USDB = rangeB.getUltraSonicDistance();
+					telemetry.addData("range F", USDF);
+					telemetry.addData("range B", USDB);
+					telemetry.update();
+
+					if (USDF <= 17 || USDB <= 17 || (USDF - USDB) >= threshold) {
+						move(-speed*0.5, speed * .76);
+					} else if (USDF >= 23 || USDB >= 23 || (USDB - USDF) >= threshold) {
+						move(-speed , speed*0.76*0.5);
+					} else {
+						move(-speed, speed * 0.76);
+					}
+				}
+				stopMotors();
+			} else {
+				//moveForwards(speed);
+				while ((!color.equals("Red")) && opModeIsActive()) {
+					telemetry.addData("move Along wall to beacon red","");
+					telemetry.addData("color sensor Color", colorB.beaconColor());
+					if (colorB.beaconColor().equals("Blue")) {
+						color = "Blue";
+					} else if (colorB.beaconColor().equals("Red")) {
+						color = "Red";
+					} else {
+						color = "Neither";
+					}
+
+
+					USDF = rangeF.getUltraSonicDistance();
+					USDB = rangeB.getUltraSonicDistance();
+					telemetry.addData("range F", USDF);
+					telemetry.addData("range B", USDB);
+					telemetry.update();
+
+					if (USDF > 20 || USDB > 20 || (USDF - USDB) >= threshold) {
+						move(speed, -speed * .76*0.5);
+					} else if ((USDB - USDF) >= threshold) {
+						move(speed * .5, -speed*0.76);
+					} else {
+						move(speed, -speed * 0.76);
+					}
+				}
+				stopMotors();
+			}
+		}
+	}
+
 //	public void setServosParallel()
 //	{
 //		servoRangeB.setPosition(0.5);
