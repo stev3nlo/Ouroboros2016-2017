@@ -603,8 +603,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				//moveForwards(speed);
 				while ((!color.equals("Blue")) && opModeIsActive()) {
 					telemetry.addData("move Along wall to beacon blue","");
-					telemetry.addData("color sensor Color",colorB.beaconColor());
-					telemetry.update();
+					telemetry.addData("color sensor Color", colorB.beaconColor());
 					if (colorB.beaconColor().equals("Blue")) {
 						color = "Blue";
 					} else if (colorB.beaconColor().equals("Red")) {
@@ -616,11 +615,14 @@ public abstract class MyOpMode extends LinearOpMode {
 
 					USDF = rangeF.getUltraSonicDistance();
 					USDB = rangeB.getUltraSonicDistance();
+					telemetry.addData("range F", USDF);
+					telemetry.addData("range B", USDB);
+					telemetry.update();
 
 					if ((USDF - USDB) >= threshold) {
-						move(-speed, speed * .76*0.75);
+						move(-speed*0.75, speed * .76);
 					} else if ((USDB - USDF) >= threshold) {
-						move(-speed * .75, speed*0.76);
+						move(-speed , speed*0.76*0.75);
 					} else {
 						move(-speed, speed * 0.76);
 					}
@@ -630,8 +632,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				//moveForwards(speed);
 				while ((!color.equals("Red")) && opModeIsActive()) {
 					telemetry.addData("move Along wall to beacon red","");
-					telemetry.addData("color sensor Color",colorB.beaconColor());
-					telemetry.update();
+					telemetry.addData("color sensor Color", colorB.beaconColor());
 					if (colorB.beaconColor().equals("Blue")) {
 						color = "Blue";
 					} else if (colorB.beaconColor().equals("Red")) {
@@ -643,6 +644,9 @@ public abstract class MyOpMode extends LinearOpMode {
 
 					USDF = rangeF.getUltraSonicDistance();
 					USDB = rangeB.getUltraSonicDistance();
+					telemetry.addData("range F", USDF);
+					telemetry.addData("range B", USDB);
+					telemetry.update();
 
 					if ((USDF - USDB) >= threshold) {
 						move(speed, -speed * .76*0.75);

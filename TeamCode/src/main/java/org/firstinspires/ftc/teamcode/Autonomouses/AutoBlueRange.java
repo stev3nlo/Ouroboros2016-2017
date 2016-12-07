@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.Autonomouses;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
@@ -8,7 +11,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-public class AutoBlueRange extends MyOpMode {
+@Autonomous(name="Auto Blue Range", group="Test")
+public class AutoBlueRange extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -26,7 +30,7 @@ public class AutoBlueRange extends MyOpMode {
         super.runOpMode();
         //initializeSensors();
         waitForStart();
-        moveAlongWallToBeacon(.3,2.0,true);
+        moveAlongWallToBeacon(.5,2.0,true);
 
        /* //travel forward to prine shooting spot
         moveWithEncoders(-1, 550); //needs to be tested
