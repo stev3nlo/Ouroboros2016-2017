@@ -653,21 +653,36 @@ public abstract class MyOpMode extends LinearOpMode {
 					if(USDF >= targetDist + thresholdW) //turn right, slow right side
 					{
 						double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
+						//if(multiplier > 0.8)
+							multiplier = 0.6;
 						move(speed, -speed * .76 * multiplier);
 					}
 					else if (USDB >= targetDist + thresholdW) //turn left, slow left side
 					{
 						double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
+						//if(multiplier > 0.8)
+							multiplier = 0.6;
 						move(speed*multiplier, -speed * 0.76 );
+					}
+					else if(USDF <= targetDist - thresholdW)
+					{
+
+					}
+					else if(USDB <= targetDist - thresholdW)
+					{
+
 					}
 					else if(USDF - USDB >= thresholdA) //turn right, slow right side
 					{
-						double multiplier = 0.7 + (((double)USDF-USDB)/thresholdA*5);
+						double multiplier = 0.5 + (((double)USDF-USDB)/thresholdA*5);
+						multiplier = 0.6;
 						move(speed, -speed * .76 * multiplier);
 					}
 					else if(USDB - USDF >= thresholdA)
 					{
-						double multiplier = 0.7 + (((double)USDB-USDF)/thresholdA*5);
+						double multiplier = 0.5 + (((double)USDB-USDF)/thresholdA*5);
+						//if(multiplier > 0.8)
+							multiplier = 0.6;
 						move(speed*multiplier, -speed * 0.76 );
 					}
 					else
@@ -902,13 +917,13 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void moveBeaconPusherOut() {
 		//TEST VALUES
-		double v = 1.0;
+		double v = 0.0;
 		servoBeaconPusher.setPosition(v);
 	}
 
 	public void moveBeaconPusherIn() {
 		//TEST VALUES
-		double v = 0.0;
+		double v = 1.0;
 		servoBeaconPusher.setPosition(v);
 	}
 

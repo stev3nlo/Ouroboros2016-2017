@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Blue Range", group="Test")
-public class AutoBlueRange extends MyAutonomous {
+@Autonomous(name="MoveAlongWallToBeaconTest", group="Test")
+public class MoveAlongWallToBeaconTest extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -32,7 +32,7 @@ public class AutoBlueRange extends MyAutonomous {
         super.runOpMode();
         //initializeSensors();
         waitForStart();
-        runSpinner(1.0);
+        /*runSpinner(1.0);
         pause(0.5);
         //moveAlongWallToBeacon(.3, 2.0, true);
         moveWithEncoders(.5, 3500);
@@ -48,6 +48,7 @@ public class AutoBlueRange extends MyAutonomous {
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnLeft(0.3,45.0);
+        */
 
         //moveAlongWallForUnits(0.6,1.0,2.0,20,true,3000);
 
@@ -62,6 +63,7 @@ public class AutoBlueRange extends MyAutonomous {
         */
 
         moveAlongWallToBeacon(0.3, 1.0,2.0, 20,true);
+        /*
         telemetry.addData("Pressing","beacon");
         telemetry.update();
         pause(3.0);
@@ -73,6 +75,7 @@ public class AutoBlueRange extends MyAutonomous {
         telemetry.addData("Pressing","beacon");
         telemetry.update();
         pause(3.0);
+        */
 
        /* //travel forward to prine shooting spot
         moveWithEncoders(-1, 550); //needs to be tested
