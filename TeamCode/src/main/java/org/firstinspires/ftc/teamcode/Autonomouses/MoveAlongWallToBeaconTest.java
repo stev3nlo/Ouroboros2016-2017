@@ -63,6 +63,7 @@ public class MoveAlongWallToBeaconTest extends MyAutonomous {
         */
 
         moveAlongWallToBeacon(0.3, 1.0,2.0, 20,true);
+        pushButton();
         /*
         telemetry.addData("Pressing","beacon");
         telemetry.update();

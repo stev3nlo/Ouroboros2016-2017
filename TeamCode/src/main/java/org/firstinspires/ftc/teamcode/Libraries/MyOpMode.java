@@ -664,6 +664,7 @@ public abstract class MyOpMode extends LinearOpMode {
 							multiplier = 0.6;
 						move(speed*multiplier, -speed * 0.76 );
 					}
+					/*
 					else if(USDF <= targetDist - thresholdW)
 					{
 
@@ -672,6 +673,7 @@ public abstract class MyOpMode extends LinearOpMode {
 					{
 
 					}
+					*/
 					else if(USDF - USDB >= thresholdA) //turn right, slow right side
 					{
 						double multiplier = 0.5 + (((double)USDF-USDB)/thresholdA*5);
