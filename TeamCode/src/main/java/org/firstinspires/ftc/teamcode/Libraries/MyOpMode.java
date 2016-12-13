@@ -633,9 +633,11 @@ public abstract class MyOpMode extends LinearOpMode {
 		if (opModeIsActive()) {
 			if (isBlue) {
 				//moveForwards(speed);
-				if(speed > 0) {
-					while ((!color.equals("Blue")) && opModeIsActive()) {
-						telemetry.addData("move Along wall to beacon blue", "");
+				if(speed > 0)
+				{
+					while ((!color.equals("Blue")) && opModeIsActive())
+					{
+						telemetry.addData("move Along wall to beacon blue","");
 						telemetry.addData("color sensor Color", colorB.beaconColor());
 						if (colorB.beaconColor().equals("Blue")) {
 							color = "Blue";
@@ -644,7 +646,6 @@ public abstract class MyOpMode extends LinearOpMode {
 						} else {
 							color = "Neither";
 						}
-
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						telemetry.addData("range F", USDF);
@@ -695,6 +696,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				}
 				else
 				{
+					boolean isArcTurning = false;
 					while ((!color.equals("Blue")) && opModeIsActive()) {
 						telemetry.addData("move Along wall to beacon blue", "");
 						telemetry.addData("color sensor Color", colorB.beaconColor());
@@ -712,6 +714,13 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("range B", USDB);
 						telemetry.update();
 						double multiplier = -1.0;
+						if(isArcTurning)
+						{
+							if(USDB < USDF)
+								isArcTurning = false;
+							else
+								move(0, speed * 0.76);
+						}
 						if (USDF >= targetDist + thresholdW) //turn right, slow right side
 						{
 							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 4));
@@ -720,10 +729,8 @@ public abstract class MyOpMode extends LinearOpMode {
 							move(speed, -speed * .76 * multiplier);
 						} else if (USDB >= targetDist + thresholdW) //turn left, slow left side
 						{
-							multiplier = 1.0 - (((double) USDB - targetDist) / (targetDist / 4));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
-							move(speed, -speed * 0.76 * multiplier);
+							isArcTurning = true;
+							move(0, speed * 0.76);
 						} else if (USDF <= targetDist - thresholdW) //turn left, slow left side
 						{
 							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 4));
@@ -756,6 +763,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				}
 			} else {
 				//moveForwards(speed);
+
 				while ((!color.equals("Red")) && opModeIsActive()) {
 					telemetry.addData("move Along wall to beacon red","");
 					telemetry.addData("color sensor Color", colorB.beaconColor());
@@ -775,6 +783,7 @@ public abstract class MyOpMode extends LinearOpMode {
 					telemetry.update();
 
 					double multiplier = -1.0;
+
 					if(USDF >= targetDist + thresholdW) //turn right, slow right side
 					{
 						multiplier = 1.0 - (((double)USDF-targetDist)/(targetDist/3));
@@ -902,6 +911,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						}
 						else
 						{
+
 							move(speed, -speed * 0.76);
 						}
 						telemetry.addData("multiplier",multiplier);
@@ -914,6 +924,7 @@ public abstract class MyOpMode extends LinearOpMode {
 					int avgEnc = currEnc;
 					move(speed, -speed * 0.76);
 					int distMoved = Math.abs(avgEnc - currEnc);
+					boolean isArcTurning = false;
 					while (distMoved < goal && opModeIsActive())
 					{
 						avgEnc = getAvgEnc();
@@ -929,53 +940,49 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.update();
 
 						double multiplier = -1.0;
-						if(USDF >= targetDist + thresholdW) //turn right, slow right side
+						if(isArcTurning)
 						{
-							multiplier = 1.0 - (((double)USDF-targetDist)/(targetDist/3));
-							if(multiplier<0.4)
-								multiplier = 0.4;
-							move(speed*multiplier, -speed * .76);
+							if(USDB < USDF)
+								isArcTurning = false;
+							else
+								move(0, speed * 0.76);
 						}
-						else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+						if (USDF >= targetDist + thresholdW) //turn right, slow right side
 						{
-							multiplier = 1.0 - (((double)USDB-targetDist)/(targetDist/3));
-							if(multiplier<0.4)
+							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 4));
+							if (multiplier < 0.4)
 								multiplier = 0.4;
-							move(speed, -speed * 0.76 *multiplier);
-						}
-						else if(USDF <= targetDist - thresholdW) //turn left, slow left side
+							move(speed, -speed * .76 * multiplier);
+						} else if (USDB >= targetDist + thresholdW) //turn left, slow left side
 						{
-							multiplier = 1.0 - (((double)targetDist-USDF)/(targetDist/3));
-							if(multiplier<0.4)
+							isArcTurning = true;
+							move(0, speed * 0.76);
+						} else if (USDF <= targetDist - thresholdW) //turn left, slow left side
+						{
+							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 4));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed * multiplier, -speed * 0.76);
+						} else if (USDB <= targetDist - thresholdW) {
+							multiplier = 1.0 - (((double) targetDist - USDB) / (targetDist / 4));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed * multiplier, -speed * 0.76);
+						} else if (USDF - USDB >= thresholdA) //turn right, slow right side
+						{
+							multiplier = 1.0 - (((double) USDF - USDB) / thresholdA * 8);
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed * multiplier, -speed * .76);
+						} else if (USDB - USDF >= thresholdA) {
+							multiplier = 1.0 - (((double) USDB - USDF) / thresholdA * 8);
+							if (multiplier < 0.4)
 								multiplier = 0.4;
 							move(speed, -speed * 0.76 * multiplier);
-						}
-						else if(USDB <= targetDist - thresholdW)
-						{
-							multiplier = 1.0 - (((double)targetDist-USDB)/(targetDist/3));
-							if(multiplier<0.4)
-								multiplier = 0.4;
-							move(speed*multiplier, -speed * 0.76);
-						}
-						else if(USDF - USDB >= thresholdA) //turn right, slow right side
-						{
-							multiplier = 1.0 - (((double)USDF-USDB)/thresholdA*10);
-							if(multiplier<0.4)
-								multiplier = 0.4;
-							move(speed*multiplier, -speed * .76);
-						}
-						else if(USDB - USDF >= thresholdA)
-						{
-							multiplier = 1.0 - (((double)USDB-USDF)/thresholdA*10);
-							if(multiplier<0.4)
-								multiplier = 0.4;
-							move(speed, -speed * 0.76 *multiplier);
-						}
-						else
-						{
+						} else {
 							move(speed, -speed * 0.76);
 						}
-						telemetry.addData("multiplier",multiplier);
+						telemetry.addData("multiplier", multiplier);
 						telemetry.update();
 					}
 				}
@@ -1053,13 +1060,15 @@ public abstract class MyOpMode extends LinearOpMode {
 	}
 
 
-	public void moveBeaconPusherOut() {
+	public void moveBeaconPusherOut()
+		{
 		//TEST VALUES
 		double v = 0.0;
 		servoBeaconPusher.setPosition(v);
 	}
 
-	public void moveBeaconPusherIn() {
+	public void moveBeaconPusherIn()
+		{
 		//TEST VALUES
 		double v = 1.0;
 		servoBeaconPusher.setPosition(v);

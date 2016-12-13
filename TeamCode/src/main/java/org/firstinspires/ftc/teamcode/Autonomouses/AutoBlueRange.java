@@ -44,7 +44,7 @@ public class AutoBlueRange extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(1.0);
-        moveWithEncoders(0.5,1300);
+        moveWithEncoders(0.5,1000);
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnLeft(0.3,38.0);
@@ -66,16 +66,19 @@ public class AutoBlueRange extends MyAutonomous {
         //moveAlongWallForUnits(-0.3, 1.0, 2.0, 14, true, 200);
         //pause(0.5);
         pushButton();
+        pause(1.0);
 
-        moveAlongWallForUnits(-0.5, 1.0, 2.0, 16, true, 1000);
+        moveAlongWallForUnits(-0.3, 1.0, 2.0, 16, true, 1000);
         telemetry.addData("Moving to", "beacon");
         telemetry.update();
 
         moveAlongWallToBeacon(-0.25, 1.0, 2.0, 16, true);
+        pause(1.0);
         //moveAlongWallForUnits(0.3,1.0,2.0,14,true,200);
         pushButton();
 
-       /* //travel forward to prine shooting spot
+
+       /* //travel forward to prime shooting spot
         moveWithEncoders(-1, 550); //needs to be tested
 
         //shoot sequence
