@@ -633,64 +633,127 @@ public abstract class MyOpMode extends LinearOpMode {
 		if (opModeIsActive()) {
 			if (isBlue) {
 				//moveForwards(speed);
-				while ((!color.equals("Blue")) && opModeIsActive()) {
-					telemetry.addData("move Along wall to beacon blue","");
-					telemetry.addData("color sensor Color", colorB.beaconColor());
-					if (colorB.beaconColor().equals("Blue")) {
-						color = "Blue";
-					} else if (colorB.beaconColor().equals("Red")) {
-						color = "Red";
-					} else {
-						color = "Neither";
-					}
+				if(speed > 0) {
+					while ((!color.equals("Blue")) && opModeIsActive()) {
+						telemetry.addData("move Along wall to beacon blue", "");
+						telemetry.addData("color sensor Color", colorB.beaconColor());
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
 
-					USDF = rangeF.getUltraSonicDistance();
-					USDB = rangeB.getUltraSonicDistance();
-					telemetry.addData("range F", USDF);
-					telemetry.addData("range B", USDB);
-					telemetry.update();
-
-					if(USDF >= targetDist + thresholdW) //turn right, slow right side
-					{
-						double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
-						//if(multiplier > 0.8)
-							multiplier = 0.6;
-						move(speed, -speed * .76 * multiplier);
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						telemetry.addData("range F", USDF);
+						telemetry.addData("range B", USDB);
+						telemetry.update();
+						double multiplier = -1.0;
+						if (USDF >= targetDist + thresholdW) //turn right, slow right side
+						{
+							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 6));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed, -speed * .76 * multiplier);
+						} else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+						{
+							multiplier = 1.0 - (((double) USDB - targetDist) / (targetDist / 6));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed * multiplier, -speed * 0.76);
+						} else if (USDF <= targetDist - thresholdW) //turn left, slow left side
+						{
+							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 6));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed * multiplier, -speed * 0.76);
+						} else if (USDB <= targetDist - thresholdW) {
+							multiplier = 1.0 - (((double) targetDist - USDB) / (targetDist / 6));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed, -speed * 0.76 * multiplier);
+						} else if (USDF - USDB >= thresholdA) //turn right, slow right side
+						{
+							multiplier = 1.0 - (((double) USDF - USDB) / thresholdA * 2);
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed, -speed * .76 * multiplier);
+						} else if (USDB - USDF >= thresholdA) {
+							multiplier = 1.0 - (((double) USDB - USDF) / thresholdA * 2);
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed * multiplier, -speed * 0.76);
+						} else {
+							move(speed, -speed * 0.76);
+						}
+						telemetry.addData("multiplier", multiplier);
+						telemetry.update();
 					}
-					else if (USDB >= targetDist + thresholdW) //turn left, slow left side
-					{
-						double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
-						//if(multiplier > 0.8)
-							multiplier = 0.6;
-						move(speed*multiplier, -speed * 0.76 );
-					}
-					else if(USDF <= targetDist - thresholdW)
-					{
-
-					}
-					else if(USDB <= targetDist - thresholdW)
-					{
-
-					}
-					else if(USDF - USDB >= thresholdA) //turn right, slow right side
-					{
-						double multiplier = 0.5 + (((double)USDF-USDB)/thresholdA*5);
-						multiplier = 0.6;
-						move(speed, -speed * .76 * multiplier);
-					}
-					else if(USDB - USDF >= thresholdA)
-					{
-						double multiplier = 0.5 + (((double)USDB-USDF)/thresholdA*5);
-						//if(multiplier > 0.8)
-							multiplier = 0.6;
-						move(speed*multiplier, -speed * 0.76 );
-					}
-					else
-					{
-						move(speed, -speed * 0.76);
-					}
+					stopMotors();
 				}
-				stopMotors();
+				else
+				{
+					while ((!color.equals("Blue")) && opModeIsActive()) {
+						telemetry.addData("move Along wall to beacon blue", "");
+						telemetry.addData("color sensor Color", colorB.beaconColor());
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						telemetry.addData("range F", USDF);
+						telemetry.addData("range B", USDB);
+						telemetry.update();
+						double multiplier = -1.0;
+						if (USDF >= targetDist + thresholdW) //turn right, slow right side
+						{
+							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 4));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed, -speed * .76 * multiplier);
+						} else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+						{
+							multiplier = 1.0 - (((double) USDB - targetDist) / (targetDist / 4));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed, -speed * 0.76 * multiplier);
+						} else if (USDF <= targetDist - thresholdW) //turn left, slow left side
+						{
+							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 4));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed * multiplier, -speed * 0.76);
+						} else if (USDB <= targetDist - thresholdW) {
+							multiplier = 1.0 - (((double) targetDist - USDB) / (targetDist / 4));
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed * multiplier, -speed * 0.76);
+						} else if (USDF - USDB >= thresholdA) //turn right, slow right side
+						{
+							multiplier = 1.0 - (((double) USDF - USDB) / thresholdA * 8);
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed * multiplier, -speed * .76);
+						} else if (USDB - USDF >= thresholdA) {
+							multiplier = 1.0 - (((double) USDB - USDF) / thresholdA * 8);
+							if (multiplier < 0.4)
+								multiplier = 0.4;
+							move(speed, -speed * 0.76 * multiplier);
+						} else {
+							move(speed, -speed * 0.76);
+						}
+						telemetry.addData("multiplier", multiplier);
+						telemetry.update();
+					}
+					stopMotors();
+				}
 			} else {
 				//moveForwards(speed);
 				while ((!color.equals("Red")) && opModeIsActive()) {
@@ -711,30 +774,55 @@ public abstract class MyOpMode extends LinearOpMode {
 					telemetry.addData("range B", USDB);
 					telemetry.update();
 
+					double multiplier = -1.0;
 					if(USDF >= targetDist + thresholdW) //turn right, slow right side
 					{
-						double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
+						multiplier = 1.0 - (((double)USDF-targetDist)/(targetDist/3));
+						if(multiplier<0.4)
+							multiplier = 0.4;
 						move(speed, -speed * .76 * multiplier);
 					}
 					else if (USDB >= targetDist + thresholdW) //turn left, slow left side
 					{
-						double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
+						multiplier = 1.0 - (((double)USDB-targetDist)/(targetDist/3));
+						if(multiplier < 0.4)
+							multiplier = 0.4;
 						move(speed*multiplier, -speed * 0.76 );
+					}
+					else if(USDF <= targetDist - thresholdW) //turn left, slow left side
+					{
+						multiplier = 1.0 - (((double)targetDist-USDF)/(targetDist/3));
+						if(multiplier < 0.4)
+							multiplier = 0.4;
+						move(speed*multiplier, -speed * 0.76 );
+					}
+					else if(USDB <= targetDist - thresholdW)
+					{
+						multiplier = 1.0 - (((double)targetDist-USDB)/(targetDist/3));
+						if(multiplier < 0.4)
+							multiplier = 0.4;
+						move(speed, -speed * 0.76 * multiplier);
 					}
 					else if(USDF - USDB >= thresholdA) //turn right, slow right side
 					{
-						double multiplier = 0.7 + (((double)USDF-USDB)/thresholdA*5);
+						multiplier = 1.0 - (((double)USDF-USDB)/thresholdA*5);
+						if(multiplier < 0.4)
+							multiplier = 0.4;
 						move(speed, -speed * .76 * multiplier);
 					}
 					else if(USDB - USDF >= thresholdA)
 					{
-						double multiplier = 0.7 + (((double)USDB-USDF)/thresholdA*5);
+						multiplier = 1.0 - (((double)USDB-USDF)/thresholdA*5);
+						if(multiplier < 0.4)
+							multiplier = 0.4;
 						move(speed*multiplier, -speed * 0.76 );
 					}
 					else
 					{
 						move(speed, -speed * 0.76);
 					}
+					telemetry.addData("multiplier",multiplier);
+					telemetry.update();
 				}
 				stopMotors();
 			}
@@ -769,30 +857,55 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("range B", USDB);
 						telemetry.update();
 
+						double multiplier = -1.0;
 						if(USDF >= targetDist + thresholdW) //turn right, slow right side
 						{
-							double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
+							multiplier = 1.0 - (((double)USDF-targetDist)/(targetDist/3));
+							if(multiplier<0.4)
+								multiplier = 0.4;
 							move(speed, -speed * .76 * multiplier);
 						}
 						else if (USDB >= targetDist + thresholdW) //turn left, slow left side
 						{
-							double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
+							multiplier = 1.0 - (((double)USDB-targetDist)/(targetDist/3));
+							if(multiplier<0.4)
+								multiplier = 0.4;
 							move(speed*multiplier, -speed * 0.76 );
+						}
+						else if(USDF <= targetDist - thresholdW) //turn left, slow left side
+						{
+							multiplier = 1.0 - (((double)targetDist-USDF)/(targetDist/3));
+							if(multiplier<0.4)
+								multiplier = 0.4;
+							move(speed*multiplier, -speed * 0.76 );
+						}
+						else if(USDB <= targetDist - thresholdW)
+						{
+							multiplier = 1.0 - (((double)targetDist-USDB)/(targetDist/3));
+							if(multiplier<0.4)
+								multiplier = 0.4;
+							move(speed, -speed * 0.76 * multiplier);
 						}
 						else if(USDF - USDB >= thresholdA) //turn right, slow right side
 						{
-							double multiplier = 0.7 + (((double)USDF-USDB)/thresholdA*5);
+							multiplier = 1.0 - (((double)USDF-USDB)/thresholdA*10);
+							if(multiplier<0.4)
+								multiplier = 0.4;
 							move(speed, -speed * .76 * multiplier);
 						}
 						else if(USDB - USDF >= thresholdA)
 						{
-							double multiplier = 0.7 + (((double)USDB-USDF)/thresholdA*5);
+							multiplier = 1.0 - (((double)USDB-USDF)/thresholdA*10);
+							if(multiplier<0.4)
+								multiplier = 0.4;
 							move(speed*multiplier, -speed * 0.76 );
 						}
 						else
 						{
 							move(speed, -speed * 0.76);
 						}
+						telemetry.addData("multiplier",multiplier);
+						telemetry.update();
 					}
 				}
 				else
@@ -815,30 +928,55 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("range B", USDB);
 						telemetry.update();
 
+						double multiplier = -1.0;
 						if(USDF >= targetDist + thresholdW) //turn right, slow right side
 						{
-							double multiplier = 0.5 + (((double)USDF-targetDist)/(targetDist/2));
-							move(multiplier * speed, -speed * .76 * multiplier);
+							multiplier = 1.0 - (((double)USDF-targetDist)/(targetDist/3));
+							if(multiplier<0.4)
+								multiplier = 0.4;
+							move(speed*multiplier, -speed * .76);
 						}
 						else if (USDB >= targetDist + thresholdW) //turn left, slow left side
 						{
-							double multiplier = 0.5 + (((double)USDB-targetDist)/(targetDist/2));
-							move(speed*multiplier, -speed * 0.76 );
+							multiplier = 1.0 - (((double)USDB-targetDist)/(targetDist/3));
+							if(multiplier<0.4)
+								multiplier = 0.4;
+							move(speed, -speed * 0.76 *multiplier);
+						}
+						else if(USDF <= targetDist - thresholdW) //turn left, slow left side
+						{
+							multiplier = 1.0 - (((double)targetDist-USDF)/(targetDist/3));
+							if(multiplier<0.4)
+								multiplier = 0.4;
+							move(speed, -speed * 0.76 * multiplier);
+						}
+						else if(USDB <= targetDist - thresholdW)
+						{
+							multiplier = 1.0 - (((double)targetDist-USDB)/(targetDist/3));
+							if(multiplier<0.4)
+								multiplier = 0.4;
+							move(speed*multiplier, -speed * 0.76);
 						}
 						else if(USDF - USDB >= thresholdA) //turn right, slow right side
 						{
-							double multiplier = 0.7 + (((double)USDF-USDB)/thresholdA*5);
-							move(speed, -speed * .76 * multiplier);
+							multiplier = 1.0 - (((double)USDF-USDB)/thresholdA*10);
+							if(multiplier<0.4)
+								multiplier = 0.4;
+							move(speed*multiplier, -speed * .76);
 						}
 						else if(USDB - USDF >= thresholdA)
 						{
-							double multiplier = 0.7 + (((double)USDB-USDF)/thresholdA*5);
-							move(speed*multiplier, -speed * 0.76 );
+							multiplier = 1.0 - (((double)USDB-USDF)/thresholdA*10);
+							if(multiplier<0.4)
+								multiplier = 0.4;
+							move(speed, -speed * 0.76 *multiplier);
 						}
 						else
 						{
 							move(speed, -speed * 0.76);
 						}
+						telemetry.addData("multiplier",multiplier);
+						telemetry.update();
 					}
 				}
 				stopMotors();
@@ -909,7 +1047,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		moveBeaconPusherOut();
 		initCurtime();
 		double startTime = getCurTime();
-		while(opModeIsActive() && getCurTime() - startTime <= 5.0)
+		while(opModeIsActive() && getCurTime() - startTime <= 2.5)
 			initCurtime();
 		moveBeaconPusherIn();
 	}
