@@ -643,6 +643,18 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		double USDF = rangeF.getUltraSonicDistance();
 		double USDB = rangeB.getUltraSonicDistance();
+		if(speed > 0)
+		{
+			if(USDF > USDB)
+			{
+				//arcTurnRight();
+			}
+		}
+	}
+
+	public void arcTurnLeftToWall(double speed)
+	{
+
 	}
 
 	public void turnParallelToWall(double speed) {
