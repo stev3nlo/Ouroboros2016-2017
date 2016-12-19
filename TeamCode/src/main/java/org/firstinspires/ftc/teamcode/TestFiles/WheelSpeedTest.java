@@ -11,6 +11,7 @@ import java.util.TreeMap;
 /**
  * Created by spencersharp on 12/19/16.
  */
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="WheelSpeedTest", group="Test")
 public class WheelSpeedTest extends MyOpMode
 {
     public double curPowerOfMotorL1 = 1.0;

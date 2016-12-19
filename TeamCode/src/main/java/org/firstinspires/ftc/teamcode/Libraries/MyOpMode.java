@@ -639,6 +639,12 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void arcTurnRightToWall(double speed)
+	{
+		double USDF = rangeF.getUltraSonicDistance();
+		double USDB = rangeB.getUltraSonicDistance();
+	}
+
 	public void turnParallelToWall(double speed) {
 		double USDF;
 		double USDB;
@@ -725,25 +731,25 @@ public abstract class MyOpMode extends LinearOpMode {
 								moveForwards(speed, speed * 0.5);
 								break;
 							case "01":
-								arcTurnRight(-speed);
+								arcTurnRightToWall(-speed);
 								break;
 							case "02":
 								turnParallelToWall(speed);
 								break;
 							case "10":
-								arcTurnRight(speed);
+								arcTurnRightToWall(speed);
 								break;
 							case "11":
 								moveForwards(speed);
 								break;
 							case "12":
-								arcTurnLeft(speed);
+								arcTurnLeftToWall(speed);
 								break;
 							case "20":
 								turnParallelToWall(speed);
 								break;
 							case "21":
-								arcTurnLeft(-speed);
+								arcTurnLeftToWall(-speed);
 								break;
 							case "22":
 								moveForwards(speed * 0.5, speed);
