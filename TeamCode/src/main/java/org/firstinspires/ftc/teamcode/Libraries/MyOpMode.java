@@ -381,16 +381,16 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void arcTurnRight(double speed)
 	{
 		if(speed > 0)
-			moveForwards(0,speed);
+			moveForwards(0.05,speed);
 		else if(speed < 0)
-			moveBackwards(0,speed);
+			moveBackwards(0.05,speed);
 	}
 
 	public void arcTurnLeft(double speed) {
 		if(speed > 0)
-			moveForwards(speed,0);
+			moveForwards(speed,0.05);
 		else if(speed < 0)
-			moveBackwards(speed,0);
+			moveBackwards(speed,0.05);
 	}
 
 	public void gyroArcTurnRight(double speed, double targetAngle) throws InterruptedException
@@ -889,26 +889,26 @@ public abstract class MyOpMode extends LinearOpMode {
 								moveForwards(speed, speed * 0.5);
 								break;
 							case "01":
-								arcTurnRightToWall(-speed*1.0);
+								arcTurnRightToWall(-speed*1.7);
 								break;
 							case "02":
 								turnParallelToWall(speed);
 								break;
 							case "10":
-								arcTurnRightToWall(speed*1.0);
+								arcTurnRightToWall(speed*1.7);
 								break;
 							case "11":
 								moveForwards(speed);
 								break;
 							case "12":
-								arcTurnLeftToWall(speed*1.0);
+								arcTurnLeftToWall(speed*1.7);
 								break;
 
 							case "20":
 								turnParallelToWall(speed);
 								break;
 							case "21":
-								arcTurnLeftToWall(-speed*1.0);
+								arcTurnLeftToWall(-speed*1.7);
 								break;
 							case "22":
 								moveForwards(speed * 0.5, speed);
@@ -964,7 +964,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				}
 			}
 		}
-		stopMotors();
+		moveBackwards(0.05,0.05);
 	}
 
 	public void stabilizeAlongWallWithRangeForEncoderDist(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue, int encoderDist)
@@ -1692,7 +1692,10 @@ public abstract class MyOpMode extends LinearOpMode {
 		if(opModeIsActive()) {
 			int currEnc = getAvgEnc();
 			int avgEnc = currEnc;
-			move(speed,-speed*0.76);
+			if(speed > 0)
+				moveForwards(speed);
+			else
+				moveBackwards(speed);
 			int distMoved = Math.abs(avgEnc - currEnc);
 			while (distMoved < goal && opModeIsActive()) {
 				avgEnc = getAvgEnc();
@@ -1706,7 +1709,10 @@ public abstract class MyOpMode extends LinearOpMode {
 				} catch (InterruptedException e) {
 				}
 			}
-			stopMotors();
+			if(speed>0)
+				moveBackwards(0.03);
+			else
+				moveForwards(0.03);
 		}
 	}
 

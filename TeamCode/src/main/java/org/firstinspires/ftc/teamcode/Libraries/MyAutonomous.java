@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Libraries;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 @Autonomous(name = "MyAutonomous", group = "Test")
 @Disabled
@@ -9,7 +10,11 @@ public class MyAutonomous extends MyOpMode
 {
     @Override
     public void runOpMode() throws InterruptedException {
-        initialize();
+        super.runOpMode();
+        /*motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);*/
         initializeSensors();
     }
 
