@@ -345,7 +345,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void turnRight(double speed) {
-		move(speed, speed);
+		if(speed < 0)
+			speed *= -1;
+		move(-speed, -speed);
 	}
 
 	/**
@@ -357,7 +359,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void turnLeft(double speed) {
-		turnRight(-speed);
+		if(speed < 0)
+			speed *= -1;
+		move(speed,speed);
 	}
 
 	public void arcTurnRight(double speed)
@@ -641,19 +645,21 @@ public abstract class MyOpMode extends LinearOpMode {
 		if (opModeIsActive()) {
 			USDF = rangeF.getUltraSonicDistance();
 			USDB = rangeB.getUltraSonicDistance();
-			if (USDF < USDB) {
-				turnLeft(speed);
-				while ((USDF < USDB) && opModeIsActive()) {
+			if (USDF > USDB) {
+				turnRight(speed);
+				while ((USDF > USDB) && opModeIsActive()) {
 					USDF = rangeF.getUltraSonicDistance();
 					USDB = rangeB.getUltraSonicDistance();
+					try{idle();}catch(InterruptedException e){}
 				}
 				stopMotors();
 			} else {
-				if (USDF > USDB) {
-					turnRight(speed);
-					while ((USDF > USDB) && opModeIsActive()) {
+				if (USDF < USDB) {
+					turnLeft(speed);
+					while ((USDF < USDB) && opModeIsActive()) {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
+						try{idle();}catch(InterruptedException e){}
 					}
 					stopMotors();
 				}
@@ -661,7 +667,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
-	public String getCaseNameFromInfo(double USDF, double USDB, int targetDist, double thresholdW)
+	public String getCaseNameFromInfo(double USDF, double USDB, int targetDist, double thresholdW, boolean isForward, boolean isBlue)
 	{
 		String name = "";
 		if(USDF>targetDist+thresholdW)
@@ -692,7 +698,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		return name;
 	}
 
-	public void stabilizeAlongWallWithRange(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue)
+	public void stabilizeAlongWallWithRangeToBeacon(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue)
 	{
 		double USDF;
 		double USDB;
@@ -713,7 +719,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						}
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
-						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW, true, true);
 						switch (caseName) {
 							case "00":
 								moveForwards(speed, speed * 0.5);
@@ -743,6 +749,110 @@ public abstract class MyOpMode extends LinearOpMode {
 								moveForwards(speed * 0.5, speed);
 								break;
 						}
+						try{idle();}catch(InterruptedException e){}
+					}
+				}
+				else
+				{
+					while(!color.equals("Blue")) {
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW, true, true);
+						switch (caseName) {
+							case "00":
+								moveForwards(speed, speed * 0.5);
+								break;
+							case "01":
+								arcTurnRight(-speed);
+								break;
+							case "02":
+								turnParallelToWall(speed);
+								break;
+							case "10":
+								arcTurnRight(speed);
+								break;
+							case "11":
+								moveForwards(speed);
+								break;
+							case "12":
+								arcTurnLeft(speed);
+								break;
+							case "20":
+								turnParallelToWall(speed);
+								break;
+							case "21":
+								arcTurnLeft(-speed);
+								break;
+							case "22":
+								moveForwards(speed * 0.5, speed);
+								break;
+						}
+						try{idle();}catch(InterruptedException e){}
+					}
+				}
+			}
+		}
+	}
+
+	public void stabilizeAlongWallWithRangeForEncoderDist(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue, int encoderDist)
+	{
+		double USDF;
+		double USDB;
+		String color = "Neither";
+		if(opModeIsActive())
+		{
+			if(isBlue)
+			{
+				if(speed > 0)
+				{
+					while(!color.equals("Blue")) {
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW, true, true);
+						switch (caseName) {
+							case "00":
+								moveForwards(speed, speed * 0.5);
+								break;
+							case "01":
+								arcTurnRight(-speed);
+								break;
+							case "02":
+								turnParallelToWall(speed);
+								break;
+							case "10":
+								arcTurnRight(speed);
+								break;
+							case "11":
+								moveForwards(speed);
+								break;
+							case "12":
+								arcTurnLeft(speed);
+								break;
+							case "20":
+								turnParallelToWall(speed);
+								break;
+							case "21":
+								arcTurnLeft(-speed);
+								break;
+							case "22":
+								moveForwards(speed * 0.5, speed);
+								break;
+						}
+						try{idle();}catch(InterruptedException e){}
 					}
 				}
 			}
