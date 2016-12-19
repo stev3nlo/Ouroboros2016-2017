@@ -61,18 +61,18 @@ public class AutoBlueRange extends MyAutonomous {
         gyroTurnRight(0.3, degreesToTurn);
         */
 
-        moveAlongWallToBeacon(0.25, 1.0, 2.0, 16, true);
+        moveAlongWallToBeacon(0.4, 1.0, 2.0, 16, true);
         pause(0.5);
         //moveAlongWallForUnits(-0.3, 1.0, 2.0, 14, true, 200);
         //pause(0.5);
         pushButton();
         pause(1.0);
 
-        moveAlongWallForUnits(-0.3, 1.0, 2.0, 16, true, 1000);
+        moveAlongWallForUnits(-0.4, 1.0, 2.0, 16, true, 1000);
         telemetry.addData("Moving to", "beacon");
         telemetry.update();
 
-        moveAlongWallToBeacon(-0.25, 1.0, 2.0, 16, true);
+        moveAlongWallToBeacon(-0.4, 1.0, 2.0, 16, true);
         pause(1.0);
         //moveAlongWallForUnits(0.3,1.0,2.0,14,true,200);
         pushButton();

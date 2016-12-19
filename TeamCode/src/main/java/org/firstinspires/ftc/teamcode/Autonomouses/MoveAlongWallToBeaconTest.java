@@ -62,7 +62,7 @@ public class MoveAlongWallToBeaconTest extends MyAutonomous {
         gyroTurnRight(0.3, degreesToTurn);
         */
 
-        moveAlongWallToBeacon(0.3, 1.0,2.0, 20,true);
+        moveAlongWallToBeacon(0.3, 1.0,2.0, 18,true);
         /*
         telemetry.addData("Pressing","beacon");
         telemetry.update();

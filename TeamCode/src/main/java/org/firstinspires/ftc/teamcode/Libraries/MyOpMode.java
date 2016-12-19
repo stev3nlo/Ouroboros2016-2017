@@ -28,6 +28,10 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public static final int encoderTicksPerRotation = 1140;
 	public static final int goalRPM = 150;
+	public static final double motorL1SpeedMultiplier = 1.0;
+	public static final double motorL2SpeedMultiplier = 1.0;
+	public static final double motorR1SpeedMultiplier = 1.0;
+	public static final double motorR2SpeedMultiplier = 1.0;
 	protected static final int timeToDropBalls = 3;
 	protected double timeSinceLastStabilization = 0.0;
 	protected TreeMap<Double,Long> RPMs = new TreeMap<Double,Long>();
@@ -45,7 +49,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * DcMotor variable for the second motor on the right
 	 */
-	//protected DcMotor motorR2;
+	protected DcMotor motorR2;
 	/**
 	 * DcMotor variable for the first motor on the left
 	 */
@@ -53,7 +57,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	/**
 	 * DcMotor variable for the second motor on the left
 	 */
-	//protected DcMotor motorL2;
+	protected DcMotor motorL2;
 	/**
 	 * DcMotor variable for the motor on the manipulator
 	 */
@@ -95,9 +99,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	//protected MROpticalDistanceSensor ods;
 
 	//Speed values for motors
-	protected double curPowerOfMotorR1 = 0.0;
-	protected double curPowerOfMotorL1 = 0.0;
-	protected double curPowerOfMotorManip = 0.0;
+	//protected double curPowerOfMotorR1 = 0.0;
+	//protected double curPowerOfMotorL1 = 0.0;
+	//protected double curPowerOfMotorManip = 0.0;
 	protected double curPowerOfMotorSpinner = 0.9;
 
 	public long spinnerEncoderOffset = 0;
@@ -130,18 +134,15 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		//hardware maps the drive motors
 		motorR1 = hardwareMap.dcMotor.get("motorR1");
-		//motorR2 = hardwareMap.dcMotor.get("motorR2");
+		motorR2 = hardwareMap.dcMotor.get("motorR2");
 		motorL1 = hardwareMap.dcMotor.get("motorL1");
-		//motorL2 = hardwareMap.dcMotor.get("motorL2");
+		motorL2 = hardwareMap.dcMotor.get("motorL2");
 		motorManip = hardwareMap.dcMotor.get("motorManip");
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
 		servoDropper = hardwareMap.servo.get("servoDropper");
 		closeServoDropper();
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 		moveBeaconPusherIn();
-
-		//servoRangeB = hardwareMap.servo.get("servoRangeB");
-		//servoRangeF = hardwareMap.servo.get("servoRangeF");
 
 
 		curPowerOfMotorSpinner = 0.9;
@@ -218,9 +219,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void move(double speedL, double speedR)
 	{
 		motorL1.setPower(speedL);
-		//motorL2.setPower(speedL);
+		motorL2.setPower(speedL);
 		motorR1.setPower(speedR);
-		//motorR2.setPower(speedR);
+		motorR2.setPower(speedR);
 	}
 
 	public void moveManip(double speed)
@@ -259,14 +260,19 @@ public abstract class MyOpMode extends LinearOpMode {
 		return motorL1.getCurrentPosition();
 	}
 
-	/*public long getMotorL2EncoderVal()
+	public long getMotorL2EncoderVal()
 	{
 		return motorL2.getCurrentPosition();
-	}*/
+	}
 
 	public long getMotorR1EncoderVal()
 	{
 		return motorR1.getCurrentPosition();
+	}
+
+	public long getMotorR2EncoderVal()
+	{
+		return motorR2.getCurrentPosition();
 	}
 
 	/**
@@ -277,9 +283,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	public void stopMotors() {
 		motorR1.setPower(0.0);
-		//motorR2.setPower(0.0);
+		motorR2.setPower(0.0);
 		motorL1.setPower(0.0);
-		//motorL2.setPower(0.0);
+		motorL2.setPower(0.0);
 	}
 
 	/**
@@ -291,7 +297,18 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param speed
 	 */
 	public void moveForwards(double speed) {
-		move(speed, -speed);
+		if(speed<0)
+			speed *= -1;
+		move(-speed, speed);
+	}
+
+	public void moveForwards(double speedL, double speedR)
+	{
+		if(speedL<0)
+			speedL *= -1;
+		if(speedR<0)
+			speedR *= -1;
+		move(-speedL, speedR);
 	}
 
 	/**
@@ -302,8 +319,20 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * </p>
 	 * @param speed
 	 */
-	public void moveBackwards(double speed) {
-		moveForwards(-speed);
+	public void moveBackwards(double speed)
+	{
+		if(speed<0)
+			speed *= -1;
+		move(speed, -speed);
+	}
+
+	public void moveBackwards(double speedL, double speedR)
+	{
+		if(speedL<0)
+			speedL *= -1;
+		if(speedR<0)
+			speedR *= -1;
+		move(speedL, -speedR);
 	}
 
 	/**
@@ -333,11 +362,17 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void arcTurnRight(double speed)
 	{
-		move(speed, 0);
+		if(speed > 0)
+			moveForwards(0,speed);
+		else if(speed < 0)
+			moveBackwards(0,speed);
 	}
 
 	public void arcTurnLeft(double speed) {
-		move(0, -speed);
+		if(speed > 0)
+			moveForwards(speed,0);
+		else if(speed < 0)
+			moveBackwards(speed,0);
 	}
 
 	public void gyroArcTurnRight(double speed, double targetAngle) throws InterruptedException
@@ -603,29 +638,118 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void turnParallelToWall(double speed) {
 		double USDF;
 		double USDB;
-//		if (opModeIsActive()) {
-//			USDF = rangeF.getDistanceCM();
-//			USDB = rangeB.getDistanceCM();
-//			if (USDF < USDB) {
-//				arcTurnRight(speed);
-//				while ((USDF < USDB) && opModeIsActive()) {
-//					USDF = rangeF.getDistanceCM();
-//					USDB = rangeB.getDistanceCM();
-//				}
-//				stopMotors();
-//			} else {
-//				if (USDF > USDB) {
-//					arcTurnLeft(speed);
-//					while ((USDF > USDB) && opModeIsActive()) {
-//						USDF = rangeF.getDistanceCM();
-//						USDB = rangeB.getDistanceCM();
-//					}
-//					stopMotors();
-//				}
-//			}
-//		}
+		if (opModeIsActive()) {
+			USDF = rangeF.getUltraSonicDistance();
+			USDB = rangeB.getUltraSonicDistance();
+			if (USDF < USDB) {
+				turnLeft(speed);
+				while ((USDF < USDB) && opModeIsActive()) {
+					USDF = rangeF.getUltraSonicDistance();
+					USDB = rangeB.getUltraSonicDistance();
+				}
+				stopMotors();
+			} else {
+				if (USDF > USDB) {
+					turnRight(speed);
+					while ((USDF > USDB) && opModeIsActive()) {
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+					}
+					stopMotors();
+				}
+			}
+		}
 	}
 
+	public String getCaseNameFromInfo(double USDF, double USDB, int targetDist, double thresholdW)
+	{
+		String name = "";
+		if(USDF>targetDist+thresholdW)
+		{
+			name += "0";
+		}
+		else if(USDF<targetDist-thresholdW)
+		{
+			name += "2";
+		}
+		else
+		{
+			name += "1";
+		}
+
+		if(USDB>targetDist+thresholdW)
+		{
+			name += "0";
+		}
+		else if(USDB<targetDist-thresholdW)
+		{
+			name += "2";
+		}
+		else
+		{
+			name += "1";
+		}
+		return name;
+	}
+
+	public void stabilizeAlongWallWithRange(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue)
+	{
+		double USDF;
+		double USDB;
+		String color = "Neither";
+		if(opModeIsActive())
+		{
+			if(isBlue)
+			{
+				if(speed > 0)
+				{
+					while(!color.equals("Blue")) {
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						switch (caseName) {
+							case "00":
+								moveForwards(speed, speed * 0.5);
+								break;
+							case "01":
+								arcTurnRight(-speed);
+								break;
+							case "02":
+								turnParallelToWall(speed);
+								break;
+							case "10":
+								arcTurnRight(speed);
+								break;
+							case "11":
+								moveForwards(speed);
+								break;
+							case "12":
+								arcTurnLeft(speed);
+								break;
+							case "20":
+								turnParallelToWall(speed);
+								break;
+							case "21":
+								arcTurnLeft(-speed);
+								break;
+							case "22":
+								moveForwards(speed * 0.5, speed);
+								break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/*
 	public void moveAlongWallToBeacon(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue) {
 		double USDF;
 		double USDB;
@@ -635,6 +759,10 @@ public abstract class MyOpMode extends LinearOpMode {
 				//moveForwards(speed);
 				if(speed > 0)
 				{
+					boolean isArcTurningLeft = false;
+					boolean isArcTurningRight = false;
+					double speedL = 0.0;
+					double speedR = 0.0;
 					while ((!color.equals("Blue")) && opModeIsActive())
 					{
 						telemetry.addData("move Along wall to beacon blue","");
@@ -650,45 +778,85 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDB = rangeB.getUltraSonicDistance();
 						telemetry.addData("range F", USDF);
 						telemetry.addData("range B", USDB);
-						telemetry.update();
 						double multiplier = -1.0;
-						if (USDF >= targetDist + thresholdW) //turn right, slow right side
+						if(isArcTurningLeft)
 						{
-							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 6));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
-							move(speed, -speed * .76 * multiplier);
-						} else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+							if(USDF >= USDB) {
+								isArcTurningLeft = false;
+								speedL = 0.0;
+								speedR = 0.0;
+							}
+							else
+							{
+								speedL = -speed;
+								speedR = 0.0;
+							}
+						}
+						else if(isArcTurningRight)
 						{
-							multiplier = 1.0 - (((double) USDB - targetDist) / (targetDist / 6));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
-							move(speed * multiplier, -speed * 0.76);
+							if(USDF <= USDB) {
+								isArcTurningRight = false;
+								speedL = 0.0;
+								speedR = 0.0;
+							}
+							else {
+								speedL = 0.0;
+								speedR = speed;
+							}
+						}
+						else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+						{
+							multiplier = 1.0 - (((double) USDB - targetDist) / (targetDist / 3));
+							if (multiplier < 0.3)
+								multiplier = 0.3;
+							speedL = speed * multiplier;
+							speedR = -speed * 0.76;
+						}
+						else if (USDF >= targetDist + thresholdW) //turn right, slow right side
+						{
+							isArcTurningRight = true;
+							speedL = -speed;
+							speedR = 0.0;
+						} else if (USDB <= targetDist - thresholdW) {
+							multiplier = 1.0 - (((double) targetDist - USDB) / (targetDist / 3));
+							if (multiplier < 0.3)
+								multiplier = 0.3;
+							speedL = speed;
+							speedR = -speed * 0.76 * multiplier;
 						} else if (USDF <= targetDist - thresholdW) //turn left, slow left side
 						{
-							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 6));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
-							move(speed * multiplier, -speed * 0.76);
-						} else if (USDB <= targetDist - thresholdW) {
-							multiplier = 1.0 - (((double) targetDist - USDB) / (targetDist / 6));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
-							move(speed, -speed * 0.76 * multiplier);
+							isArcTurningLeft = true;
+							speedL = 0.0;
+							speedR = speed;
 						} else if (USDF - USDB >= thresholdA) //turn right, slow right side
 						{
 							multiplier = 1.0 - (((double) USDF - USDB) / thresholdA * 2);
-							if (multiplier < 0.4)
-								multiplier = 0.4;
-							move(speed, -speed * .76 * multiplier);
+							if (multiplier < 0.3)
+								multiplier = 0.3;
+							speedL = speed;
+							speedR = -speed * 0.76 * multiplier;
 						} else if (USDB - USDF >= thresholdA) {
 							multiplier = 1.0 - (((double) USDB - USDF) / thresholdA * 2);
-							if (multiplier < 0.4)
-								multiplier = 0.4;
-							move(speed * multiplier, -speed * 0.76);
+							if (multiplier < 0.3)
+								multiplier = 0.3;
+							speedL = speed * multiplier;
+							speedR = -speed * 0.76;
 						} else {
-							move(speed, -speed * 0.76);
+							speedL = speed;
+							speedR = -speed * 0.76;
 						}
+						move(speedL,speedR);
+						telemetry.addData("speedL",speedL);
+						telemetry.addData("speedR",speedR);
+						if(isArcTurningLeft)
+							telemetry.addData("isArcTurningLeft","true");
+						else
+							telemetry.addData("isArcTurningLeft","false");
+
+						if(isArcTurningRight)
+							telemetry.addData("isArcTurningRight","true");
+						else
+							telemetry.addData("isArcTurningRight","false");
 						telemetry.addData("multiplier", multiplier);
 						telemetry.update();
 					}
@@ -696,7 +864,8 @@ public abstract class MyOpMode extends LinearOpMode {
 				}
 				else
 				{
-					boolean isArcTurning = false;
+					boolean isArcTurningLeft = false;
+					boolean isArcTurningRight = false;
 					while ((!color.equals("Blue")) && opModeIsActive()) {
 						telemetry.addData("move Along wall to beacon blue", "");
 						telemetry.addData("color sensor Color", colorB.beaconColor());
@@ -714,44 +883,49 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("range B", USDB);
 						telemetry.update();
 						double multiplier = -1.0;
-						if(isArcTurning)
+						if(isArcTurningLeft)
 						{
-							if(USDB < USDF)
-								isArcTurning = false;
+							if(USDF <= USDB)
+								isArcTurningLeft = false;
 							else
 								move(0, speed * 0.76);
 						}
-						if (USDF >= targetDist + thresholdW) //turn right, slow right side
+						else if(isArcTurningRight)
 						{
-							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 4));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
+							if(USDF <= USDB)
+								isArcTurningRight = false;
+							else
+								move(-speed,0);
+						}
+						else if (USDF >= targetDist + thresholdW) //turn right, slow right side
+						{
+							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 3));
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed, -speed * .76 * multiplier);
 						} else if (USDB >= targetDist + thresholdW) //turn left, slow left side
 						{
-							isArcTurning = true;
+							isArcTurningLeft = true;
 							move(0, speed * 0.76);
 						} else if (USDF <= targetDist - thresholdW) //turn left, slow left side
 						{
-							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 4));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
+							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 3));
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed * multiplier, -speed * 0.76);
 						} else if (USDB <= targetDist - thresholdW) {
-							multiplier = 1.0 - (((double) targetDist - USDB) / (targetDist / 4));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
-							move(speed * multiplier, -speed * 0.76);
+							isArcTurningRight = true;
+							move(speed * 0.76,0);
 						} else if (USDF - USDB >= thresholdA) //turn right, slow right side
 						{
-							multiplier = 1.0 - (((double) USDF - USDB) / thresholdA * 8);
-							if (multiplier < 0.4)
-								multiplier = 0.4;
+							multiplier = 1.0 - (((double) USDF - USDB) / thresholdA * 2);
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed * multiplier, -speed * .76);
 						} else if (USDB - USDF >= thresholdA) {
-							multiplier = 1.0 - (((double) USDB - USDF) / thresholdA * 8);
-							if (multiplier < 0.4)
-								multiplier = 0.4;
+							multiplier = 1.0 - (((double) USDB - USDF) / thresholdA * 2);
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed, -speed * 0.76 * multiplier);
 						} else {
 							move(speed, -speed * 0.76);
@@ -852,69 +1026,68 @@ public abstract class MyOpMode extends LinearOpMode {
 					int avgEnc = currEnc;
 					move(speed, -speed * 0.76);
 					int distMoved = Math.abs(avgEnc - currEnc);
+					boolean isArcTurningLeft = false;
+					boolean isArcTurningRight = false;
 					while (distMoved < goal && opModeIsActive())
 					{
 						avgEnc = getAvgEnc();
 						telemetry.addData("avg Enc", avgEnc);
 						telemetry.addData("curr Enc", currEnc);
 						distMoved = Math.abs(avgEnc - currEnc);
-						telemetry.update();
 
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						telemetry.addData("range F", USDF);
 						telemetry.addData("range B", USDB);
-						telemetry.update();
-
 						double multiplier = -1.0;
-						if(USDF >= targetDist + thresholdW) //turn right, slow right side
+						if(isArcTurningLeft)
 						{
-							multiplier = 1.0 - (((double)USDF-targetDist)/(targetDist/3));
-							if(multiplier<0.4)
-								multiplier = 0.4;
+							if(USDF <= USDB)
+								isArcTurningLeft = false;
+							else
+								move(0, speed * 0.76);
+						}
+						else if(isArcTurningRight)
+						{
+							if(USDF <= USDB)
+								isArcTurningRight = false;
+							else
+								move(-speed,0);
+						}
+						else if (USDF >= targetDist + thresholdW) //turn right, slow right side
+						{
+							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 3));
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed, -speed * .76 * multiplier);
-						}
-						else if (USDB >= targetDist + thresholdW) //turn left, slow left side
+						} else if (USDB >= targetDist + thresholdW) //turn left, slow left side
 						{
-							multiplier = 1.0 - (((double)USDB-targetDist)/(targetDist/3));
-							if(multiplier<0.4)
-								multiplier = 0.4;
-							move(speed*multiplier, -speed * 0.76 );
-						}
-						else if(USDF <= targetDist - thresholdW) //turn left, slow left side
+							isArcTurningLeft = true;
+							move(0, speed * 0.76);
+						} else if (USDF <= targetDist - thresholdW) //turn left, slow left side
 						{
-							multiplier = 1.0 - (((double)targetDist-USDF)/(targetDist/3));
-							if(multiplier<0.4)
-								multiplier = 0.4;
-							move(speed*multiplier, -speed * 0.76 );
-						}
-						else if(USDB <= targetDist - thresholdW)
+							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 3));
+							if (multiplier < 0.3)
+								multiplier = 0.3;
+							move(speed * multiplier, -speed * 0.76);
+						} else if (USDB <= targetDist - thresholdW) {
+							isArcTurningRight = true;
+							move(speed * 0.76,0);
+						} else if (USDF - USDB >= thresholdA) //turn right, slow right side
 						{
-							multiplier = 1.0 - (((double)targetDist-USDB)/(targetDist/3));
-							if(multiplier<0.4)
-								multiplier = 0.4;
+							multiplier = 1.0 - (((double) USDF - USDB) / thresholdA * 2);
+							if (multiplier < 0.3)
+								multiplier = 0.3;
+							move(speed * multiplier, -speed * .76);
+						} else if (USDB - USDF >= thresholdA) {
+							multiplier = 1.0 - (((double) USDB - USDF) / thresholdA * 2);
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed, -speed * 0.76 * multiplier);
-						}
-						else if(USDF - USDB >= thresholdA) //turn right, slow right side
-						{
-							multiplier = 1.0 - (((double)USDF-USDB)/thresholdA*10);
-							if(multiplier<0.4)
-								multiplier = 0.4;
-							move(speed, -speed * .76 * multiplier);
-						}
-						else if(USDB - USDF >= thresholdA)
-						{
-							multiplier = 1.0 - (((double)USDB-USDF)/thresholdA*10);
-							if(multiplier<0.4)
-								multiplier = 0.4;
-							move(speed*multiplier, -speed * 0.76 );
-						}
-						else
-						{
-
+						} else {
 							move(speed, -speed * 0.76);
 						}
-						telemetry.addData("multiplier",multiplier);
+						telemetry.addData("multiplier", multiplier);
 						telemetry.update();
 					}
 				}
@@ -924,60 +1097,63 @@ public abstract class MyOpMode extends LinearOpMode {
 					int avgEnc = currEnc;
 					move(speed, -speed * 0.76);
 					int distMoved = Math.abs(avgEnc - currEnc);
-					boolean isArcTurning = false;
+					boolean isArcTurningLeft = false;
+					boolean isArcTurningRight = false;
 					while (distMoved < goal && opModeIsActive())
 					{
 						avgEnc = getAvgEnc();
 						telemetry.addData("avg Enc", avgEnc);
 						telemetry.addData("curr Enc", currEnc);
 						distMoved = Math.abs(avgEnc - currEnc);
-						telemetry.update();
 
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						telemetry.addData("range F", USDF);
 						telemetry.addData("range B", USDB);
-						telemetry.update();
-
 						double multiplier = -1.0;
-						if(isArcTurning)
+						if(isArcTurningLeft)
 						{
-							if(USDB < USDF)
-								isArcTurning = false;
+							if(USDF <= USDB)
+								isArcTurningLeft = false;
 							else
 								move(0, speed * 0.76);
 						}
-						if (USDF >= targetDist + thresholdW) //turn right, slow right side
+						else if(isArcTurningRight)
 						{
-							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 4));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
+							if(USDF <= USDB)
+								isArcTurningRight = false;
+							else
+								move(-speed,0);
+						}
+						else if (USDF >= targetDist + thresholdW) //turn right, slow right side
+						{
+							multiplier = 1.0 - (((double) USDF - targetDist) / (targetDist / 3));
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed, -speed * .76 * multiplier);
 						} else if (USDB >= targetDist + thresholdW) //turn left, slow left side
 						{
-							isArcTurning = true;
+							isArcTurningLeft = true;
 							move(0, speed * 0.76);
 						} else if (USDF <= targetDist - thresholdW) //turn left, slow left side
 						{
-							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 4));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
+							multiplier = 1.0 - (((double) targetDist - USDF) / (targetDist / 3));
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed * multiplier, -speed * 0.76);
 						} else if (USDB <= targetDist - thresholdW) {
-							multiplier = 1.0 - (((double) targetDist - USDB) / (targetDist / 4));
-							if (multiplier < 0.4)
-								multiplier = 0.4;
-							move(speed * multiplier, -speed * 0.76);
+							isArcTurningRight = true;
+							move(speed * 0.76,0);
 						} else if (USDF - USDB >= thresholdA) //turn right, slow right side
 						{
-							multiplier = 1.0 - (((double) USDF - USDB) / thresholdA * 8);
-							if (multiplier < 0.4)
-								multiplier = 0.4;
+							multiplier = 1.0 - (((double) USDF - USDB) / thresholdA * 2);
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed * multiplier, -speed * .76);
 						} else if (USDB - USDF >= thresholdA) {
-							multiplier = 1.0 - (((double) USDB - USDF) / thresholdA * 8);
-							if (multiplier < 0.4)
-								multiplier = 0.4;
+							multiplier = 1.0 - (((double) USDB - USDF) / thresholdA * 2);
+							if (multiplier < 0.3)
+								multiplier = 0.3;
 							move(speed, -speed * 0.76 * multiplier);
 						} else {
 							move(speed, -speed * 0.76);
@@ -1042,6 +1218,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 		stopMotors();
 	}
+	*/
 
 //	public void setServosParallel()
 //	{
@@ -1275,10 +1452,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void runOpMode() throws InterruptedException
 	{
 		initialize(); //Sets up motors, servos, and gyros
-		motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-		//motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-		motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-		//motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+		motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+		motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+		motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+		motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 	}
 }

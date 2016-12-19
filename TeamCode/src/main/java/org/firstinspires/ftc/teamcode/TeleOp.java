@@ -119,13 +119,13 @@ public class TeleOp extends MyOpMode
             updateControllerVals();
             initCurtime(); //gets real time timer
             if(driverMode == 0)
-                move(-g1y1, 0.76*g1y2); // moves drive wheels
+                move(g1y1, -g1y2); // moves drive wheels
             else if(driverMode == 1)
-                move(-g1y1 * 0.75, 0.76*g1y2 * 0.75);
+                move(g1y1 * 0.75, -g1y2 * 0.75);
             else if(driverMode == 2)
-                move(-g1y1*0.5, 0.76*g1y2*0.5);
+                move(g1y1*0.5, -g1y2*0.5);
             else if(driverMode == 3)
-                move(-g1y1*0.25, 0.76*g1y2*0.25);
+                move(g1y1*0.25, -g1y2*0.25);
             if(g1APressed) {
                 driverMode = 0;
             }
