@@ -77,6 +77,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	//sensors
 	/**
 	 * Adafruit IMU Object
+	 * 
 	 */
 	protected SensorAdafruitIMU gyro;
 
