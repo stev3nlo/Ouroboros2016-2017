@@ -61,6 +61,7 @@ public class AutoBlueRange extends MyAutonomous {
         gyroTurnRight(0.3, degreesToTurn);
         */
 
+        /*
         moveAlongWallToBeacon(0.4, 1.0, 2.0, 16, true);
         pause(0.5);
         //moveAlongWallForUnits(-0.3, 1.0, 2.0, 14, true, 200);
