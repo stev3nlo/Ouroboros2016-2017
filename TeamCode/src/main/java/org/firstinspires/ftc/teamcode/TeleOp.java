@@ -108,24 +108,49 @@ public class TeleOp extends MyOpMode
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
-        motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        //motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         //motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         waitForStart();
+
         timeAtLastLoop = getCurTime();
         while (opModeIsActive())
         {
             updateControllerVals();
             initCurtime(); //gets real time timer
-            if(driverMode == 0)
+            if(driverMode == 0) {
                 move(g1y1, -g1y2); // moves drive wheels
-            else if(driverMode == 1)
+                /*motorL1.setPower(1.0);
+                motorL2.setPower(0.0);
+                motorR1.setPower(0.0);
+                motorR2.setPower(0.0);
+                telemetry.addData("motorL1 being moved", "");*/
+            }
+            else if(driverMode == 1) {
                 move(g1y1 * 0.75, -g1y2 * 0.75);
-            else if(driverMode == 2)
+                /*motorL1.setPower(0.0);
+                motorL2.setPower(1.0);
+                motorR1.setPower(0.0);
+                motorR2.setPower(0.0);
+                telemetry.addData("motorL2 being moved", "");*/
+            }
+            else if(driverMode == 2) {
                 move(g1y1*0.5, -g1y2*0.5);
-            else if(driverMode == 3)
+                /*motorL1.setPower(0.0);
+                motorL2.setPower(0.0);
+                motorR1.setPower(1.0);
+                motorR2.setPower(0.0);
+                telemetry.addData("motorR1 being moved", "");*/
+            }
+            else if(driverMode == 3) {
                 move(g1y1*0.25, -g1y2*0.25);
+                /*motorL1.setPower(0.0);
+                motorL2.setPower(0.0);
+                motorR1.setPower(0.0);
+                motorR2.setPower(1.0);
+                telemetry.addData("motorR2 being moved", "");*/
+            }
             if(g1APressed) {
                 driverMode = 0;
             }

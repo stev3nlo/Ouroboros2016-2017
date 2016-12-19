@@ -32,6 +32,25 @@ public class MoveAlongWallToBeaconTest extends MyAutonomous {
         super.runOpMode();
         //initializeSensors();
         waitForStart();
+        //moveForwards(0.5);
+        /*
+        initCurtime();
+        arcTurnRight(0.5);
+        double startTime = getCurTime();
+        while(getCurTime() < startTime + 5.0)
+        {
+            initCurtime();
+            idle();
+        }
+        initCurtime();
+        arcTurnRight(-0.5);
+        startTime = getCurTime();
+        while(getCurTime() < startTime + 5.0)
+        {
+            initCurtime();
+            idle();
+        }*/
+        stabilizeAlongWallWithRangeToBeacon(0.17,1.0,3.0,17,false);
         /*runSpinner(1.0);
         pause(0.5);
         //moveAlongWallToBeacon(.3, 2.0, true);

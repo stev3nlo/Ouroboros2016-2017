@@ -118,6 +118,7 @@ public class WheelSpeedTest extends MyOpMode
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
+        waitForStart();
         initCurtime();
         timeAtLastStabilization = getCurTime() +5.0;
         motorL1.setPower(-motorL1SpeedMultiplier);
@@ -131,7 +132,12 @@ public class WheelSpeedTest extends MyOpMode
             motorL2RPMs.put(getCurTime(), getMotorL2EncoderVal());
             motorR1RPMs.put(getCurTime(), getMotorR1EncoderVal());
             motorR2RPMs.put(getCurTime(), getMotorR2EncoderVal());
-            if(getCurTime()-timeAtLastStabilization > 5.0)
+            /*telemetry.addData("motorL1EncoderVal",getMotorL1EncoderVal());
+            telemetry.addData("motorL2EncoderVal",getMotorL2EncoderVal());
+            telemetry.addData("motorR1EncoderVal",getMotorR1EncoderVal());
+            telemetry.addData("motorR2EncoderVal",getMotorR2EncoderVal());
+            telemetry.update();*/
+            if(getCurTime()-timeAtLastStabilization > 1.0)
             {
                 HashMap<Double, Long> firstEncoderTimeSetAfterTimeL1 = getFirstEncoderTimeSetAfterTime(getCurTime() - 5.0, "motorL1");
                 Map.Entry pairL1 = getFirstSetFromHashMap(firstEncoderTimeSetAfterTimeL1);
@@ -156,7 +162,7 @@ public class WheelSpeedTest extends MyOpMode
                 */
 
 
-                HashMap<Double, Long> firstEncoderTimeSetAfterTimeL2 = getFirstEncoderTimeSetAfterTime(getCurTime() - 6.0, "motorL2");
+                HashMap<Double, Long> firstEncoderTimeSetAfterTimeL2 = getFirstEncoderTimeSetAfterTime(getCurTime() - 5.0, "motorL2");
                 Map.Entry pairL2 = getFirstSetFromHashMap(firstEncoderTimeSetAfterTimeL2);
                 oldTime = (double) pairL2.getKey();
                 oldEncoderVal = (long) pairL2.getValue();
@@ -179,7 +185,7 @@ public class WheelSpeedTest extends MyOpMode
                 */
 
 
-                HashMap<Double, Long> firstEncoderTimeSetAfterTimeR1 = getFirstEncoderTimeSetAfterTime(getCurTime() - 6.0, "motorR1");
+                HashMap<Double, Long> firstEncoderTimeSetAfterTimeR1 = getFirstEncoderTimeSetAfterTime(getCurTime() - 5.0, "motorR1");
                 Map.Entry pairR1 = getFirstSetFromHashMap(firstEncoderTimeSetAfterTimeR1);
                 oldTime = (double) pairR1.getKey();
                 oldEncoderVal = (long) pairR1.getValue();
@@ -202,8 +208,8 @@ public class WheelSpeedTest extends MyOpMode
                 */
 
 
-                HashMap<Double, Long> firstEncoderTimeSetAfterTimeR2 = getFirstEncoderTimeSetAfterTime(getCurTime() - 6.0, "motorR2");
-                Map.Entry pairR2 = getFirstSetFromHashMap(firstEncoderTimeSetAfterTimeL2);
+                HashMap<Double, Long> firstEncoderTimeSetAfterTimeR2 = getFirstEncoderTimeSetAfterTime(getCurTime() - 5.0, "motorR2");
+                Map.Entry pairR2 = getFirstSetFromHashMap(firstEncoderTimeSetAfterTimeR2);
                 oldTime = (double) pairR2.getKey();
                 oldEncoderVal = (long) pairR2.getValue();
                 curRPM = getMotorR2EncoderVal() - oldEncoderVal;
@@ -226,15 +232,15 @@ public class WheelSpeedTest extends MyOpMode
                 telemetry.update();
 
 
-                motorL1.setPower(-motorL1SpeedMultiplier);
-                motorL2.setPower(-motorL2SpeedMultiplier);
-                motorR1.setPower(motorR1SpeedMultiplier);
-                motorR2.setPower(motorR2SpeedMultiplier);
+                motorL1.setPower(motorL1SpeedMultiplier);
+                motorL2.setPower(motorL2SpeedMultiplier);
+                motorR1.setPower(-motorR1SpeedMultiplier);
+                motorR2.setPower(-motorR2SpeedMultiplier);
 
 
                 timeAtLastStabilization = getCurTime();
-                idle();
             }
+            idle();
         }
     }
 
