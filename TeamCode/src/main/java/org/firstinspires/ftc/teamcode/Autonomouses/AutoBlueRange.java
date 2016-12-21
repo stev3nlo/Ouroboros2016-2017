@@ -31,26 +31,49 @@ public class AutoBlueRange extends MyAutonomous {
         //initializeBlueServos();
         super.runOpMode();
         //initializeSensors();
+        double startAngle = gyro.getYaw();
+        double yawDiff = 0.0;
+        while(!opModeIsActive() && !isStopRequested())
+        {
+            yawDiff = getAngleDiff(startAngle,gyro.getYaw());
+            telemetry.addData("yawDiff",yawDiff);
+            telemetry.update();
+            idle();
+        }
         waitForStart();
-        runSpinner(1.0);
-        pause(0.5);
         //moveAlongWallToBeacon(.3, 2.0, true);
-        moveWithEncoders(.5, 3500);
+        moveWithEncoders(.2, 2800);
         runSpinner(1.0);
-        pause(1.0);
+        pause(1.5);
         openServoDropper();
         runSpinner(1.0);
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(1.0);
-        moveWithEncoders(0.5,1000);
+        moveWithEncoders(0.2, 800);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnLeft(0.3,38.0);
+        gyroArcTurnRight(0.2, yawDiff - 5.0);
+        pause(0.5);
+        turnParallelToWall(0.18);
 
-        stabilizeAlongWallWithRangeToBeacon(0.25,1.0,2.0,18,true);
-        //moveAlongWallForUnits(0.6,1.0,2.0,20,true,3000);
+        stabilizeAlongWallWithRangeToBeacon(0.17, 1.0, 3.0, 17, true);
+        pause(0.25);
+        turnParallelToWall(0.18);
+        pause(0.25);
+        stabilizeAlongWallWithRangeToBeacon(-0.14, 1.0, 3.0, 17, true);
+
+        pushButton();
+
+        stabilizeAlongWallWithRangeForEncoderDist(-0.17, 1.0, 3.0, 17, true, 2000);
+        turnParallelToWall(0.18);
+        stabilizeAlongWallWithRangeToBeacon(-0.17, 1.0, 3.0, 17, true);
+        pause(0.25);
+        turnParallelToWall(0.18);
+        pause(0.25);
+        stabilizeAlongWallWithRangeToBeacon(0.14,1.0,3.0,17,true);
+        pushButton();
 
         /*
         double degreesToTurn = -26.0;

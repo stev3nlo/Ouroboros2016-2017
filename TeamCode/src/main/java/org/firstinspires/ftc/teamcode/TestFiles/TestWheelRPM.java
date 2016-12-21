@@ -17,7 +17,7 @@ public class TestWheelRPM extends MyOpMode
     {
         motorL1RPMs = new TreeMap<Double,Long>();
         initCurtime();
-        try{waitForStart();}catch(InterruptedException e){}
+        waitForStart();
         motorL1RPMs.put(getCurTime(), getMotorL1EncoderVal());
         motorL1RPMs.put(getCurTime(), getMotorR1EncoderVal());
         while(opModeIsActive())
@@ -37,7 +37,7 @@ public class TestWheelRPM extends MyOpMode
             calcedRPMOfMotorR1 /= getCurTime()-oldTimeR1;
             telemetry.addData("motorL1RPM",calcedRPMOfMotorL1);
             telemetry.addData("motorR1RPM", calcedRPMOfMotorR1);
-            try{idle();}catch(InterruptedException e){}
+            idle();
         }
     }
 

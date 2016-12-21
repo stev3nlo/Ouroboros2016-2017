@@ -188,7 +188,7 @@ public class SpinnerTest extends TeleOp {
     public void runOpMode()
     {
         initialize();
-        try{waitForStart();}catch(InterruptedException e){}
+        waitForStart();
         initCurtime();
         timeAtLastRPMUpdate = getCurTime();
         timeAtLastButtonPress = getCurTime();
@@ -225,7 +225,7 @@ public class SpinnerTest extends TeleOp {
             }
             motorSpinner.setPower(curPowerOfMotorSpinner);
             runTelemetry();
-            try{idle();}catch(InterruptedException e){}
+            idle();
         }
     }
 }

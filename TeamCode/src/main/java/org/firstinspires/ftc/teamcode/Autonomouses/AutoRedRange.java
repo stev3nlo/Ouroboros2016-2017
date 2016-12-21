@@ -31,9 +31,12 @@ public class AutoRedRange extends MyAutonomous {
         //initializeBlueServos();
         super.runOpMode();
         //initializeSensors();
+        double startAngle = gyro.getYaw();
+        double yawDiff = 0.0;
         while(!opModeIsActive())
         {
-            telemetry.addData("yaw",gyro.getYaw());
+            yawDiff = getAngleDiff(startAngle,gyro.getYaw());
+            telemetry.addData("yawDiff",yawDiff);
             telemetry.update();
             idle();
         }
@@ -53,7 +56,7 @@ public class AutoRedRange extends MyAutonomous {
         moveWithEncoders(-0.3,1000);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnLeft(-0.3,38.0);
+        gyroArcTurnLeft(-0.3,yawDiff);
         while(opModeIsActive())
         {
             telemetry.addData("USDF",rangeF.getUltraSonicDistance());

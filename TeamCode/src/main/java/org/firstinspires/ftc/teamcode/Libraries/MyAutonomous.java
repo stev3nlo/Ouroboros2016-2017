@@ -31,10 +31,7 @@ public class MyAutonomous extends MyOpMode
                 telemetry.update();
                 runSpinner(curPowerOfMotorSpinner);
                 initCurtime();
-                try {
-                    idle();
-                } catch (InterruptedException e) {
-                }
+                idle();
             }
         }
     }

@@ -241,7 +241,7 @@ public class TeleOp extends MyOpMode
             }
             updateTelemetry();
             //timeAtEndOfLastCycle = System.nanoTime()/1000000000;
-            try{idle();}catch(InterruptedException e){}
+            idle();
         }
     }
 }

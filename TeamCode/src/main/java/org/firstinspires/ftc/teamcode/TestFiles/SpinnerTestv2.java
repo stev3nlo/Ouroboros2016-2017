@@ -28,7 +28,7 @@ public class SpinnerTestv2 extends TeleOp
     public void runOpMode()
     {
         initialize();
-        try{waitForStart();}catch(InterruptedException e){}
+        waitForStart();
         while(opModeIsActive()) {
             initCurtime();
             updateControllerVals();
@@ -52,7 +52,7 @@ public class SpinnerTestv2 extends TeleOp
             }
             telemetry.addData("curRPM", curRPM);
             telemetry.update();
-            try{idle();}catch(InterruptedException e){}
+            idle();
         }
     }
 }
