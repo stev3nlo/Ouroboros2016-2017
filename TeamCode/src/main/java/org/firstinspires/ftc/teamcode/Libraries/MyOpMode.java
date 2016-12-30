@@ -805,7 +805,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.update();
 						switch (caseName) {
 							case "00":
-								moveForwards(speed, speed * 0.5);
+								moveForwards(speed, speed * 0.7);
 								break;
 							case "01":
 								arcTurnRightToWall(-speed);
@@ -817,7 +817,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(speed);
 								break;
 							case "11":
-								moveForwards(speed);
+								moveForwards(speed*1.2,speed);
 								break;
 							case "12":
 								arcTurnLeftToWall(speed);
@@ -829,7 +829,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(-speed);
 								break;
 							case "22":
-								moveForwards(speed * 0.5, speed);
+								moveForwards(speed * 0.7, speed);
 								break;
 						}
 						idle();
@@ -876,7 +876,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(-speed);
 								break;
 							case "22":
-								moveBackwards(speed * 0.5, speed);
+								moveBackwards(speed * 0.7, speed);
 								break;
 						}
 						idle();
@@ -984,6 +984,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			}
 		}
 		moveBackwards(0.05,0.05);
+		telemetry.addData("saw the color","true");
 	}
 
 	public void stabilizeAlongWallWithRangeForEncoderDist(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue, int encoderDist)
@@ -1010,7 +1011,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
 						switch (caseName) {
 							case "00":
-								moveForwards(speed, speed * 0.5);
+								moveForwards(speed, speed * 0.7);
 								break;
 							case "01":
 								arcTurnRightToWall(-speed);
@@ -1034,7 +1035,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(-speed);
 								break;
 							case "22":
-								moveForwards(speed * 0.5, speed);
+								moveForwards(speed * 0.7, speed);
 								break;
 						}
 						idle();
@@ -1057,7 +1058,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.update();
 						switch (caseName) {
 							case "00":
-								moveBackwards(speed, speed * 0.5);
+								moveBackwards(speed, speed * 0.7);
 								break;
 							case "01":
 								arcTurnRightToWall(-speed);
@@ -1081,7 +1082,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(-speed);
 								break;
 							case "22":
-								moveBackwards(speed * 0.5, speed);
+								moveBackwards(speed * 0.7, speed);
 								break;
 						}
 						idle();
@@ -1854,9 +1855,9 @@ public abstract class MyOpMode extends LinearOpMode {
 			int currEnc = getAvgEnc();
 			int avgEnc = currEnc;
 			if(speed > 0)
-				moveForwards(speed);
+				moveForwards(speed*1.2,speed);
 			else
-				moveBackwards(speed);
+				moveBackwards(speed*1.2,speed);
 			int distMoved = Math.abs(avgEnc - currEnc);
 			while (distMoved < goal && opModeIsActive()) {
 				avgEnc = getAvgEnc();
@@ -1885,6 +1886,10 @@ public abstract class MyOpMode extends LinearOpMode {
 		//telemetry.addData("encR1",encR1);
 		int encR2 = motorR2.getCurrentPosition();
 		//telemetry.addData("encR2",encR2);
+		telemetry.addData("encL1",encL1);
+		telemetry.addData("encL2",encL2);
+		telemetry.addData("encR1",encR1);
+		telemetry.addData("encR2",encR2);
 		int avg = Math.abs(encL1) + Math.abs(encL2) + Math.abs(encR1) + Math.abs(encR2);
 		avg /= 4;
 		return avg;

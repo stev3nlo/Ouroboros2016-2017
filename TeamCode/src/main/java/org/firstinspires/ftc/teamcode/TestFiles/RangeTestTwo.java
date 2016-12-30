@@ -15,17 +15,6 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 @Autonomous(name="RangeTest2", group="Test")
 public class RangeTestTwo extends MyAutonomous {
 
-	public void initialize()
-	{
-		//initializeSensors();
-		/*
-		 rangeF = new SensorMRRange(hardwareMap.i2cDevice.get("rangeF"));
-		 rangeB = new SensorMRRange(hardwareMap.i2cDevice.get("rangeB"));
-		 */
-		//rangeF.sensorSetup(0x4a);
-		//rangeB.sensorSetup(0x4c);
-	}
-
 	public void runOpMode() throws InterruptedException {
 		super.runOpMode();
 		waitForStart();

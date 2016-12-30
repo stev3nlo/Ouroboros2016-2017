@@ -39,8 +39,8 @@ public class SensorMRRange {
 		this.rangeSensor = rangeSensor;
 		initReader();
 		//rangeSensor.getDistance(DistanceUnit.CM);
-		//ultraSonicDistanceValue = -1;
-		//prevUSDVal = ultraSonicDistanceValue;
+		ultraSonicDistanceValue = -1;
+		prevUSDVal = ultraSonicDistanceValue;
 		//ModernRoboticsI2cRangeSensor modernRoboticsI2cRangeSensor =
 	}
 
