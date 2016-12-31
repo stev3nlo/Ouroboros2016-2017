@@ -50,7 +50,7 @@ public class MoveAlongWallToBeaconTest extends MyAutonomous {
             initCurtime();
             idle();
         }*/
-        stabilizeAlongWallWithRangeToBeacon(-0.13,1.0,3.0,17,true);
+        stabilizeAlongWallWithRangeToBeacon(0.13, 1.0, 3.0, 13, true);
         /*runSpinner(1.0);
         pause(0.5);
         //moveAlongWallToBeacon(.3, 2.0, true);

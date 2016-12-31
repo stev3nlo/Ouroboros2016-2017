@@ -44,7 +44,9 @@ public class AutoBlueRange extends MyAutonomous {
         }
         waitForStart();
         //moveAlongWallToBeacon(.3, 2.0, true);
-        moveWithEncoders(.2, 3000);
+        initCurtime();
+        double startTime = getCurTime();
+        moveWithEncoders(.2, 3700);
         runSpinner(1.0);
         pause(1.5);
         openServoDropper();
@@ -53,7 +55,7 @@ public class AutoBlueRange extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(1.0);
-        moveWithEncoders(0.2, 1500);
+        moveWithEncoders(0.2, 1600);
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(0.2, yawDiff - 5.0);
@@ -61,27 +63,46 @@ public class AutoBlueRange extends MyAutonomous {
         turnParallelToWall(0.17);
         //17 max
         //9 min
-        stabilizeAlongWallWithRangeToBeacon(0.13, 1.0, 1.5, 13, true);
+        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 3.0, 13, true);
         pause(0.25);
         turnParallelToWall(0.18);
         pause(0.25);
-        stabilizeAlongWallWithRangeToBeacon(-0.115, 1.0, 1.5, 13, true);
+        stabilizeAlongWallWithRangeToBeacon(-0.10, 1.0, 3.0, 13, true);
 
         pushButton();
-        if(colorB.getColor().equals("Blue"))
+        /*
+        if(colorB.getColor().equals("Red"))
         {
             pause(5.0);
             pushButton();
-        }
+        }*/
 
-        stabilizeAlongWallWithRangeForEncoderDist(-0.13, 1.0, 1.5, 13, true, 2000);
         turnParallelToWall(0.18);
-        stabilizeAlongWallWithRangeToBeacon(-0.13, 1.0, 1.5, 13, true);
-        pause(0.25);
-        turnParallelToWall(0.17);
-        pause(0.25);
-        stabilizeAlongWallWithRangeToBeacon(0.115,1.0,1.5,13,true);
-        pushButton();
+
+        stabilizeAlongWallWithRangeForEncoderDist(-0.135, 1.0, 1.5, 13, true, 2000);
+        turnParallelToWall(0.18);
+        stabilizeAlongWallWithRangeToBeacon(-0.115, 1.0, 1.5, 13, true);
+
+
+        initCurtime();
+
+        if(getCurTime() - startTime < 24.0) {
+            pause(0.25);
+            turnParallelToWall(0.18);
+            pause(0.25);
+            stabilizeAlongWallWithRangeToBeacon(0.1, 1.0, 1.5, 13, true);
+            pushButton();
+        }
+        else if(getCurTime() - startTime < 26.0) {
+            pause(0.25);
+            turnParallelToWall(0.18);
+            pause(0.25);
+            pushButton();
+        }
+        else
+        {
+            pushButton();
+        }
 
         /*
         double degreesToTurn = -26.0;

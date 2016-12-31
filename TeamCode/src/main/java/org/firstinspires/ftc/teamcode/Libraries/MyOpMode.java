@@ -712,14 +712,30 @@ public abstract class MyOpMode extends LinearOpMode {
 	}
 
 	public void turnParallelToWall(double speed) {
-		double USDF;
-		double USDB;
+		double USDF = -1;
+		double USDB = -1;
+		boolean broken = false;
 		if (opModeIsActive()) {
 			USDF = rangeF.getUltraSonicDistance();
 			USDB = rangeB.getUltraSonicDistance();
+			double startTime = getCurTime();
+			while((USDB == -1 || USDF == -1) && opModeIsActive())
+			{
+				telemetry.addData("USDF", USDF);
+				telemetry.addData("USDB", USDB);
+				telemetry.update();
+				initCurtime();
+				if(getCurTime() - startTime > 1.5) {
+					broken = true;
+					break;
+				}
+				idle();
+			}
 			if (USDF > USDB) {
 				turnRight(speed);
 				while ((USDF > USDB) && opModeIsActive()) {
+					if(broken)
+						break;
 					telemetry.addData("turning","to wall");
 					telemetry.addData("USDF",USDF);
 					telemetry.addData("USDB",USDB);
@@ -728,11 +744,13 @@ public abstract class MyOpMode extends LinearOpMode {
 					USDB = rangeB.getUltraSonicDistance();
 					idle();
 				}
-				stopMotors();
+				turnLeft(0.05);
 			} else {
 				if (USDF < USDB) {
 					turnLeft(speed);
 					while ((USDF < USDB) && opModeIsActive()) {
+						if(broken)
+							break;
 						telemetry.addData("turning","to wall");
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB",USDB);
@@ -741,15 +759,21 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDB = rangeB.getUltraSonicDistance();
 						idle();
 					}
-					stopMotors();
+					turnRight(0.05);
 				}
 			}
+		}
+		if(!broken && Math.abs(USDF - USDB) > 2.0)
+		{
+			turnParallelToWall(speed-0.01);
 		}
 	}
 
 	public String getCaseNameFromInfo(double USDF, double USDB, int targetDist, double thresholdW)
 	{
 		String name = "";
+		if(USDF>=-1.1 && USDF <= -0.9 || USDB>=-1.1 && USDB <= -0.9)
+			return "11";
 		if(USDF>targetDist+thresholdW)
 		{
 			name += "0";
@@ -791,46 +815,50 @@ public abstract class MyOpMode extends LinearOpMode {
 				{
 					while(!color.equals("Blue") && opModeIsActive())
 					{
+
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("caseName",caseName);
+						telemetry.addData("color",color);
+						telemetry.addData("USDF",USDF);
+						telemetry.addData("USDB",USDB);
+						telemetry.update();
+						switch (caseName) {
+							case "00":
+								moveForwards(speed*1.2*1.2, speed*0.8);
+								break;
+							case "01":
+								arcTurnRightToWall(-speed * 1.15);
+								break;
+							case "02":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "10":
+								arcTurnRightToWall(speed * 1.15);
+								break;
+							case "11":
+								moveForwards(speed*1.2,speed);
+								break;
+							case "12":
+								arcTurnLeftToWall(speed*1.15);
+								break;
+							case "20":
+								turnParallelToWall(speed*1.15);
+								break;
+							case "21":
+								arcTurnLeftToWall(-speed * 1.15);
+								break;
+							case "22":
+								moveForwards(speed * 1.2 * 0.8, speed * 1.2);
+								break;
+						}
 						if (colorB.beaconColor().equals("Blue")) {
 							color = "Blue";
 						} else if (colorB.beaconColor().equals("Red")) {
 							color = "Red";
 						} else {
 							color = "Neither";
-						}
-						USDF = rangeF.getUltraSonicDistance();
-						USDB = rangeB.getUltraSonicDistance();
-						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
-						telemetry.addData("caseName",caseName);
-						telemetry.update();
-						switch (caseName) {
-							case "00":
-								moveForwards(speed, speed * 0.7);
-								break;
-							case "01":
-								arcTurnRightToWall(-speed);
-								break;
-							case "02":
-								turnParallelToWall(speed);
-								break;
-							case "10":
-								arcTurnRightToWall(speed);
-								break;
-							case "11":
-								moveForwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed);
-								break;
-							case "20":
-								turnParallelToWall(speed);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed);
-								break;
-							case "22":
-								moveForwards(speed * 0.7, speed);
-								break;
 						}
 						idle();
 					}
@@ -838,46 +866,47 @@ public abstract class MyOpMode extends LinearOpMode {
 				else
 				{
 					while(!color.equals("Blue") && opModeIsActive()) {
+
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("caseName", caseName);
+						telemetry.update();
+						switch (caseName) {
+							case "00":
+								moveBackwards(speed * 1.2 * 1.2, speed * 0.8);
+								break;
+							case "01":
+								arcTurnRightToWall(-speed * 1.15);
+								break;
+							case "02":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "10":
+								arcTurnRightToWall(speed * 1.15);
+								break;
+							case "11":
+								moveBackwards(speed*1.2,speed);
+								break;
+							case "12":
+								arcTurnLeftToWall(speed * 1.15);
+								break;
+							case "20":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "21":
+								arcTurnLeftToWall(-speed * 1.15);
+								break;
+							case "22":
+								moveBackwards(speed * 1.2 * 0.8, speed * 1.2);
+								break;
+						}
 						if (colorB.beaconColor().equals("Blue")) {
 							color = "Blue";
 						} else if (colorB.beaconColor().equals("Red")) {
 							color = "Red";
 						} else {
 							color = "Neither";
-						}
-						USDF = rangeF.getUltraSonicDistance();
-						USDB = rangeB.getUltraSonicDistance();
-						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
-						telemetry.addData("caseName",caseName);
-						telemetry.update();
-						switch (caseName) {
-							case "00":
-								moveBackwards(speed, speed * 0.5);
-								break;
-							case "01":
-								arcTurnRightToWall(-speed);
-								break;
-							case "02":
-								turnParallelToWall(speed);
-								break;
-							case "10":
-								arcTurnRightToWall(speed);
-								break;
-							case "11":
-								moveBackwards(speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed);
-								break;
-							case "20":
-								turnParallelToWall(speed);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed);
-								break;
-							case "22":
-								moveBackwards(speed * 0.7, speed);
-								break;
 						}
 						idle();
 					}
@@ -1011,31 +1040,31 @@ public abstract class MyOpMode extends LinearOpMode {
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
 						switch (caseName) {
 							case "00":
-								moveForwards(speed, speed * 0.7);
+								moveForwards(speed*1.2*1.2, speed*0.8);
 								break;
 							case "01":
-								arcTurnRightToWall(-speed);
+								arcTurnRightToWall(-speed * 1.15);
 								break;
 							case "02":
-								turnParallelToWall(speed);
+								turnParallelToWall(speed * 1.15);
 								break;
 							case "10":
-								arcTurnRightToWall(speed);
+								arcTurnRightToWall(speed*1.15);
 								break;
 							case "11":
-								moveForwards(speed);
+								moveForwards(speed*1.2,speed);
 								break;
 							case "12":
-								arcTurnLeftToWall(speed);
+								arcTurnLeftToWall(speed*1.15);
 								break;
 							case "20":
-								turnParallelToWall(speed);
+								turnParallelToWall(speed*1.15);
 								break;
 							case "21":
-								arcTurnLeftToWall(-speed);
+								arcTurnLeftToWall(-speed*1.15);
 								break;
 							case "22":
-								moveForwards(speed * 0.7, speed);
+								moveForwards(speed * 1.2 * 0.8, speed * 1.2);
 								break;
 						}
 						idle();
@@ -1058,31 +1087,31 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.update();
 						switch (caseName) {
 							case "00":
-								moveBackwards(speed, speed * 0.7);
+								moveBackwards(speed * 1.2 * 1.2, speed * 0.8);
 								break;
 							case "01":
-								arcTurnRightToWall(-speed);
+								arcTurnRightToWall(-speed * 1.15);
 								break;
 							case "02":
-								turnParallelToWall(speed);
+								turnParallelToWall(speed * 1.15);
 								break;
 							case "10":
-								arcTurnRightToWall(speed);
+								arcTurnRightToWall(speed * 1.15);
 								break;
 							case "11":
-								moveBackwards(speed);
+								moveBackwards(speed*1.2,speed);
 								break;
 							case "12":
-								arcTurnLeftToWall(speed);
+								arcTurnLeftToWall(speed * 1.15);
 								break;
 							case "20":
-								turnParallelToWall(speed);
+								turnParallelToWall(speed * 1.15);
 								break;
 							case "21":
-								arcTurnLeftToWall(-speed);
+								arcTurnLeftToWall(-speed * 1.15);
 								break;
 							case "22":
-								moveBackwards(speed * 0.7, speed);
+								moveBackwards(speed * 1.2 * 0.8, speed * 1.2);
 								break;
 						}
 						idle();
@@ -1863,7 +1892,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				avgEnc = getAvgEnc();
 				telemetry.addData("avg Enc", avgEnc);
 				telemetry.addData("curr Enc", currEnc);
-				//move((-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))*.7));
+				move(1.2 * (-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))));
 				distMoved = Math.abs(avgEnc - currEnc);
 				telemetry.update();
 				idle();

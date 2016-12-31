@@ -41,10 +41,12 @@ public class AutoRedRange extends MyAutonomous {
             idle();
         }
         waitForStart();
+        initCurtime();
+        double startTime = getCurTime();
         runSpinner(1.0);
         pause(0.5);
         //moveAlongWallToBeacon(.3, 2.0, true);
-        moveWithEncoders(-.3, 3500);
+        moveWithEncoders(-.2, 3300);
         runSpinner(1.0);
         pause(1.0);
         openServoDropper();
@@ -53,14 +55,54 @@ public class AutoRedRange extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(1.0);
-        moveWithEncoders(-0.3,1000);
+        moveWithEncoders(-0.2,2000);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnLeft(-0.3,yawDiff);
-        while(opModeIsActive())
+        gyroArcTurnLeft(0.2,yawDiff-5.0);
+
+        pause(0.5);
+        turnParallelToWall(0.17);
+        //17 max
+        //9 min
+        stabilizeAlongWallWithRangeToBeacon(-0.115, 1.0, 3.0, 13, true);
+        pause(0.25);
+        turnParallelToWall(0.18);
+        pause(0.25);
+        stabilizeAlongWallWithRangeToBeacon(0.10, 1.0, 3.0, 13, true);
+
+        pushButton();
+        /*
+        if(colorB.getColor().equals("Red"))
         {
-            telemetry.addData("USDF",rangeF.getUltraSonicDistance());
-            telemetry.addData("USDB",rangeB.getUltraSonicDistance());
+            pause(5.0);
+            pushButton();
+        }*/
+
+        turnParallelToWall(0.18);
+
+        stabilizeAlongWallWithRangeForEncoderDist(0.135, 1.0, 1.5, 13, true, 2000);
+        turnParallelToWall(0.18);
+        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 1.5, 13, true);
+
+
+        initCurtime();
+
+        if(getCurTime() - startTime < 24.0) {
+            pause(0.25);
+            turnParallelToWall(0.18);
+            pause(0.25);
+            stabilizeAlongWallWithRangeToBeacon(-0.1, 1.0, 1.5, 13, true);
+            pushButton();
+        }
+        else if(getCurTime() - startTime < 26.0) {
+            pause(0.25);
+            turnParallelToWall(0.18);
+            pause(0.25);
+            pushButton();
+        }
+        else
+        {
+            pushButton();
         }
 
         //stabilizeAlongWallWithRangeToBeacon(-0.25,1.0,2.0,18,false);
