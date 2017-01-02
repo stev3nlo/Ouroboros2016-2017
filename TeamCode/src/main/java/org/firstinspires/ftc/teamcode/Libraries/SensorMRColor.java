@@ -144,7 +144,7 @@ public class SensorMRColor {
 
 	//returns whether the color of the beacon is Red or Blue
 	public String beaconColor() {
-		if (getBlue() >= 1){// && getBlue() > getRed()) {
+		if (getBlue() >= 1 && getBlue() > getRed()){// && getBlue() > getRed()) {
 			return "Blue";
 		} else if (getRed() >= 2 && getRed() > getBlue()) {
 			return "Red";

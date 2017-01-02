@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Blue Range", group="Autonomous")
-public class AutoBlueRange extends MyAutonomous {
+@Autonomous(name="Auto Red Range Test", group="Autonomous")
+public class AutoRedRangeTest extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -33,47 +33,59 @@ public class AutoBlueRange extends MyAutonomous {
         //initializeSensors();
         double startAngle = gyro.getYaw();
         double yawDiff = 0.0;
-        while(!opModeIsActive() && !isStopRequested())
+        while(!opModeIsActive())
         {
             yawDiff = getAngleDiff(startAngle,gyro.getYaw());
-            telemetry.addData("OGangle",startAngle);
-            telemetry.addData("newANGLE",gyro.getYaw());
             telemetry.addData("yawDiff",yawDiff);
             telemetry.update();
             idle();
         }
         waitForStart();
-        //moveAlongWallToBeacon(.3, 2.0, true);
         initCurtime();
         double startTime = getCurTime();
-        runSpinner(1.0);
-        pause(0.1);
-        moveWithEncoders(.3, 3700);
+        double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
+        if(batteryLevel > 13.0)
+            runSpinner(0.8);
+        else
+            runSpinner(0.9);
+        pause(0.5);
+        //moveAlongWallToBeacon(.3, 2.0, true);
+        moveWithEncoders(-.3, 3075);
         pause(0.5);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(0.5);
-        moveWithEncoders(0.3, 1900);
+        moveWithEncoders(-0.3, 3100);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(0.2, yawDiff - 5.0);
+        gyroArcTurnRight(-0.2, yawDiff - 5.0);
+
+        while(opModeIsActive())
+        {
+            telemetry.addData("USDF",rangeF.getUltraSonicDistance());
+            telemetry.addData("USDB", rangeB.getUltraSonicDistance());
+            telemetry.update();
+            idle();
+        }
+        /*
         pause(0.5);
-        turnParallelToWall(0.17);
+        turnParallelToWall(0.19);
         //17 max
         //9 min
-        stabilizeAlongWallWithRangeForEncoderDist(0.18, 1.0, 3.0, 13, true,1000);
-        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 2.0, 13, true);
+        stabilizeAlongWallWithRangeForEncoderDist(-0.18, 1.0, 3.0, 13, false,1000);
+        stabilizeAlongWallWithRangeToBeacon(-0.12, 1.0, 3.0, 13, false);
         pause(0.25);
         turnParallelToWall(0.165);
         pause(0.25);
-        driveAlongWallToBeacon(-0.105, true);
-        pause(0.25);
-        pushButton();
+        driveAlongWallToBeacon(0.105, false);
         pause(0.25);
 
-        if(colorB.getColor().equals("Red"))
+        pushButton();
+
+        pause(0.25);
+        if(colorB.getColor().equals("Blue"))
         {
             pause(5.0);
             pushButton();
@@ -81,12 +93,10 @@ public class AutoBlueRange extends MyAutonomous {
 
         turnParallelToWall(0.19);
 
-        //stabilizeAlongWallWithRangeForEncoderDist(-0.18, 1.0, 2.0, 13, true, 2000);
-        moveWithEncoders(-0.18,1500);
-        pause(0.1);
+        stabilizeAlongWallWithRangeForEncoderDist(0.18, 1.0, 3.0, 13, false, 2000);
+
         turnParallelToWall(0.19);
-        pause(0.1);
-        driveAlongWallToBeacon(-0.115,  true);
+        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 3.0, 13, false);
 
 
         initCurtime();
@@ -95,7 +105,7 @@ public class AutoBlueRange extends MyAutonomous {
             pause(0.25);
             turnParallelToWall(0.18);
             pause(0.25);
-            driveAlongWallToBeacon(0.1, true);
+            driveAlongWallToBeacon(-0.1, false);
             pushButton();
         }
         else if(getCurTime() - startTime < 26.0) {
@@ -108,6 +118,9 @@ public class AutoBlueRange extends MyAutonomous {
         {
             pushButton();
         }
+
+        //stabilizeAlongWallWithRangeToBeacon(-0.25,1.0,2.0,18,false);
+        //moveAlongWallForUnits(0.6,1.0,2.0,20,true,3000);
 
         /*
         double degreesToTurn = -26.0;

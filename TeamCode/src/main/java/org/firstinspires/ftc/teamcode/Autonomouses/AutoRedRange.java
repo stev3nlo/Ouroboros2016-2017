@@ -43,46 +43,56 @@ public class AutoRedRange extends MyAutonomous {
         waitForStart();
         initCurtime();
         double startTime = getCurTime();
-        runSpinner(1.0);
-        pause(0.5);
+        double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
+        if(batteryLevel > 13.8)
+            runSpinner(0.8);
+        else
+            runSpinner(0.86);
+        pause(0.1);
         //moveAlongWallToBeacon(.3, 2.0, true);
-        moveWithEncoders(-.2, 3300);
-        runSpinner(1.0);
-        pause(1.0);
+        moveWithEncoders(-.4, 3075);
+        pause(0.1);
         openServoDropper();
-        runSpinner(1.0);
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
-        pause(1.0);
-        moveWithEncoders(-0.2,2000);
+        pause(0.1);
+        moveWithEncoders(-0.4,3200);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnLeft(0.2,yawDiff-5.0);
+        gyroArcTurnRight(-0.3, yawDiff - 6.0);
 
-        pause(0.5);
+        pause(0.25);
         turnParallelToWall(0.17);
         //17 max
         //9 min
-        stabilizeAlongWallWithRangeToBeacon(-0.115, 1.0, 3.0, 13, true);
-        pause(0.25);
-        turnParallelToWall(0.18);
-        pause(0.25);
-        stabilizeAlongWallWithRangeToBeacon(0.10, 1.0, 3.0, 13, true);
+        stabilizeAlongWallWithRangeForEncoderDist(-0.18, 1.0, 3.0, 13, false, 1000);
+        stabilizeAlongWallWithRangeToBeacon(-0.125, 1.0, 3.0, 13, false);
+        pause(0.1);
+        turnParallelToWall(0.165);
+        pause(0.1);
+        driveAlongWallToBeacon(0.105, false);
+        pause(0.1);
 
         pushButton();
-        /*
-        if(colorB.getColor().equals("Red"))
+
+        pause(0.25);
+        if(colorB.getColor().equals("Blue"))
         {
             pause(5.0);
             pushButton();
-        }*/
+        }
 
-        turnParallelToWall(0.18);
+        turnParallelToWall(0.19);
+        pause(0.1);
 
-        stabilizeAlongWallWithRangeForEncoderDist(0.135, 1.0, 1.5, 13, true, 2000);
-        turnParallelToWall(0.18);
-        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 1.5, 13, true);
+        moveWithEncoders(0.23, 1000);
+
+        stabilizeAlongWallWithRangeForEncoderDist(0.18,1.0,3.0,13,false,700);
+        pause(0.1);
+        turnParallelToWall(0.19);
+        pause(0.1);
+        stabilizeAlongWallWithRangeToBeacon(0.125, 1.0, 3.0, 13, false);
 
 
         initCurtime();
@@ -91,7 +101,7 @@ public class AutoRedRange extends MyAutonomous {
             pause(0.25);
             turnParallelToWall(0.18);
             pause(0.25);
-            stabilizeAlongWallWithRangeToBeacon(-0.1, 1.0, 1.5, 13, true);
+            driveAlongWallToBeacon(-0.1, false);
             pushButton();
         }
         else if(getCurTime() - startTime < 26.0) {

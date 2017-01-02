@@ -167,6 +167,9 @@ public class TeleOp extends MyOpMode
             if (g2YPressed || !shooterIsRunning)
             {
                 shooterIsRunning = false;
+                runSpinner(0.0);
+                /*
+                shooterIsRunning = false;
                 firstCycleOfSpinner = true;
                 if(numCyclesOfSlowingSpinner==-1)
                 {
@@ -180,10 +183,13 @@ public class TeleOp extends MyOpMode
                     if(numCyclesOfSlowingSpinner > 0)
                         numCyclesOfSlowingSpinner--;
                 }
+                */
             }
             //creates constant speed of spinner throughout game
             if(g2XPressed || shooterIsRunning)
             {
+                runSpinner(0.9);
+                /*
                 shooterIsRunning = true;
                 if(firstCycleOfSpinner) {
                     firstCycleOfSpinner = false;
@@ -194,6 +200,7 @@ public class TeleOp extends MyOpMode
                 runRPMStabilization();
 
                 runSpinner(curPowerOfMotorSpinner);
+                */
             }
 
 
@@ -227,11 +234,11 @@ public class TeleOp extends MyOpMode
                 closeServoDropper();
             }
 
-            if(g2Ltrig > 0.1)
+            if(g2Ltrig > 0.3)
             {
                 moveBeaconPusherOut();
             }
-            else if(g2Rtrig > 0.1)
+            else if(g2Rtrig > 0.3)
             {
                 moveBeaconPusherOut();
             }

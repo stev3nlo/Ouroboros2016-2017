@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Blue Range", group="Autonomous")
-public class AutoBlueRange extends MyAutonomous {
+@Autonomous(name="Auto Blue Range Test", group="Test")
+public class AutoBlueRangeTest extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -46,11 +46,11 @@ public class AutoBlueRange extends MyAutonomous {
         //moveAlongWallToBeacon(.3, 2.0, true);
         initCurtime();
         double startTime = getCurTime();
-        runSpinner(1.0);
-        pause(0.1);
         moveWithEncoders(.3, 3700);
+        runSpinner(1.0);
         pause(0.5);
         openServoDropper();
+        runSpinner(1.0);
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
@@ -60,33 +60,40 @@ public class AutoBlueRange extends MyAutonomous {
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(0.2, yawDiff - 5.0);
         pause(0.5);
+
+
+        while(opModeIsActive())
+        {
+            telemetry.addData("USDF",rangeF.getUltraSonicDistance());
+            telemetry.addData("USDB", rangeB.getUltraSonicDistance());
+            telemetry.update();
+            idle();
+        }
+        /*
         turnParallelToWall(0.17);
         //17 max
         //9 min
-        stabilizeAlongWallWithRangeForEncoderDist(0.18, 1.0, 3.0, 13, true,1000);
+        stabilizeAlongWallWithRangeForEncoderDist(0.13, 1.0, 2.0, 13, true,1000);
         stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 2.0, 13, true);
         pause(0.25);
-        turnParallelToWall(0.165);
+        turnParallelToWall(0.18);
         pause(0.25);
-        driveAlongWallToBeacon(-0.105, true);
-        pause(0.25);
-        pushButton();
-        pause(0.25);
+        stabilizeAlongWallWithRangeToBeacon(-0.10, 1.0, 2.0, 13, true);
 
+        pushButton();
+        /*
         if(colorB.getColor().equals("Red"))
         {
             pause(5.0);
             pushButton();
-        }
+        }*/
 
-        turnParallelToWall(0.19);
+        /*
+        turnParallelToWall(0.18);
 
-        //stabilizeAlongWallWithRangeForEncoderDist(-0.18, 1.0, 2.0, 13, true, 2000);
-        moveWithEncoders(-0.18,1500);
-        pause(0.1);
-        turnParallelToWall(0.19);
-        pause(0.1);
-        driveAlongWallToBeacon(-0.115,  true);
+        stabilizeAlongWallWithRangeForEncoderDist(-0.135, 1.0, 2.0, 13, true, 2000);
+        turnParallelToWall(0.18);
+        stabilizeAlongWallWithRangeToBeacon(-0.115, 1.0, 2.0, 13, true);
 
 
         initCurtime();
@@ -95,7 +102,7 @@ public class AutoBlueRange extends MyAutonomous {
             pause(0.25);
             turnParallelToWall(0.18);
             pause(0.25);
-            driveAlongWallToBeacon(0.1, true);
+            stabilizeAlongWallWithRangeToBeacon(0.1, 1.0, 2.0, 13, true);
             pushButton();
         }
         else if(getCurTime() - startTime < 26.0) {
