@@ -1275,25 +1275,25 @@ public abstract class MyOpMode extends LinearOpMode {
 								moveBackwards(speed * 1.2 * 1.1, speed * 0.9);
 								break;
 							case "01":
-								arcTurnRightToWall(-speed * 1.4);
+								arcTurnRightToWall(-speed * 1.25);
 								break;
 							case "02":
 								turnParallelToWall(speed * 1.15);
 								break;
 							case "10":
-								arcTurnRightToWall(speed * 1.4);
+								arcTurnRightToWall(speed * 1.25);
 								break;
 							case "11":
 								moveBackwards(speed * 1.2, speed);
 								break;
 							case "12":
-								arcTurnLeftToWall(speed*1.4);
+								arcTurnLeftToWall(speed*1.25);
 								break;
 							case "20":
 								turnParallelToWall(speed*1.15);
 								break;
 							case "21":
-								arcTurnLeftToWall(-speed*1.4);
+								arcTurnLeftToWall(-speed*1.25);
 								break;
 							case "22":
 								moveBackwards(speed * 0.75 * 1.2, speed * 1.25);

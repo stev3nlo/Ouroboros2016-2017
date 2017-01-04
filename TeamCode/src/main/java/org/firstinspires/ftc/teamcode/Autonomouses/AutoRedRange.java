@@ -47,26 +47,26 @@ public class AutoRedRange extends MyAutonomous {
         if(batteryLevel > 13.8)
             runSpinner(0.8);
         else
-            runSpinner(0.86);
+            runSpinner(0.88);
         pause(0.1);
         //moveAlongWallToBeacon(.3, 2.0, true);
-        moveWithEncoders(-.4, 3075);
+        moveWithEncoders(-.4, 2900);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(0.1);
-        moveWithEncoders(-0.4,3200);
+        moveWithEncoders(-0.33,3000);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(-0.3, yawDiff - 6.0);
+        gyroArcTurnRight(-0.2, yawDiff - 6.0);
 
         pause(0.25);
         turnParallelToWall(0.17);
         //17 max
         //9 min
-        stabilizeAlongWallWithRangeForEncoderDist(-0.18, 1.0, 3.0, 13, false, 1000);
+        stabilizeAlongWallWithRangeForEncoderDist(-0.14, 1.0, 3.0, 13, false, 1000);
         stabilizeAlongWallWithRangeToBeacon(-0.125, 1.0, 3.0, 13, false);
         pause(0.1);
         turnParallelToWall(0.165);
@@ -88,7 +88,7 @@ public class AutoRedRange extends MyAutonomous {
 
         moveWithEncoders(0.23, 1000);
 
-        stabilizeAlongWallWithRangeForEncoderDist(0.18,1.0,3.0,13,false,700);
+        stabilizeAlongWallWithRangeForEncoderDist(0.15,1.0,3.0,13,false,700);
         pause(0.1);
         turnParallelToWall(0.19);
         pause(0.1);

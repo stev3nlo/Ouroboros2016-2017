@@ -181,13 +181,14 @@ public class TeleOp extends MyOpMode
                     runSpinner(curPowerOfMotorSpinner*((double)numCyclesOfSlowingSpinner/20.0));
                     timeAtLastSpinnerSlowdown = getCurTime();
                     if(numCyclesOfSlowingSpinner > 0)
-                        numCyclesOfSlowingSpinner--;
+               --=0-=09-==-0980=r    numCyclesOfSlowingSpinner--;
                 }
                 */
             }
             //creates constant speed of spinner throughout game
             if(g2XPressed || shooterIsRunning)
             {
+                shooterIsRunning = true;
                 runSpinner(0.9);
                 /*
                 shooterIsRunning = true;
