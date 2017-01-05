@@ -10,7 +10,7 @@ import java.io.IOException;
  * Created by Morgannanez on 1/5/17.
  */
 
-@Autonomous(name="MoveAlongWallToBeaconTest", group="Test")
+@Autonomous(name="PushButtonTest", group="Test")
 
 public class PushButtonTest extends MyOpMode {
 
@@ -18,6 +18,6 @@ public class PushButtonTest extends MyOpMode {
     {
         super.runOpMode();
         waitForStart();
-        moveBeaconPusherOut();
+        moveWithEncoders(0.2,6000);
     }
 }

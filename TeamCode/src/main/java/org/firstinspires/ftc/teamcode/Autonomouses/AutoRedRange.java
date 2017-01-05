@@ -57,7 +57,7 @@ public class AutoRedRange extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(0.1);
-        moveWithEncoders(-0.33,3000);
+        moveWithEncoders(-0.33,3150);
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(-0.2, yawDiff - 6.0);
@@ -66,8 +66,8 @@ public class AutoRedRange extends MyAutonomous {
         turnParallelToWall(0.17);
         //17 max
         //9 min
-        stabilizeAlongWallWithRangeForEncoderDist(-0.14, 1.0, 3.0, 13, false, 1000);
-        stabilizeAlongWallWithRangeToBeacon(-0.125, 1.0, 3.0, 13, false);
+        stabilizeAlongWallWithRangeForEncoderDist(-0.14, 1.0, 3.0, 11, false, 1000);
+        stabilizeAlongWallWithRangeToBeacon(-0.125, 1.0, 3.0, 11, false);
         pause(0.1);
         turnParallelToWall(0.165);
         pause(0.1);
@@ -86,13 +86,13 @@ public class AutoRedRange extends MyAutonomous {
         turnParallelToWall(0.19);
         pause(0.1);
 
-        moveWithEncoders(0.23, 1000);
+        moveWithEncodersCoast(0.23, 1000);
 
-        stabilizeAlongWallWithRangeForEncoderDist(0.15,1.0,3.0,13,false,700);
+        stabilizeAlongWallWithRangeForEncoderDist(0.15,1.0,3.0,11,false,700);
         pause(0.1);
         turnParallelToWall(0.19);
         pause(0.1);
-        stabilizeAlongWallWithRangeToBeacon(0.125, 1.0, 3.0, 13, false);
+        stabilizeAlongWallWithRangeToBeacon(0.125, 1.0, 3.0, 11, false);
 
 
         initCurtime();

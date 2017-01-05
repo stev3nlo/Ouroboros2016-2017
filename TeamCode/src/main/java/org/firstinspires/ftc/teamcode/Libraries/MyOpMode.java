@@ -900,6 +900,182 @@ public abstract class MyOpMode extends LinearOpMode {
 				{
 					while(!color.equals("Blue") && opModeIsActive())
 					{
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("caseName",caseName);
+						telemetry.addData("color",color);
+						telemetry.addData("USDF",USDF);
+						telemetry.addData("USDB", USDB);
+						switch (caseName) {
+							case "00":
+								if(USDB-USDF >= 4.0) {
+									telemetry.addData("Not drifting","");
+									moveForwards(speed * 1.2, speed);
+								}
+								else {
+									telemetry.addData("Drifting", "");
+									moveForwards(speed * 1.2 * 1.3, speed * 0.7);
+								}
+								break;
+							case "01":
+								arcTurnRightToWall(speed * 1.25);
+								break;
+							case "02":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "10":
+								arcTurnRightToWall(-speed*1.25);
+								break;
+							case "11":
+								moveForwards(speed*1.2,speed);
+								break;
+							case "12":
+								arcTurnLeftToWall(speed*1.25);
+								break;
+							case "20":
+								turnParallelToWall(speed*1.15);
+								break;
+							case "21":
+								arcTurnLeftToWall(-speed*1.25);
+								break;
+							case "22":
+								moveForwards(speed * 1.2 * 0.75, speed * 1.25);
+								break;
+						}
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+						telemetry.update();
+						idle();
+
+
+					}
+				}
+				else
+				{
+					while(!color.equals("Blue") && opModeIsActive()) {
+
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("caseName", caseName);
+						telemetry.addData("color",color);
+						telemetry.addData("USDF",USDF);
+						telemetry.addData("USDB", USDB);
+						switch (caseName) {
+							case "00":
+								if(USDF-USDB >= 4.0) {
+									telemetry.addData("Not drifting","");
+									moveBackwards(speed * 1.2, speed);
+								} else {
+									telemetry.addData("Drifting", "");
+									moveBackwards(speed * 1.2 * 1.3, speed * 0.7);
+								}
+								break;
+							case "01":
+								arcTurnRightToWall(speed * 1.25);
+								break;
+							case "02":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "10":
+								arcTurnRightToWall(-speed * 1.25);
+								break;
+							case "11":
+								moveBackwards(speed*1.2,speed);
+								break;
+							case "12":
+								arcTurnLeftToWall(speed * 1.25);
+								break;
+							case "20":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "21":
+								arcTurnLeftToWall(-speed * 1.25);
+								break;
+							case "22":
+								moveBackwards(speed * 1.2 * 0.7, speed * 1.3);
+								break;
+						}
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+						telemetry.update();
+						idle();
+					}
+				}
+			}
+			else
+			{
+				if(speed > 0)
+				{
+					while(!color.equals("Red") && opModeIsActive())
+					{
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("caseName",caseName);
+						telemetry.addData("color",color);
+						telemetry.addData("USDF",USDF);
+						telemetry.addData("USDB", USDB);
+						switch (caseName) {
+							case "00":
+								if(USDF-USDB >= 4.0) {
+									telemetry.addData("Not drifting","");
+									moveForwards(speed * 1.2, speed);
+								} else {
+									telemetry.addData("Drifting", "");
+									moveForwards(speed * 1.2 * 1.3, speed * 0.7);
+								}
+								break;
+							case "01":
+								arcTurnRightToWall(speed*1.25);
+								break;
+							case "02":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "10":
+								arcTurnRightToWall(-speed*1.25);
+								break;
+							case "11":
+								moveForwards(speed*1.2,speed);
+								break;
+							case "12":
+								arcTurnLeftToWall(speed*1.25);
+								break;
+							case "20":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "21":
+								arcTurnLeftToWall(-speed*1.25);
+								break;
+							case "22":
+								moveForwards(speed * 0.7 * 1.2, speed * 1.3);
+								break;
+						}
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+						telemetry.update();
+						idle();
+					}
+				}
+				else
+				{
+					while(!color.equals("Red") && opModeIsActive()) {
 
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
@@ -907,7 +1083,88 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("caseName",caseName);
 						telemetry.addData("color",color);
 						telemetry.addData("USDF",USDF);
-						telemetry.addData("USDB",USDB);
+						telemetry.addData("USDB", USDB);
+						switch (caseName) {
+							case "00":
+								if(USDB-USDF >= 4.0) {
+									telemetry.addData("Not drifting","");
+									moveBackwards(speed * 1.2, speed);
+								} else {
+									telemetry.addData("Drifting", "");
+									moveBackwards(speed * 1.2 * 1.3, speed * 0.7);
+								}
+								break;
+							case "01":
+								arcTurnRightToWall(speed * 1.25);
+								break;
+							case "02":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "10":
+								arcTurnRightToWall(-speed * 1.25);
+								break;
+							case "11":
+								moveBackwards(speed*1.2,speed);
+								break;
+							case "12":
+								arcTurnLeftToWall(speed*1.25);
+								break;
+							case "20":
+								turnParallelToWall(speed*1.15);
+								break;
+							case "21":
+								arcTurnLeftToWall(-speed*1.25);
+								break;
+							case "22":
+								moveBackwards(speed * 0.7 * 1.2, speed * 1.3);
+								break;
+						}
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+						telemetry.update();
+						idle();
+					}
+				}
+			}
+		}
+		if(speed < 0)
+			moveForwards(0.03,0.03);
+		else
+			moveBackwards(0.03,0.03);
+		telemetry.addData("saw the color","true");
+		telemetry.update();
+	}
+
+	public void stabilizeAlongWallWithRangeForEncoderDist(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue, int encoderDist)
+	{
+		double USDF;
+		double USDB;
+		String color = "Neither";
+		if(opModeIsActive())
+		{
+			if(isBlue)
+			{
+				if(speed > 0)
+				{
+					int currEnc = getAvgEnc();
+					int avgEnc = currEnc;
+					int distMoved = Math.abs(avgEnc - currEnc);
+					while (distMoved < encoderDist && opModeIsActive()) {
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("caseName",caseName);
+						telemetry.addData("USDF",USDF);
+						telemetry.addData("USDB", USDB);
+						avgEnc = getAvgEnc();
+						telemetry.addData("avg Enc", avgEnc);
+						telemetry.addData("curr Enc", currEnc);
+						distMoved = Math.abs(avgEnc - currEnc);
 						switch (caseName) {
 							case "00":
 								if(USDB-USDF >= 4.0) {
@@ -944,343 +1201,35 @@ public abstract class MyOpMode extends LinearOpMode {
 								moveForwards(speed * 1.2 * 0.75, speed * 1.25);
 								break;
 						}
-						if (colorB.beaconColor().equals("Blue")) {
-							color = "Blue";
-						} else if (colorB.beaconColor().equals("Red")) {
-							color = "Red";
-						} else {
-							color = "Neither";
-						}
-						idle();
-
 						telemetry.update();
+						idle();
 					}
 				}
 				else
 				{
-					while(!color.equals("Blue") && opModeIsActive()) {
-
+					int currEnc = getAvgEnc();
+					int avgEnc = currEnc;
+					int distMoved = Math.abs(avgEnc - currEnc);
+					while (distMoved < encoderDist && opModeIsActive()) {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
 						telemetry.addData("caseName", caseName);
-						telemetry.update();
-						switch (caseName) {
-							case "00":
-								moveBackwards(speed * 1.2 * 1.1, speed * 0.9);
-								break;
-							case "01":
-								arcTurnRightToWall(-speed * 1.4);
-								break;
-							case "02":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "10":
-								arcTurnRightToWall(speed * 1.4);
-								break;
-							case "11":
-								moveBackwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed * 1.4);
-								break;
-							case "20":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed * 1.4);
-								break;
-							case "22":
-								moveBackwards(speed * 1.2 * 0.75, speed * 1.25);
-								break;
-						}
-						if (colorB.beaconColor().equals("Blue")) {
-							color = "Blue";
-						} else if (colorB.beaconColor().equals("Red")) {
-							color = "Red";
-						} else {
-							color = "Neither";
-						}
-						idle();
-					}
-				}
-			}
-			else
-			{
-				if(speed > 0)
-				{
-					while(!color.equals("Red") && opModeIsActive())
-					{
-						if (colorB.beaconColor().equals("Blue")) {
-							color = "Blue";
-						} else if (colorB.beaconColor().equals("Red")) {
-							color = "Red";
-						} else {
-							color = "Neither";
-						}
-						USDF = rangeF.getUltraSonicDistance();
-						USDB = rangeB.getUltraSonicDistance();
-						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
-						telemetry.addData("caseName",caseName);
-						telemetry.update();
-						switch (caseName) {
-							case "00":
-								moveForwards(speed * 1.2 * 1.1, speed * 0.9);
-								break;
-							case "01":
-								arcTurnRightToWall(-speed*1.4);
-								break;
-							case "02":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "10":
-								arcTurnRightToWall(speed*1.4);
-								break;
-							case "11":
-								moveForwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.4);
-								break;
-							case "20":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.4);
-								break;
-							case "22":
-								moveForwards(speed * 0.75 * 1.2, speed * 1.25);
-								break;
-						}
-						idle();
-					}
-				}
-				else
-				{
-					while(!color.equals("Red") && opModeIsActive()) {
-						if (colorB.beaconColor().equals("Blue")) {
-							color = "Blue";
-						} else if (colorB.beaconColor().equals("Red")) {
-							color = "Red";
-						} else {
-							color = "Neither";
-						}
-						USDF = rangeF.getUltraSonicDistance();
-						USDB = rangeB.getUltraSonicDistance();
-						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
-						telemetry.addData("caseName",caseName);
-						telemetry.update();
-						switch (caseName) {
-							case "00":
-								moveBackwards(speed * 1.2 * 1.1, speed * 0.9);
-								break;
-							case "01":
-								arcTurnRightToWall(-speed * 1.4);
-								break;
-							case "02":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "10":
-								arcTurnRightToWall(speed * 1.4);
-								break;
-							case "11":
-								moveBackwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.4);
-								break;
-							case "20":
-								turnParallelToWall(speed*1.15);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.4);
-								break;
-							case "22":
-								moveBackwards(speed * 0.75 * 1.2, speed * 1.25);
-								break;
-						}
-						idle();
-					}
-				}
-			}
-		}
-		if(speed < 0)
-			moveForwards(0.03,0.03);
-		else
-			moveBackwards(0.03,0.03);
-		telemetry.addData("saw the color","true");
-		telemetry.update();
-	}
-
-	public void stabilizeAlongWallWithRangeForEncoderDist(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue, int encoderDist)
-	{
-		double USDF;
-		double USDB;
-		String color = "Neither";
-		if(opModeIsActive())
-		{
-			if(isBlue)
-			{
-				if(speed > 0)
-				{
-					int currEnc = getAvgEnc();
-					int avgEnc = currEnc;
-					int distMoved = Math.abs(avgEnc - currEnc);
-					while (distMoved < encoderDist && opModeIsActive()) {
+						telemetry.addData("USDF",USDF);
+						telemetry.addData("USDB", USDB);
 						avgEnc = getAvgEnc();
 						telemetry.addData("avg Enc", avgEnc);
 						telemetry.addData("curr Enc", currEnc);
 						distMoved = Math.abs(avgEnc - currEnc);
-						USDF = rangeF.getUltraSonicDistance();
-						USDB = rangeB.getUltraSonicDistance();
-						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
 						switch (caseName) {
 							case "00":
-								moveForwards(speed*1.2*1.1, speed*0.9);
-								break;
-							case "01":
-								arcTurnRightToWall(-speed * 1.4);
-								break;
-							case "02":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "10":
-								arcTurnRightToWall(speed*1.4);
-								break;
-							case "11":
-								moveForwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.4);
-								break;
-							case "20":
-								turnParallelToWall(speed*1.15);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.4);
-								break;
-							case "22":
-								moveForwards(speed * 1.2 * 0.75, speed * 1.25);
-								break;
-						}
-						idle();
-					}
-				}
-				else
-				{
-					int currEnc = getAvgEnc();
-					int avgEnc = currEnc;
-					int distMoved = Math.abs(avgEnc - currEnc);
-					while (distMoved < encoderDist && opModeIsActive()) {
-						avgEnc = getAvgEnc();
-						telemetry.addData("avg Enc", avgEnc);
-						telemetry.addData("curr Enc", currEnc);
-						distMoved = Math.abs(avgEnc - currEnc);
-						USDF = rangeF.getUltraSonicDistance();
-						USDB = rangeB.getUltraSonicDistance();
-						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
-						telemetry.addData("caseName",caseName);
-						telemetry.update();
-						switch (caseName) {
-							case "00":
-								moveBackwards(speed * 1.2 * 1.1, speed * 0.9);
-								break;
-							case "01":
-								arcTurnRightToWall(-speed * 1.4);
-								break;
-							case "02":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "10":
-								arcTurnRightToWall(speed * 1.4);
-								break;
-							case "11":
-								moveBackwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed * 1.4);
-								break;
-							case "20":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed * 1.4);
-								break;
-							case "22":
-								moveBackwards(speed * 1.2 * 0.75, speed * 1.25);
-								break;
-						}
-						idle();
-					}
-				}
-			}
-			else
-			{
-				if(speed > 0)
-				{
-					int currEnc = getAvgEnc();
-					int avgEnc = currEnc;
-					int distMoved = Math.abs(avgEnc - currEnc);
-					while (distMoved < encoderDist && opModeIsActive()) {
-						avgEnc = getAvgEnc();
-						telemetry.addData("avg Enc", avgEnc);
-						telemetry.addData("curr Enc", currEnc);
-						distMoved = Math.abs(avgEnc - currEnc);
-						USDF = rangeF.getUltraSonicDistance();
-						USDB = rangeB.getUltraSonicDistance();
-						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
-						telemetry.addData("caseName",caseName);
-						telemetry.update();
-						switch (caseName) {
-							case "00":
-								moveForwards(speed * 1.2 * 1.1, speed * 0.9);
-								break;
-							case "01":
-								arcTurnRightToWall(-speed*1.4);
-								break;
-							case "02":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "10":
-								arcTurnRightToWall(speed*1.4);
-								break;
-							case "11":
-								moveForwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.4);
-								break;
-							case "20":
-								turnParallelToWall(speed * 1.15);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.4);
-								break;
-							case "22":
-								moveForwards(speed * 0.75 * 1.2, speed * 1.25);
-								break;
-						}
-						idle();
-					}
-				}
-				else
-				{
-					int currEnc = getAvgEnc();
-					int avgEnc = currEnc;
-					int distMoved = Math.abs(avgEnc - currEnc);
-					while (distMoved < encoderDist && opModeIsActive()) {
-						avgEnc = getAvgEnc();
-						telemetry.addData("avg Enc", avgEnc);
-						telemetry.addData("curr Enc", currEnc);
-						distMoved = Math.abs(avgEnc - currEnc);
-						USDF = rangeF.getUltraSonicDistance();
-						USDB = rangeB.getUltraSonicDistance();
-						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
-						telemetry.addData("caseName",caseName);
-						telemetry.update();
-						switch (caseName) {
-							case "00":
-								moveBackwards(speed * 1.2 * 1.1, speed * 0.9);
+								if(USDF-USDB >= 4.0) {
+									telemetry.addData("Not drifting","");
+									moveBackwards(speed * 1.2, speed);
+								} else {
+									telemetry.addData("Drifting", "");
+									moveBackwards(speed * 1.2 * 1.3, speed * 0.7);
+								}
 								break;
 							case "01":
 								arcTurnRightToWall(-speed * 1.25);
@@ -1292,7 +1241,121 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(speed * 1.25);
 								break;
 							case "11":
-								moveBackwards(speed * 1.2, speed);
+								moveBackwards(speed*1.2,speed);
+								break;
+							case "12":
+								arcTurnLeftToWall(speed * 1.25);
+								break;
+							case "20":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "21":
+								arcTurnLeftToWall(-speed * 1.25);
+								break;
+							case "22":
+								moveBackwards(speed * 1.2 * 0.7, speed * 1.3);
+								break;
+						}
+						telemetry.update();
+						idle();
+					}
+				}
+			}
+			else
+			{
+				if(speed > 0)
+				{
+					int currEnc = getAvgEnc();
+					int avgEnc = currEnc;
+					int distMoved = Math.abs(avgEnc - currEnc);
+					while (distMoved < encoderDist && opModeIsActive()) {
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("caseName",caseName);
+						telemetry.addData("USDF",USDF);
+						telemetry.addData("USDB", USDB);
+						avgEnc = getAvgEnc();
+						telemetry.addData("avg Enc", avgEnc);
+						telemetry.addData("curr Enc", currEnc);
+						distMoved = Math.abs(avgEnc - currEnc);
+						switch (caseName) {
+							case "00":
+								if(USDF-USDB >= 4.0) {
+									telemetry.addData("Not drifting","");
+									moveForwards(speed * 1.2, speed);
+								} else {
+									telemetry.addData("Drifting", "");
+									moveForwards(speed * 1.2 * 1.3, speed * 0.7);
+								}
+								break;
+							case "01":
+								arcTurnRightToWall(-speed*1.25);
+								break;
+							case "02":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "10":
+								arcTurnRightToWall(speed*1.25);
+								break;
+							case "11":
+								moveForwards(speed*1.2,speed);
+								break;
+							case "12":
+								arcTurnLeftToWall(speed*1.25);
+								break;
+							case "20":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "21":
+								arcTurnLeftToWall(-speed*1.25);
+								break;
+							case "22":
+								moveForwards(speed * 0.7 * 1.2, speed * 1.3);
+								break;
+						}
+						telemetry.update();
+						idle();
+					}
+				}
+				else
+				{
+					int currEnc = getAvgEnc();
+					int avgEnc = currEnc;
+					int distMoved = Math.abs(avgEnc - currEnc);
+					while (distMoved < encoderDist && opModeIsActive()) {
+						USDF = rangeF.getUltraSonicDistance();
+						USDB = rangeB.getUltraSonicDistance();
+						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("caseName",caseName);
+						telemetry.addData("color",color);
+						telemetry.addData("USDF",USDF);
+						telemetry.addData("USDB", USDB);
+						avgEnc = getAvgEnc();
+						telemetry.addData("avg Enc", avgEnc);
+						telemetry.addData("curr Enc", currEnc);
+						distMoved = Math.abs(avgEnc - currEnc);
+						switch (caseName) {
+							case "00":
+								if(USDB-USDF >= 4.0) {
+									telemetry.addData("Not drifting","");
+									moveBackwards(speed * 1.2, speed);
+								} else {
+									telemetry.addData("Drifting", "");
+									moveBackwards(speed * 1.2 * 1.3, speed * 0.7);
+								}
+								break;
+							case "01":
+								arcTurnRightToWall(-speed * 1.25);
+								break;
+							case "02":
+								turnParallelToWall(speed * 1.15);
+								break;
+							case "10":
+								arcTurnRightToWall(speed * 1.25);
+								break;
+							case "11":
+								moveBackwards(speed*1.2,speed);
 								break;
 							case "12":
 								arcTurnLeftToWall(speed*1.25);
@@ -1304,9 +1367,17 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(-speed*1.25);
 								break;
 							case "22":
-								moveBackwards(speed * 0.75 * 1.2, speed * 1.25);
+								moveBackwards(speed * 0.7 * 1.2, speed * 1.3);
 								break;
 						}
+						if (colorB.beaconColor().equals("Blue")) {
+							color = "Blue";
+						} else if (colorB.beaconColor().equals("Red")) {
+							color = "Red";
+						} else {
+							color = "Neither";
+						}
+						telemetry.update();
 						idle();
 					}
 				}
@@ -1996,6 +2067,29 @@ public abstract class MyOpMode extends LinearOpMode {
 				moveBackwards(0.03);
 			else
 				moveForwards(0.03);
+			try{pause(0.2);}catch(Exception e){}
+			stopMotors();
+		}
+	}
+
+	public void moveWithEncodersCoast(double speed, int goal) {
+		if(opModeIsActive()) {
+			int currEnc = getAvgEnc();
+			int avgEnc = currEnc;
+			if(speed > 0)
+				moveForwards(speed*1.2,speed);
+			else
+				moveBackwards(speed*1.2,speed);
+			int distMoved = Math.abs(avgEnc - currEnc);
+			while (distMoved < goal && opModeIsActive()) {
+				avgEnc = getAvgEnc();
+				telemetry.addData("avg Enc", avgEnc);
+				telemetry.addData("curr Enc", currEnc);
+				move(1.2 * (-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))));
+				distMoved = Math.abs(avgEnc - currEnc);
+				telemetry.update();
+				idle();
+			}
 			try{pause(0.2);}catch(Exception e){}
 			stopMotors();
 		}
