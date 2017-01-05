@@ -382,9 +382,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void arcTurnRight(double speed)
 	{
 		if(speed > 0)
-			moveForwards(0.05,speed);
+			moveForwards(0.03,speed);
 		else if(speed < 0)
-			moveBackwards(0.05,speed);
+			moveBackwards(0.03,speed);
 	}
 
 	public void arcTurnLeft(double speed) {
@@ -908,31 +908,37 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("color",color);
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB",USDB);
-						telemetry.update();
 						switch (caseName) {
 							case "00":
-								moveForwards(speed*1.2*1.1, speed*0.9);
+								if(USDB-USDF >= 4.0) {
+									telemetry.addData("Not drifting","");
+									moveForwards(speed * 1.2, speed);
+								}
+								else {
+									telemetry.addData("Drifting", "");
+									moveForwards(speed * 1.2 * 1.3, speed * 0.7);
+								}
 								break;
 							case "01":
-								arcTurnRightToWall(-speed * 1.4);
+								arcTurnRightToWall(-speed * 1.25);
 								break;
 							case "02":
 								turnParallelToWall(speed * 1.15);
 								break;
 							case "10":
-								arcTurnRightToWall(speed*1.4);
+								arcTurnRightToWall(speed*1.25);
 								break;
 							case "11":
 								moveForwards(speed*1.2,speed);
 								break;
 							case "12":
-								arcTurnLeftToWall(speed*1.4);
+								arcTurnLeftToWall(speed*1.25);
 								break;
 							case "20":
 								turnParallelToWall(speed*1.15);
 								break;
 							case "21":
-								arcTurnLeftToWall(-speed*1.4);
+								arcTurnLeftToWall(-speed*1.25);
 								break;
 							case "22":
 								moveForwards(speed * 1.2 * 0.75, speed * 1.25);
@@ -946,6 +952,8 @@ public abstract class MyOpMode extends LinearOpMode {
 							color = "Neither";
 						}
 						idle();
+
+						telemetry.update();
 					}
 				}
 				else
