@@ -55,15 +55,15 @@ public class AutoBlueRange extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(0.5);
-        moveWithEncoders(0.3, 2500);
+        moveWithEncoders(0.3, 2200);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(0.2, yawDiff - 6.0);
+        gyroArcTurnRight(0.2, yawDiff - 7.0);
         pause(0.5);
         turnParallelToWall(0.17);
         //17 max
         //9 min
-        stabilizeAlongWallWithRangeForEncoderDist(0.13, 1.0, 3.0, 9, true,2000);
+        //stabilizeAlongWallWithRangeForEncoderDist(0.13, 1.0, 3.0, 9, true,2000);
         stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 2.0, 9, true);
         pause(0.25);
         turnParallelToWall(0.165);
@@ -82,7 +82,7 @@ public class AutoBlueRange extends MyAutonomous {
         turnParallelToWall(0.19);
 
         //stabilizeAlongWallWithRangeForEncoderDist(-0.18, 1.0, 2.0, 13, true, 2000);
-        moveWithEncoders(-0.16,1500);
+        moveWithEncoders(-0.16,2000);
         pause(0.1);
         turnParallelToWall(0.19);
         pause(0.1);
