@@ -14,14 +14,15 @@ public class ShootBlue extends MyAutonomous {
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
         waitForStart();
+        pause(10);
         initCurtime();
         initTime = getCurTime();
-        simpleStabilizingLoop(1.0);
-        moveWithEncoders(-.8, 3700);
-        simpleStabilizingLoop(1.0);
+        moveWithEncoders(-.3, 3800);
+        runSpinner(1.0);
+        pause(3);
         openServoDropper();
+        pause(4);
         initTime = getCurTime();
-        simpleStabilizingLoop(1.5);
         closeServoDropper();
     }
 }

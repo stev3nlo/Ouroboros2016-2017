@@ -14,10 +14,11 @@ public class ShootRed extends MyAutonomous {
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
         waitForStart();
+        wait(10);
         initCurtime();
         initTime = getCurTime();
         simpleStabilizingLoop(1.0);
-        moveWithEncoders(.8, 3700);
+        moveWithEncoders(.6, 3700);
         simpleStabilizingLoop(1.0);
         openServoDropper();
         initTime = getCurTime();
