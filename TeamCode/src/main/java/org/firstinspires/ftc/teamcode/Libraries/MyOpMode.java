@@ -472,7 +472,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			telemetry.addData("newAngle",newAngle);
 			telemetry.update();
 			newAngle = gyro.getYaw();		//updates the new angle constantly
-			turnLeft(speed * ((1 - ((getAngleDiff(startAngle,newAngle) / targetAngle) / 2))));
+			turnLeft(speed * ((1 - ((getAngleDiff(startAngle, newAngle) / targetAngle) / 2))));
 			idle();
 		}
 		stopMotors();
@@ -744,18 +744,18 @@ public abstract class MyOpMode extends LinearOpMode {
 		int intDiff = (int)diff;
 		switch(intDiff)
 		{
-			case 1: return 0.0;
-			case 2: return 0.0;
-			case 3: return 0.0;
-			case 4: return 0.0;
-			case 5: return 0.0;
-			case 6: return 0.0;
-			case 7: return 0.0;
-			case 8: return 0.0;
+			case 1: return 1.75;
+			case 2: return 5.0;
+			case 3: return 6.1;
+			case 4: return 9.8;
+			case 5: return 10.1;
+			case 6: return 13.7;
+			case 7: return 15.4;
+			case 8: return 18.25;
 		}
-		return 0.0;
+		return 18.25;
 	}
-	public void turnParallelToWallWithGyro(double speed) throws InterruptedException{
+	public void turnParallelToWallWithGyro(double speed, double count) throws InterruptedException{
 		double USDF = -1;
 		double USDB = -1;
 		boolean broken = false;
@@ -768,6 +768,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			{
 				telemetry.addData("USDF", USDF);
 				telemetry.addData("USDB", USDB);
+				telemetry.addData("count",count);
 				telemetry.update();
 				initCurtime();
 				if(getCurTime() - startTime > 1.5) {
@@ -776,19 +777,19 @@ public abstract class MyOpMode extends LinearOpMode {
 				}
 				idle();
 			}
-			if (USDF > USDB) {
-				gyroTurnRight(speed,lookUpTurningAngleForRangeDiff(USDF - USDB));
+			if (!broken && USDF > USDB) {
+				gyroTurnRight(speed, lookUpTurningAngleForRangeDiff(USDF - USDB));
 				turnLeft(0.03);
-			} else if (USDB > USDF){
+			} else if (!broken && USDB > USDF){
 				gyroTurnLeft(speed,lookUpTurningAngleForRangeDiff(USDB-USDF));
 				turnRight(0.03);
 			}
 		}
 		try{pause(0.25);}catch(InterruptedException e){}
 		double endYaw = gyro.getYaw();
-		if(!broken && (Math.abs(USDF - USDB) >= 1.0))
+		if(count < 3 && !broken && (Math.abs(USDF - USDB) >= 1.0))
 		{
-			turnParallelToWall(speed-0.01);
+			turnParallelToWallWithGyro(speed - 0.01, count + 1);
 		}
 	}
 
@@ -849,7 +850,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		double endYaw = gyro.getYaw();
 		if(!broken && (Math.abs(USDF - USDB) >= 1.0 || getAngleDiff(startYaw,endYaw) >= 5.0))
 		{
-			turnParallelToWall(speed-0.01);
+			turnParallelToWall(speed - 0.01);
 		}
 	}
 
@@ -884,6 +885,80 @@ public abstract class MyOpMode extends LinearOpMode {
 			name += "1";
 		}
 		return name;
+	}
+
+	public boolean driveAlongWallToBeaconOrForUnits(double speed, boolean isBlue, int encoderDist)
+	{
+		boolean foundBeacon = false;
+		String color;
+		if (colorB.beaconColor().equals("Blue"))
+		{
+			color = "Blue";
+		}
+		else if (colorB.beaconColor().equals("Red"))
+		{
+			color = "Red";
+		}
+		else
+		{
+			color = "Neither";
+		}
+		int currEnc = getAvgEnc();
+		int avgEnc = currEnc;
+		int distMoved = Math.abs(avgEnc - currEnc);
+		if(isBlue)
+		{
+			while (!color.equals("Blue") && distMoved < encoderDist && opModeIsActive()) {
+				avgEnc = getAvgEnc();
+				distMoved = Math.abs(avgEnc - currEnc);
+				if (speed > 0)
+					moveForwards(speed*1.2,speed);
+				else
+					moveBackwards(-speed*1.2,speed);
+				if (colorB.beaconColor().equals("Blue"))
+				{
+					color = "Blue";
+				}
+				else if (colorB.beaconColor().equals("Red"))
+				{
+					color = "Red";
+				}
+				else
+				{
+					color = "Neither";
+				}
+				telemetry.addData("color", color);
+				telemetry.update();
+				idle();
+			}
+		}
+		else
+		{
+			while(!color.equals("Red") && distMoved < encoderDist && opModeIsActive())
+			{
+				avgEnc = getAvgEnc();
+				distMoved = Math.abs(avgEnc - currEnc);
+				if (speed > 0)
+					moveForwards(speed*1.2,speed);
+				else
+					moveBackwards(-speed*1.2,speed);
+				if (colorB.beaconColor().equals("Blue")) {
+					color = "Blue";
+				} else if (colorB.beaconColor().equals("Red")) {
+					color = "Red";
+				} else {
+					color = "Neither";
+				}
+				telemetry.addData("color", color);
+				telemetry.update();
+				idle();
+			}
+		}
+		if(speed > 0)
+			moveBackwards(0.03);
+		else
+			moveForwards(0.03);
+		return foundBeacon;
 	}
 
 	public void driveAlongWallToBeacon(double speed, boolean isBlue)
@@ -952,7 +1027,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			moveForwards(0.03);
 	}
 
-	public void stabilizeAlongWallWithRangeToBeacon(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue)
+	public void stabilizeAlongWallWithRangeToBeacon(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue) throws InterruptedException
 	{
 		double USDF;
 		double USDB;
@@ -987,7 +1062,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(speed * 1.25);
 								break;
 							case "02":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "10":
 								arcTurnRightToWall(-speed*1.25);
@@ -999,7 +1074,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(speed*1.25);
 								break;
 							case "20":
-								turnParallelToWall(speed*1.15);
+								turnParallelToWallWithGyro(speed*1.15,0);
 								break;
 							case "21":
 								arcTurnLeftToWall(-speed*1.25);
@@ -1046,7 +1121,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(speed * 1.25);
 								break;
 							case "02":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "10":
 								arcTurnRightToWall(-speed * 1.25);
@@ -1058,7 +1133,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(speed * 1.25);
 								break;
 							case "20":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "21":
 								arcTurnLeftToWall(-speed * 1.25);
@@ -1106,7 +1181,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(speed*1.25);
 								break;
 							case "02":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "10":
 								arcTurnRightToWall(-speed*1.25);
@@ -1118,7 +1193,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(speed*1.25);
 								break;
 							case "20":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "21":
 								arcTurnLeftToWall(-speed*1.25);
@@ -1163,7 +1238,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(speed * 1.25);
 								break;
 							case "02":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "10":
 								arcTurnRightToWall(-speed * 1.25);
@@ -1205,7 +1280,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		telemetry.update();
 	}
 
-	public void stabilizeAlongWallWithRangeForEncoderDist(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue, int encoderDist)
+	public void stabilizeAlongWallWithRangeForEncoderDist(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue, int encoderDist) throws InterruptedException
 	{
 		double USDF;
 		double USDB;
@@ -1245,7 +1320,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(-speed * 1.25);
 								break;
 							case "02":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15,0);
 								break;
 							case "10":
 								arcTurnRightToWall(speed*1.25);
@@ -1257,7 +1332,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(speed*1.25);
 								break;
 							case "20":
-								turnParallelToWall(speed*1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "21":
 								arcTurnLeftToWall(-speed*1.25);
@@ -1300,7 +1375,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(-speed * 1.25);
 								break;
 							case "02":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "10":
 								arcTurnRightToWall(speed * 1.25);
@@ -1312,7 +1387,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(speed * 1.25);
 								break;
 							case "20":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15,0);
 								break;
 							case "21":
 								arcTurnLeftToWall(-speed * 1.25);
@@ -1358,7 +1433,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(-speed*1.25);
 								break;
 							case "02":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "10":
 								arcTurnRightToWall(speed*1.25);
@@ -1370,7 +1445,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(speed*1.25);
 								break;
 							case "20":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "21":
 								arcTurnLeftToWall(-speed*1.25);
@@ -1414,7 +1489,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnRightToWall(-speed * 1.25);
 								break;
 							case "02":
-								turnParallelToWall(speed * 1.15);
+								turnParallelToWallWithGyro(speed * 1.15, 0);
 								break;
 							case "10":
 								arcTurnRightToWall(speed * 1.25);
@@ -1426,7 +1501,7 @@ public abstract class MyOpMode extends LinearOpMode {
 								arcTurnLeftToWall(speed*1.25);
 								break;
 							case "20":
-								turnParallelToWall(speed*1.15);
+								turnParallelToWallWithGyro(speed*1.15,0);
 								break;
 							case "21":
 								arcTurnLeftToWall(-speed*1.25);

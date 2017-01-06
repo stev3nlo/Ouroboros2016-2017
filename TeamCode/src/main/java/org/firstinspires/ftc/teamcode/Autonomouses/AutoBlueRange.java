@@ -48,28 +48,33 @@ public class AutoBlueRange extends MyAutonomous {
         double startTime = getCurTime();
         runSpinner(1.0);
         pause(0.1);
-        moveWithEncoders(.3, 3700);
-        pause(0.5);
+        moveWithEncoders(0.32, 3500);
+        pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
-        pause(0.5);
-        moveWithEncoders(0.3, 2200);
+        pause(0.25);
+        moveWithEncoders(0.25, 2200);
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(0.2, yawDiff - 7.0);
-        pause(0.5);
-        turnParallelToWall(0.17);
+        pause(0.1);
+        turnParallelToWallWithGyro(0.21,0);
         //17 max
         //9 min
-        //stabilizeAlongWallWithRangeForEncoderDist(0.13, 1.0, 3.0, 9, true,2000);
-        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 2.0, 9, true);
-        pause(0.25);
-        turnParallelToWall(0.165);
-        pause(0.25);
-        driveAlongWallToBeacon(-0.105, true);
-        pause(0.25);
+        stabilizeAlongWallWithRangeForEncoderDist(0.14, 1.0, 4.0, 10, true, 1000);
+        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 4.0, 10, true);
+        pause(0.1);
+        turnParallelToWallWithGyro(0.21, 0);
+        pause(0.1);
+
+        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(0.105,true,400);
+        if(!foundBeacon) {
+            pause(0.2);
+            driveAlongWallToBeacon(-0.105, true);
+        }
+        pause(0.1);
         pushButton();
         pause(0.25);
 
@@ -79,12 +84,12 @@ public class AutoBlueRange extends MyAutonomous {
             pushButton();
         }
 
-        turnParallelToWall(0.19);
+        turnParallelToWallWithGyro(0.21,0);
 
         //stabilizeAlongWallWithRangeForEncoderDist(-0.18, 1.0, 2.0, 13, true, 2000);
         moveWithEncoders(-0.16,2000);
         pause(0.1);
-        turnParallelToWall(0.19);
+        turnParallelToWallWithGyro(0.21,0);
         pause(0.1);
         driveAlongWallToBeacon(-0.115,  true);
 
@@ -93,14 +98,14 @@ public class AutoBlueRange extends MyAutonomous {
 
         if(getCurTime() - startTime < 24.0) {
             pause(0.25);
-            turnParallelToWall(0.18);
+            turnParallelToWallWithGyro(0.21,0);
             pause(0.25);
             driveAlongWallToBeacon(0.1, true);
             pushButton();
         }
         else if(getCurTime() - startTime < 26.0) {
             pause(0.25);
-            turnParallelToWall(0.18);
+            turnParallelToWallWithGyro(0.21,0);
             pause(0.25);
             pushButton();
         }

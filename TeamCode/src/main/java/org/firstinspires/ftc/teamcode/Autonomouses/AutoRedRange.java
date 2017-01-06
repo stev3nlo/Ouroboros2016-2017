@@ -63,15 +63,20 @@ public class AutoRedRange extends MyAutonomous {
         gyroArcTurnRight(-0.2, yawDiff - 6.0);
 
         pause(0.25);
-        turnParallelToWall(0.17);
+        turnParallelToWallWithGyro(0.2, 0);
+        pause(0.1);
         //17 max
         //9 min
         stabilizeAlongWallWithRangeForEncoderDist(-0.14, 1.0, 4.0, 10, false, 1000);
         stabilizeAlongWallWithRangeToBeacon(-0.125, 1.0, 4.0, 10, false);
         pause(0.1);
-        turnParallelToWall(0.165);
+        turnParallelToWallWithGyro(0.2,0);
         pause(0.1);
-        driveAlongWallToBeacon(0.105, false);
+        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(-0.105,false,400);
+        if(!foundBeacon) {
+            pause(0.2);
+            driveAlongWallToBeacon(0.105, false);
+        }
         pause(0.1);
 
         pushButton();
@@ -83,28 +88,28 @@ public class AutoRedRange extends MyAutonomous {
             pushButton();
         }
 
-        turnParallelToWall(0.19);
+        turnParallelToWallWithGyro(0.21,0);
         pause(0.1);
 
-        moveWithEncodersCoast(0.4, 2000);
+        moveWithEncoders(0.4, 2000);
+        pause(0.25);
+        turnParallelToWallWithGyro(0.2,0);
         pause(0.1);
-        turnParallelToWall(0.19);
-        pause(0.1);
-        stabilizeAlongWallWithRangeToBeacon(0.125, 1.0, 3.0, 11, false);
+        stabilizeAlongWallWithRangeToBeacon(0.125, 1.0, 4.0, 10, false);
 
 
         initCurtime();
 
         if(getCurTime() - startTime < 24.0) {
             pause(0.25);
-            turnParallelToWall(0.18);
+            turnParallelToWallWithGyro(0.21,0);
             pause(0.25);
             driveAlongWallToBeacon(-0.1, false);
             pushButton();
         }
         else if(getCurTime() - startTime < 26.0) {
             pause(0.25);
-            turnParallelToWall(0.18);
+            turnParallelToWallWithGyro(0.21,0);
             pause(0.25);
             pushButton();
         }

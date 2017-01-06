@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.TestFiles;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Turn Parallel to Wall Test", group="Test")
+@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Turn Parallel to Wall Test", group="Test")
 public class TurnToWallTest extends MyAutonomous
 {
     public void runOpMode() throws InterruptedException {
@@ -16,6 +16,6 @@ public class TurnToWallTest extends MyAutonomous
             idle();
         }
         waitForStart();
-        turnParallelToWall(0.185);
+        turnParallelToWallWithGyro(0.19,0);
     }
 }
