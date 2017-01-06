@@ -389,9 +389,9 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void arcTurnLeft(double speed) {
 		if(speed > 0)
-			moveForwards(speed,0.05);
+			moveForwards(speed,0.03);
 		else if(speed < 0)
-			moveBackwards(speed,0.05);
+			moveBackwards(speed,0.03);
 	}
 
 	public void gyroArcTurnRight(double speed, double targetAngle) throws InterruptedException
@@ -782,7 +782,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 		try{pause(0.25);}catch(InterruptedException e){}
 		double endYaw = gyro.getYaw();
-		if(!broken && (Math.abs(USDF - USDB) > 2.0 || getAngleDiff(startYaw,endYaw) >= 5.0))
+		if(!broken && (Math.abs(USDF - USDB) >= 1.0 || getAngleDiff(startYaw,endYaw) >= 5.0))
 		{
 			turnParallelToWall(speed-0.01);
 		}
