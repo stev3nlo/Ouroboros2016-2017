@@ -33,7 +33,7 @@ public class AutoRedRange extends MyAutonomous {
         //initializeSensors();
         double startAngle = gyro.getYaw();
         double yawDiff = 0.0;
-        while(!opModeIsActive())
+        while(!opModeIsActive() && !isStopRequested())
         {
             yawDiff = getAngleDiff(startAngle,gyro.getYaw());
             telemetry.addData("yawDiff",yawDiff);

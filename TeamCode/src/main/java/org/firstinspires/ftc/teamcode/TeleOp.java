@@ -120,7 +120,7 @@ public class TeleOp extends MyOpMode
             updateControllerVals();
             initCurtime(); //gets real time timer
             if(driverMode == 0) {
-                move(g1y1, -g1y2); // moves drive wheels
+                move(g1y1, -g1y2/1.2); // moves drive wheels
                 /*motorL1.setPower(1.0);
                 motorL2.setPower(0.0);
                 motorR1.setPower(0.0);
@@ -128,7 +128,7 @@ public class TeleOp extends MyOpMode
                 telemetry.addData("motorL1 being moved", "");*/
             }
             else if(driverMode == 1) {
-                move(g1y1 * 0.75, -g1y2 * 0.75);
+                move(g1y1 * 0.75, (-g1y2 * 0.75) / 1.2);
                 /*motorL1.setPower(0.0);
                 motorL2.setPower(1.0);
                 motorR1.setPower(0.0);
@@ -136,7 +136,7 @@ public class TeleOp extends MyOpMode
                 telemetry.addData("motorL2 being moved", "");*/
             }
             else if(driverMode == 2) {
-                move(g1y1*0.5, -g1y2*0.5);
+                move(g1y1*0.5, (-g1y2*0.5)/1.2);
                 /*motorL1.setPower(0.0);
                 motorL2.setPower(0.0);
                 motorR1.setPower(1.0);
@@ -144,7 +144,7 @@ public class TeleOp extends MyOpMode
                 telemetry.addData("motorR1 being moved", "");*/
             }
             else if(driverMode == 3) {
-                move(g1y1*0.25, -g1y2*0.25);
+                move(g1y1*0.25, (-g1y2*0.25)/1.2);
                 /*motorL1.setPower(0.0);
                 motorL2.setPower(0.0);
                 motorR1.setPower(0.0);

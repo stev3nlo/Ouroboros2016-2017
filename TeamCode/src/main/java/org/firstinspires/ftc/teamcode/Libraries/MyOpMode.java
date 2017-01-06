@@ -448,6 +448,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			telemetry.addData("newAngle",newAngle);
 			telemetry.update();
 			newAngle = gyro.getYaw();		//updates the new angle constantly
+			turnRight(speed * ((1 - ((getAngleDiff(startAngle,newAngle) / targetAngle) / 2))));
 			idle();
 		}
 		stopMotors();
@@ -463,7 +464,18 @@ public abstract class MyOpMode extends LinearOpMode {
 	 * @param targetAngle
 	 */
 	public void gyroTurnLeft(double speed, double targetAngle) throws InterruptedException {
-		gyroTurnRight(-speed, -targetAngle);
+		double startAngle = gyro.getYaw();		//angle of the robot before the turn
+		double newAngle = gyro.getYaw();		//angle of the robot during the turn
+		turnLeft(speed);		//starts the turn
+		while (opModeIsActive() && getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
+			telemetry.addData("startAngle",startAngle);
+			telemetry.addData("newAngle",newAngle);
+			telemetry.update();
+			newAngle = gyro.getYaw();		//updates the new angle constantly
+			turnLeft(speed * ((1 - ((getAngleDiff(startAngle,newAngle) / targetAngle) / 2))));
+			idle();
+		}
+		stopMotors();
 	}
 
 	public double getAngleDiff(double angle1, double angle2)
@@ -703,7 +715,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				USDF = rangeF.getUltraSonicDistance();
 				USDB = rangeB.getUltraSonicDistance();
 				telemetry.addData("arcTurning","to wall");
-				telemetry.addData("USDF",USDF);
+				telemetry.addData("USDF", USDF);
 				telemetry.addData("USDB",USDB);
 				telemetry.update();
 				arcTurnLeft(speed);
@@ -724,6 +736,59 @@ public abstract class MyOpMode extends LinearOpMode {
 				idle();
 
 			}
+		}
+	}
+
+	public double lookUpTurningAngleForRangeDiff(double diff)
+	{
+		int intDiff = (int)diff;
+		switch(intDiff)
+		{
+			case 1: return 0.0;
+			case 2: return 0.0;
+			case 3: return 0.0;
+			case 4: return 0.0;
+			case 5: return 0.0;
+			case 6: return 0.0;
+			case 7: return 0.0;
+			case 8: return 0.0;
+		}
+		return 0.0;
+	}
+	public void turnParallelToWallWithGyro(double speed) throws InterruptedException{
+		double USDF = -1;
+		double USDB = -1;
+		boolean broken = false;
+		double startYaw = gyro.getYaw();
+		if (opModeIsActive()) {
+			USDF = rangeF.getUltraSonicDistance();
+			USDB = rangeB.getUltraSonicDistance();
+			double startTime = getCurTime();
+			while((USDB == -1 || USDF == -1) && opModeIsActive())
+			{
+				telemetry.addData("USDF", USDF);
+				telemetry.addData("USDB", USDB);
+				telemetry.update();
+				initCurtime();
+				if(getCurTime() - startTime > 1.5) {
+					broken = true;
+					break;
+				}
+				idle();
+			}
+			if (USDF > USDB) {
+				gyroTurnRight(speed,lookUpTurningAngleForRangeDiff(USDF - USDB));
+				turnLeft(0.03);
+			} else if (USDB > USDF){
+				gyroTurnLeft(speed,lookUpTurningAngleForRangeDiff(USDB-USDF));
+				turnRight(0.03);
+			}
+		}
+		try{pause(0.25);}catch(InterruptedException e){}
+		double endYaw = gyro.getYaw();
+		if(!broken && (Math.abs(USDF - USDB) >= 1.0))
+		{
+			turnParallelToWall(speed-0.01);
 		}
 	}
 
@@ -2090,8 +2155,6 @@ public abstract class MyOpMode extends LinearOpMode {
 				telemetry.update();
 				idle();
 			}
-			try{pause(0.2);}catch(Exception e){}
-			stopMotors();
 		}
 	}
 
