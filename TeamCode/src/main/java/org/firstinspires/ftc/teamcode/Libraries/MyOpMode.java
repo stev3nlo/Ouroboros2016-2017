@@ -39,6 +39,8 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected double initTime;
 	protected int numCyclesOfSlowingSpinner = 0;
 	protected double timeAtLastSpinnerSlowdown;
+	protected double initAngle = 180.0;
+
 
 
 	//drive train motors
@@ -407,9 +409,9 @@ public abstract class MyOpMode extends LinearOpMode {
 			idle();
 		}
 		if(speed>0)
-			moveBackwards(0.05);
+			turnLeft(0.03);
 		else
-			moveForwards(0.05);
+			turnRight(0.03);
 		try{pause(0.2);}catch(Exception e){}
 	}
 
@@ -443,12 +445,15 @@ public abstract class MyOpMode extends LinearOpMode {
 		double startAngle = gyro.getYaw();		//angle of the robot before the turn
 		double newAngle = gyro.getYaw();		//angle of the robot during the turn
 		turnRight(speed);		//starts the turn
-		while (opModeIsActive() && getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
-			telemetry.addData("startAngle",startAngle);
-			telemetry.addData("newAngle",newAngle);
-			telemetry.update();
+		initCurtime();
+		double startTime = getCurTime();
+		while (getCurTime() - startTime < 1.0 && opModeIsActive() && getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
+			//telemetry.addData("startAngle",startAngle);
+			//telemetry.addData("newAngle",newAngle);
+			//telemetry.update();
 			newAngle = gyro.getYaw();		//updates the new angle constantly
-			turnRight(speed * ((1 - ((getAngleDiff(startAngle,newAngle) / targetAngle) / 2))));
+			turnRight(speed * ((1 - ((getAngleDiff(startAngle,newAngle) / targetAngle) / 1.2))));
+			initCurtime();
 			idle();
 		}
 		stopMotors();
@@ -467,12 +472,15 @@ public abstract class MyOpMode extends LinearOpMode {
 		double startAngle = gyro.getYaw();		//angle of the robot before the turn
 		double newAngle = gyro.getYaw();		//angle of the robot during the turn
 		turnLeft(speed);		//starts the turn
-		while (opModeIsActive() && getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
-			telemetry.addData("startAngle",startAngle);
-			telemetry.addData("newAngle",newAngle);
-			telemetry.update();
+		initCurtime();
+		double startTime = getCurTime();
+		while (getCurTime() - startTime < 1.0 && opModeIsActive() && getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
+			//telemetry.addData("startAngle",startAngle);
+			//telemetry.addData("newAngle",newAngle);
+			//telemetry.update();
 			newAngle = gyro.getYaw();		//updates the new angle constantly
-			turnLeft(speed * ((1 - ((getAngleDiff(startAngle, newAngle) / targetAngle) / 2))));
+			turnLeft(speed * ((1 - ((getAngleDiff(startAngle, newAngle) / targetAngle) / 1.2))));
+			initCurtime();
 			idle();
 		}
 		stopMotors();
@@ -744,6 +752,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		int intDiff = (int)diff;
 		switch(intDiff)
 		{
+			case 0: return 0.0;
 			case 1: return 1.75;
 			case 2: return 5.0;
 			case 3: return 6.1;
@@ -754,6 +763,40 @@ public abstract class MyOpMode extends LinearOpMode {
 			case 8: return 18.25;
 		}
 		return 18.25;
+	}
+	public void turnParallelToWallWithGyroSimple(double speed, double count) throws InterruptedException{
+		double USDF = -1;
+		double USDB = -1;
+		boolean broken = false;
+		double startYaw = gyro.getYaw();
+
+		if (opModeIsActive()) {
+			USDF = rangeF.getUltraSonicDistance();
+			USDB = rangeB.getUltraSonicDistance();
+			String caseName = getCaseNameFromInfo(USDF,USDB,10,4.0);
+			double startTime = getCurTime();
+			while((USDB == -1 || USDF == -1) && opModeIsActive())
+			{
+				telemetry.addData("USDF", USDF);
+				telemetry.addData("USDB", USDB);
+				telemetry.addData("count",count);
+				telemetry.update();
+				initCurtime();
+				if(getCurTime() - startTime > 0.75) {
+					broken = true;
+					break;
+				}
+				idle();
+			}
+			if (!broken && USDF > USDB && !caseName.equals("22")) {
+				gyroTurnRight(speed, lookUpTurningAngleForRangeDiff(USDF - USDB));
+				turnLeft(0.03);
+			} else if (!broken && USDB > USDF && !caseName.equals("00")){
+				gyroTurnLeft(speed,lookUpTurningAngleForRangeDiff(USDB-USDF));
+				turnRight(0.03);
+			}
+		}
+		try{pause(0.25);}catch(InterruptedException e){}
 	}
 	public void turnParallelToWallWithGyro(double speed, double count) throws InterruptedException{
 		double USDF = -1;
@@ -777,19 +820,32 @@ public abstract class MyOpMode extends LinearOpMode {
 				}
 				idle();
 			}
-			if (!broken && USDF > USDB) {
-				gyroTurnRight(speed, lookUpTurningAngleForRangeDiff(USDF - USDB));
-				turnLeft(0.03);
-			} else if (!broken && USDB > USDF){
-				gyroTurnLeft(speed,lookUpTurningAngleForRangeDiff(USDB-USDF));
-				turnRight(0.03);
+			double distFrom180 = getAngleDiff(initAngle,startYaw);
+			double turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+			if(turningAngle > distFrom180 * 1.5) //use distfrom180
+			{
+				if (startYaw > initAngle) {
+					gyroTurnLeft(speed, distFrom180);
+					turnRight(0.03);
+				} else if (USDB > USDF) {
+					gyroTurnRight(speed, distFrom180);
+					turnLeft(0.03);
+				}
+			}
+			else {
+				if (!broken && USDF > USDB) {
+					gyroTurnRight(speed, lookUpTurningAngleForRangeDiff(USDF - USDB));
+					turnLeft(0.03);
+				} else if (!broken && USDB > USDF) {
+					gyroTurnLeft(speed, lookUpTurningAngleForRangeDiff(USDB - USDF));
+					turnRight(0.03);
+				}
 			}
 		}
 		try{pause(0.25);}catch(InterruptedException e){}
-		double endYaw = gyro.getYaw();
-		if(count < 3 && !broken && (Math.abs(USDF - USDB) >= 1.0))
+		if(count < 0 && !broken && (Math.abs(USDF - USDB) >= 1.0))
 		{
-			turnParallelToWallWithGyro(speed - 0.01, count + 1);
+			turnParallelToWallWithGyro(speed, count + 1);
 		}
 	}
 
@@ -1043,45 +1099,57 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("stabilizeAlongWallWithRangeToBeacon","");
 						telemetry.addData("caseName",caseName);
 						telemetry.addData("color",color);
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB", USDB);
-						switch (caseName) {
-							case "00":
-								if(USDB-USDF >= 4.0) {
-									telemetry.addData("Not drifting","");
+						double distFrom180 = getAngleDiff(initAngle,gyro.getYaw());
+						double turningAngle;
+						if(USDF > USDB)
+							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+						else
+							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
+						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						{
+							moveForwards(speed*1.2,speed);
+						}
+						else {
+							switch (caseName) {
+								case "00":
+									if (USDB - USDF >= 5.0) {
+										telemetry.addData("Not drifting", "");
+										moveForwards(speed * 1.2, speed);
+									} else {
+										telemetry.addData("Drifting", "");
+										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+									}
+									break;
+								case "01":
+									arcTurnRightToWall(speed * 1.25);
+									break;
+								case "02":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "10":
+									arcTurnRightToWall(-speed * 1.25);
+									break;
+								case "11":
 									moveForwards(speed * 1.2, speed);
-								}
-								else {
-									telemetry.addData("Drifting", "");
-									moveForwards(speed * 1.2 * 1.3, speed * 0.7);
-								}
-								break;
-							case "01":
-								arcTurnRightToWall(speed * 1.25);
-								break;
-							case "02":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "10":
-								arcTurnRightToWall(-speed*1.25);
-								break;
-							case "11":
-								moveForwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.25);
-								break;
-							case "20":
-								turnParallelToWallWithGyro(speed*1.15,0);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.25);
-								break;
-							case "22":
-								moveForwards(speed * 1.2 * 0.75, speed * 1.25);
-								break;
+									break;
+								case "12":
+									arcTurnLeftToWall(speed * 1.25);
+									break;
+								case "20":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "21":
+									arcTurnLeftToWall(-speed * 1.25);
+									break;
+								case "22":
+									moveForwards(speed * 1.2 * 0.75, speed * 1.25);
+									break;
+							}
 						}
 						if (colorB.beaconColor().equals("Blue")) {
 							color = "Blue";
@@ -1103,44 +1171,57 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("stabilizeAlongWallWithRangeToBeacon","");
 						telemetry.addData("caseName", caseName);
 						telemetry.addData("color",color);
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB", USDB);
-						switch (caseName) {
-							case "00":
-								if(USDF-USDB >= 4.0) {
-									telemetry.addData("Not drifting","");
+						double distFrom180 = getAngleDiff(initAngle,gyro.getYaw());
+						double turningAngle;
+						if(USDF > USDB)
+							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+						else
+							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
+						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						{
+							moveBackwards(speed*1.2,speed);
+						}
+						else {
+							switch (caseName) {
+								case "00":
+									if (USDF - USDB >= 5.0) {
+										telemetry.addData("Not drifting", "");
+										moveBackwards(speed * 1.2, speed);
+									} else {
+										telemetry.addData("Drifting", "");
+										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+									}
+									break;
+								case "01":
+									arcTurnRightToWall(speed * 1.25);
+									break;
+								case "02":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "10":
+									arcTurnRightToWall(-speed * 1.25);
+									break;
+								case "11":
 									moveBackwards(speed * 1.2, speed);
-								} else {
-									telemetry.addData("Drifting", "");
-									moveBackwards(speed * 1.2 * 1.3, speed * 0.7);
-								}
-								break;
-							case "01":
-								arcTurnRightToWall(speed * 1.25);
-								break;
-							case "02":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "10":
-								arcTurnRightToWall(-speed * 1.25);
-								break;
-							case "11":
-								moveBackwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed * 1.25);
-								break;
-							case "20":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed * 1.25);
-								break;
-							case "22":
-								moveBackwards(speed * 1.2 * 0.7, speed * 1.3);
-								break;
+									break;
+								case "12":
+									arcTurnLeftToWall(speed * 1.25);
+									break;
+								case "20":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "21":
+									arcTurnLeftToWall(-speed * 1.25);
+									break;
+								case "22":
+									moveBackwards(speed * 1.2 * 0.7, speed * 1.3);
+									break;
+							}
 						}
 						if (colorB.beaconColor().equals("Blue")) {
 							color = "Blue";
@@ -1163,44 +1244,57 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("stabilizeAlongWallWithRangeToBeacon","");
 						telemetry.addData("caseName",caseName);
 						telemetry.addData("color",color);
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB", USDB);
-						switch (caseName) {
-							case "00":
-								if(USDF-USDB >= 4.0) {
-									telemetry.addData("Not drifting","");
+						double distFrom180 = getAngleDiff(initAngle,gyro.getYaw());
+						double turningAngle;
+						if(USDF > USDB)
+							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+						else
+							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
+						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						{
+							moveForwards(speed*1.2,speed);
+						}
+						else {
+							switch (caseName) {
+								case "00":
+									if (USDF - USDB >= 5.0) {
+										telemetry.addData("Not drifting", "");
+										moveForwards(speed * 1.2, speed);
+									} else {
+										telemetry.addData("Drifting", "");
+										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+									}
+									break;
+								case "01":
+									arcTurnRightToWall(speed * 1.25);
+									break;
+								case "02":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "10":
+									arcTurnRightToWall(-speed * 1.25);
+									break;
+								case "11":
 									moveForwards(speed * 1.2, speed);
-								} else {
-									telemetry.addData("Drifting", "");
-									moveForwards(speed * 1.2 * 1.3, speed * 0.7);
-								}
-								break;
-							case "01":
-								arcTurnRightToWall(speed*1.25);
-								break;
-							case "02":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "10":
-								arcTurnRightToWall(-speed*1.25);
-								break;
-							case "11":
-								moveForwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.25);
-								break;
-							case "20":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.25);
-								break;
-							case "22":
-								moveForwards(speed * 0.7 * 1.2, speed * 1.3);
-								break;
+									break;
+								case "12":
+									arcTurnLeftToWall(speed * 1.25);
+									break;
+								case "20":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "21":
+									arcTurnLeftToWall(-speed * 1.25);
+									break;
+								case "22":
+									moveForwards(speed * 0.7 * 1.2, speed * 1.3);
+									break;
+							}
 						}
 						if (colorB.beaconColor().equals("Blue")) {
 							color = "Blue";
@@ -1220,44 +1314,57 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("stabilizeAlongWallWithRangeToBeacon","");
 						telemetry.addData("caseName",caseName);
 						telemetry.addData("color",color);
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB", USDB);
-						switch (caseName) {
-							case "00":
-								if(USDB-USDF >= 4.0) {
-									telemetry.addData("Not drifting","");
+						double distFrom180 = getAngleDiff(initAngle,gyro.getYaw());
+						double turningAngle;
+						if(USDF > USDB)
+							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+						else
+							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
+						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						{
+							moveBackwards(speed*1.2,speed);
+						}
+						else {
+							switch (caseName) {
+								case "00":
+									if (USDB - USDF >= 5.0) {
+										telemetry.addData("Not drifting", "");
+										moveBackwards(speed * 1.2, speed);
+									} else {
+										telemetry.addData("Drifting", "");
+										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+									}
+									break;
+								case "01":
+									arcTurnRightToWall(speed * 1.25);
+									break;
+								case "02":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "10":
+									arcTurnRightToWall(-speed * 1.25);
+									break;
+								case "11":
 									moveBackwards(speed * 1.2, speed);
-								} else {
-									telemetry.addData("Drifting", "");
-									moveBackwards(speed * 1.2 * 1.3, speed * 0.7);
-								}
-								break;
-							case "01":
-								arcTurnRightToWall(speed * 1.25);
-								break;
-							case "02":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "10":
-								arcTurnRightToWall(-speed * 1.25);
-								break;
-							case "11":
-								moveBackwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.25);
-								break;
-							case "20":
-								turnParallelToWall(speed*1.15);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.25);
-								break;
-							case "22":
-								moveBackwards(speed * 0.7 * 1.2, speed * 1.3);
-								break;
+									break;
+								case "12":
+									arcTurnLeftToWall(speed * 1.25);
+									break;
+								case "20":
+									turnParallelToWall(speed * 1.15);
+									break;
+								case "21":
+									arcTurnLeftToWall(-speed * 1.25);
+									break;
+								case "22":
+									moveBackwards(speed * 0.7 * 1.2, speed * 1.3);
+									break;
+							}
 						}
 						if (colorB.beaconColor().equals("Blue")) {
 							color = "Blue";
@@ -1298,6 +1405,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("stabilizeAlongWallWithRangeForEncoderDist","");
 						telemetry.addData("caseName",caseName);
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB", USDB);
@@ -1305,41 +1413,52 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("avg Enc", avgEnc);
 						telemetry.addData("curr Enc", currEnc);
 						distMoved = Math.abs(avgEnc - currEnc);
-						switch (caseName) {
-							case "00":
-								if(USDB-USDF >= 4.0) {
-									telemetry.addData("Not drifting","");
+						double distFrom180 = getAngleDiff(initAngle,gyro.getYaw());
+						double turningAngle;
+						if(USDF > USDB)
+							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+						else
+							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
+						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						{
+							moveForwards(speed*1.2,speed);
+						}
+						else {
+							switch (caseName) {
+								case "00":
+									if (USDB - USDF >= 5.0) {
+										telemetry.addData("Not drifting", "");
+										moveForwards(speed * 1.2, speed);
+									} else {
+										telemetry.addData("Drifting", "");
+										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+									}
+									break;
+								case "01":
+									arcTurnRightToWall(-speed * 1.25);
+									break;
+								case "02":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "10":
+									arcTurnRightToWall(speed * 1.25);
+									break;
+								case "11":
 									moveForwards(speed * 1.2, speed);
-								}
-								else {
-									telemetry.addData("Drifting", "");
-									moveForwards(speed * 1.2 * 1.3, speed * 0.7);
-								}
-								break;
-							case "01":
-								arcTurnRightToWall(-speed * 1.25);
-								break;
-							case "02":
-								turnParallelToWallWithGyro(speed * 1.15,0);
-								break;
-							case "10":
-								arcTurnRightToWall(speed*1.25);
-								break;
-							case "11":
-								moveForwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.25);
-								break;
-							case "20":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.25);
-								break;
-							case "22":
-								moveForwards(speed * 1.2 * 0.75, speed * 1.25);
-								break;
+									break;
+								case "12":
+									arcTurnLeftToWall(speed * 1.25);
+									break;
+								case "20":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "21":
+									arcTurnLeftToWall(-speed * 1.25);
+									break;
+								case "22":
+									moveForwards(speed * 1.2 * 0.75, speed * 1.25);
+									break;
+							}
 						}
 						telemetry.update();
 						idle();
@@ -1354,6 +1473,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("stabilizeAlongWallWithRangeForEncoderDist","");
 						telemetry.addData("caseName", caseName);
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB", USDB);
@@ -1361,40 +1481,52 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("avg Enc", avgEnc);
 						telemetry.addData("curr Enc", currEnc);
 						distMoved = Math.abs(avgEnc - currEnc);
-						switch (caseName) {
-							case "00":
-								if(USDF-USDB >= 4.0) {
-									telemetry.addData("Not drifting","");
+						double distFrom180 = getAngleDiff(initAngle,gyro.getYaw());
+						double turningAngle;
+						if(USDF > USDB)
+							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+						else
+							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
+						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						{
+							moveBackwards(speed*1.2,speed);
+						}
+						else {
+							switch (caseName) {
+								case "00":
+									if (USDF - USDB >= 5.0) {
+										telemetry.addData("Not drifting", "");
+										moveBackwards(speed * 1.2, speed);
+									} else {
+										telemetry.addData("Drifting", "");
+										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+									}
+									break;
+								case "01":
+									arcTurnRightToWall(-speed * 1.25);
+									break;
+								case "02":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "10":
+									arcTurnRightToWall(speed * 1.25);
+									break;
+								case "11":
 									moveBackwards(speed * 1.2, speed);
-								} else {
-									telemetry.addData("Drifting", "");
-									moveBackwards(speed * 1.2 * 1.3, speed * 0.7);
-								}
-								break;
-							case "01":
-								arcTurnRightToWall(-speed * 1.25);
-								break;
-							case "02":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "10":
-								arcTurnRightToWall(speed * 1.25);
-								break;
-							case "11":
-								moveBackwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed * 1.25);
-								break;
-							case "20":
-								turnParallelToWallWithGyro(speed * 1.15,0);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed * 1.25);
-								break;
-							case "22":
-								moveBackwards(speed * 1.2 * 0.7, speed * 1.3);
-								break;
+									break;
+								case "12":
+									arcTurnLeftToWall(speed * 1.25);
+									break;
+								case "20":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "21":
+									arcTurnLeftToWall(-speed * 1.25);
+									break;
+								case "22":
+									moveBackwards(speed * 1.2 * 0.7, speed * 1.3);
+									break;
+							}
 						}
 						telemetry.update();
 						idle();
@@ -1412,6 +1544,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("stabilizeAlongWallWithRangeForEncoderDist","");
 						telemetry.addData("caseName",caseName);
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB", USDB);
@@ -1419,40 +1552,52 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("avg Enc", avgEnc);
 						telemetry.addData("curr Enc", currEnc);
 						distMoved = Math.abs(avgEnc - currEnc);
-						switch (caseName) {
-							case "00":
-								if(USDF-USDB >= 4.0) {
-									telemetry.addData("Not drifting","");
+						double distFrom180 = getAngleDiff(initAngle,gyro.getYaw());
+						double turningAngle;
+						if(USDF > USDB)
+							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+						else
+							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
+						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						{
+							moveForwards(speed*1.2,speed);
+						}
+						else {
+							switch (caseName) {
+								case "00":
+									if (USDF - USDB >= 5.0) {
+										telemetry.addData("Not drifting", "");
+										moveForwards(speed * 1.2, speed);
+									} else {
+										telemetry.addData("Drifting", "");
+										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+									}
+									break;
+								case "01":
+									arcTurnRightToWall(-speed * 1.25);
+									break;
+								case "02":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "10":
+									arcTurnRightToWall(speed * 1.25);
+									break;
+								case "11":
 									moveForwards(speed * 1.2, speed);
-								} else {
-									telemetry.addData("Drifting", "");
-									moveForwards(speed * 1.2 * 1.3, speed * 0.7);
-								}
-								break;
-							case "01":
-								arcTurnRightToWall(-speed*1.25);
-								break;
-							case "02":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "10":
-								arcTurnRightToWall(speed*1.25);
-								break;
-							case "11":
-								moveForwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.25);
-								break;
-							case "20":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.25);
-								break;
-							case "22":
-								moveForwards(speed * 0.7 * 1.2, speed * 1.3);
-								break;
+									break;
+								case "12":
+									arcTurnLeftToWall(speed * 1.25);
+									break;
+								case "20":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "21":
+									arcTurnLeftToWall(-speed * 1.25);
+									break;
+								case "22":
+									moveForwards(speed * 0.7 * 1.2, speed * 1.3);
+									break;
+							}
 						}
 						telemetry.update();
 						idle();
@@ -1467,6 +1612,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+						telemetry.addData("stabilizeAlongWallWithRangeForEncoderDist","");
 						telemetry.addData("caseName",caseName);
 						telemetry.addData("color",color);
 						telemetry.addData("USDF",USDF);
@@ -1475,40 +1621,52 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("avg Enc", avgEnc);
 						telemetry.addData("curr Enc", currEnc);
 						distMoved = Math.abs(avgEnc - currEnc);
-						switch (caseName) {
-							case "00":
-								if(USDB-USDF >= 4.0) {
-									telemetry.addData("Not drifting","");
+						double distFrom180 = getAngleDiff(initAngle,gyro.getYaw());
+						double turningAngle;
+						if(USDF > USDB)
+							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+						else
+							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
+						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						{
+							moveBackwards(speed*1.2,speed);
+						}
+						else {
+							switch (caseName) {
+								case "00":
+									if (USDB - USDF >= 5.0) {
+										telemetry.addData("Not drifting", "");
+										moveBackwards(speed * 1.2, speed);
+									} else {
+										telemetry.addData("Drifting", "");
+										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+									}
+									break;
+								case "01":
+									arcTurnRightToWall(-speed * 1.25);
+									break;
+								case "02":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "10":
+									arcTurnRightToWall(speed * 1.25);
+									break;
+								case "11":
 									moveBackwards(speed * 1.2, speed);
-								} else {
-									telemetry.addData("Drifting", "");
-									moveBackwards(speed * 1.2 * 1.3, speed * 0.7);
-								}
-								break;
-							case "01":
-								arcTurnRightToWall(-speed * 1.25);
-								break;
-							case "02":
-								turnParallelToWallWithGyro(speed * 1.15, 0);
-								break;
-							case "10":
-								arcTurnRightToWall(speed * 1.25);
-								break;
-							case "11":
-								moveBackwards(speed*1.2,speed);
-								break;
-							case "12":
-								arcTurnLeftToWall(speed*1.25);
-								break;
-							case "20":
-								turnParallelToWallWithGyro(speed*1.15,0);
-								break;
-							case "21":
-								arcTurnLeftToWall(-speed*1.25);
-								break;
-							case "22":
-								moveBackwards(speed * 0.7 * 1.2, speed * 1.3);
-								break;
+									break;
+								case "12":
+									arcTurnLeftToWall(speed * 1.25);
+									break;
+								case "20":
+									turnParallelToWallWithGyro(speed * 1.15, 0);
+									break;
+								case "21":
+									arcTurnLeftToWall(-speed * 1.25);
+									break;
+								case "22":
+									moveBackwards(speed * 0.7 * 1.2, speed * 1.3);
+									break;
+							}
 						}
 						if (colorB.beaconColor().equals("Blue")) {
 							color = "Blue";

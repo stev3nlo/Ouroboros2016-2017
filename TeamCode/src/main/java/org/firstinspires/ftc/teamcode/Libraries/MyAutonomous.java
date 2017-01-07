@@ -16,6 +16,8 @@ public class MyAutonomous extends MyOpMode
         motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);*/
         initializeSensors();
+        pause(1.0);
+        initAngle = gyro.getYaw();
     }
 
     public void simpleStabilizingLoop(double t) throws InterruptedException

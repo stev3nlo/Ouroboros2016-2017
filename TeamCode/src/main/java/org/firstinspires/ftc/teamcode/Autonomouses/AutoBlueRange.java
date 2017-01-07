@@ -46,27 +46,31 @@ public class AutoBlueRange extends MyAutonomous {
         //moveAlongWallToBeacon(.3, 2.0, true);
         initCurtime();
         double startTime = getCurTime();
-        runSpinner(1.0);
+        double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
+        if(batteryLevel > 13.0)
+            runSpinner(0.82);
+        else
+            runSpinner(0.92);
         pause(0.1);
-        moveWithEncoders(0.32, 3500);
+        moveWithEncoders(0.32, 3600);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(0.25);
-        moveWithEncoders(0.25, 2200);
+        moveWithEncoders(0.25, 3200);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(0.2, yawDiff - 7.0);
+        gyroArcTurnRight(0.2, yawDiff - 13.0);
         pause(0.1);
-        turnParallelToWallWithGyro(0.21,0);
+        turnParallelToWallWithGyroSimple(0.195,0);
         //17 max
         //9 min
-        stabilizeAlongWallWithRangeForEncoderDist(0.14, 1.0, 4.0, 10, true, 1000);
-        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 4.0, 10, true);
+        stabilizeAlongWallWithRangeForEncoderDist(0.14, 1.0, 3.0, 11, true, 1000);
+        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 3.0, 11, true);
         pause(0.1);
-        turnParallelToWallWithGyro(0.21, 0);
+        turnParallelToWallWithGyro(0.195, 0);
         pause(0.1);
 
         boolean foundBeacon = driveAlongWallToBeaconOrForUnits(0.105,true,400);
@@ -84,29 +88,43 @@ public class AutoBlueRange extends MyAutonomous {
             pushButton();
         }
 
-        turnParallelToWallWithGyro(0.21,0);
+        turnParallelToWallWithGyro(0.195, 0);
 
-        //stabilizeAlongWallWithRangeForEncoderDist(-0.18, 1.0, 2.0, 13, true, 2000);
-        moveWithEncoders(-0.16,2000);
+        stabilizeAlongWallWithRangeForEncoderDist(-0.19, 1.0, 4.0, 11, true, 2000);
+        //moveWithEncoders(-0.16,2000);
         pause(0.1);
-        turnParallelToWallWithGyro(0.21,0);
+        turnParallelToWallWithGyro(0.195, 0);
         pause(0.1);
-        driveAlongWallToBeacon(-0.115,  true);
+        stabilizeAlongWallWithRangeToBeacon(-0.115, 1.0, 3.0,10, true);
 
 
         initCurtime();
 
-        if(getCurTime() - startTime < 24.0) {
-            pause(0.25);
-            turnParallelToWallWithGyro(0.21,0);
-            pause(0.25);
-            driveAlongWallToBeacon(0.1, true);
+        if(getCurTime() - startTime < 20.0) {
+            turnParallelToWallWithGyro(0.195, 0);
+            pause(0.1);
+            foundBeacon = driveAlongWallToBeaconOrForUnits(-0.105,true, 400);
+            if(!foundBeacon) {
+                pause(0.2);
+                driveAlongWallToBeacon(0.105, true);
+            }
+            pause(0.1);
+            turnParallelToWallWithGyro(0.195, 0);
+            pause(0.1);
             pushButton();
         }
-        else if(getCurTime() - startTime < 26.0) {
-            pause(0.25);
-            turnParallelToWallWithGyro(0.21,0);
-            pause(0.25);
+        else if(getCurTime() - startTime < 24.0) {
+            turnParallelToWallWithGyro(0.195,0);
+            pause(0.1);
+            foundBeacon = driveAlongWallToBeaconOrForUnits(-0.105,true, 400);
+            if(!foundBeacon) {
+                pause(0.2);
+                driveAlongWallToBeacon(0.105, true);
+            }
+            pushButton();
+        }
+        else if(getCurTime() - startTime < 28.0) {
+            foundBeacon = driveAlongWallToBeaconOrForUnits(0.105,true, 400);
             pushButton();
         }
         else
