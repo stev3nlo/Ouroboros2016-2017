@@ -14,15 +14,15 @@ public class ShootRed extends MyAutonomous {
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
         waitForStart();
-        wait(10);
+        pause(10);
         initCurtime();
         initTime = getCurTime();
-        simpleStabilizingLoop(1.0);
-        moveWithEncoders(.6, 3700);
-        simpleStabilizingLoop(1.0);
+        moveWithEncoders(0.3, 4900);
+        runSpinner(1.0);
+        pause(3);
         openServoDropper();
+        pause(4);
         initTime = getCurTime();
-        simpleStabilizingLoop(1.5);
         closeServoDropper();
     }
 }
