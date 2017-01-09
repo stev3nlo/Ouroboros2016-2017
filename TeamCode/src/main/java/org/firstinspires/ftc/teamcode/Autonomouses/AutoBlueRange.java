@@ -59,7 +59,7 @@ public class AutoBlueRange extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(0.25);
-        moveWithEncoders(0.25, 3200);
+        moveWithEncoders(0.25, 3300);
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(0.2, yawDiff - 13.0);

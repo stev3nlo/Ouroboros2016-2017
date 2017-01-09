@@ -57,7 +57,7 @@ public class AutoRedRange extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(0.1);
-        moveWithEncoders(-0.33,3200);
+        moveWithEncoders(-0.33,3400);
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(-0.2, yawDiff - 13.0);
