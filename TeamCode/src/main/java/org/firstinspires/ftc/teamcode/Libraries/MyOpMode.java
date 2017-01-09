@@ -388,6 +388,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		else if(speed < 0)
 			moveBackwards(0.03,speed);
 	}
+	public void arcTurnRightDrift(double speed)
+	{
+		if(speed > 0)
+			moveForwards(speed*.5,speed);
+		else if(speed < 0)
+			moveBackwards(speed*.5,speed);
+	}
 
 	public void arcTurnLeft(double speed) {
 		if(speed > 0)
@@ -692,7 +699,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				telemetry.update();
 				USDF = rangeF.getUltraSonicDistance();
 				USDB = rangeB.getUltraSonicDistance();
-				arcTurnRight(speed);
+				arcTurnRightDrift(speed);
 				idle();
 			}
 		}
@@ -706,7 +713,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				telemetry.update();
 				USDF = rangeF.getUltraSonicDistance();
 				USDB = rangeB.getUltraSonicDistance();
-				arcTurnRight(speed);
+				arcTurnRightDrift(speed);
 				idle();
 			}
 		}
@@ -973,6 +980,7 @@ public abstract class MyOpMode extends LinearOpMode {
 					moveBackwards(-speed*1.2,speed);
 				if (colorB.beaconColor().equals("Blue"))
 				{
+					foundBeacon = true;
 					color = "Blue";
 				}
 				else if (colorB.beaconColor().equals("Red"))
@@ -1001,6 +1009,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				if (colorB.beaconColor().equals("Blue")) {
 					color = "Blue";
 				} else if (colorB.beaconColor().equals("Red")) {
+					foundBeacon = true;
 					color = "Red";
 				} else {
 					color = "Neither";
@@ -1122,7 +1131,7 @@ public abstract class MyOpMode extends LinearOpMode {
 										moveForwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveForwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1194,7 +1203,7 @@ public abstract class MyOpMode extends LinearOpMode {
 										moveBackwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveBackwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1267,7 +1276,7 @@ public abstract class MyOpMode extends LinearOpMode {
 										moveForwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveForwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1337,7 +1346,7 @@ public abstract class MyOpMode extends LinearOpMode {
 										moveBackwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveBackwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1431,7 +1440,7 @@ public abstract class MyOpMode extends LinearOpMode {
 										moveForwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveForwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1499,7 +1508,7 @@ public abstract class MyOpMode extends LinearOpMode {
 										moveBackwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveBackwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1570,7 +1579,7 @@ public abstract class MyOpMode extends LinearOpMode {
 										moveForwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveForwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1639,7 +1648,7 @@ public abstract class MyOpMode extends LinearOpMode {
 										moveBackwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveBackwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
