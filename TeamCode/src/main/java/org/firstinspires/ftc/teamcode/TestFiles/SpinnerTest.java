@@ -61,47 +61,6 @@ public class SpinnerTest extends TeleOp {
         telemetry.update();
     }
 
-    /*
-
-    public double getCurRPM()
-    {
-        if(curTime-timeAtLastRPMUpdate>0.5)
-        {
-            double estimatedCurRPM = getSpinnerEncoderVal() - spinnerEncoderOffset; // gets current ticks
-            spinnerEncoderOffset = getSpinnerEncoderVal();
-
-            estimatedCurRPM /= curTime - timeAtLastRPMUpdate;   // gets time
-            estimatedCurRPM /= 1140;
-
-            timeAtLastRPMUpdate = curTime;
-
-            return estimatedCurRPM;
-        }
-        return curRPM;
-        /*
-        if(firstCycleOfSpinner)
-        {
-            firstCycleOfSpinner = false;
-            timeAtLastStabilization = curTime;
-            spinnerEncoderOffset = getSpinnerEncoderVal();
-            runSpinner(curPowerOfSpinner);
-        }
-        else if (curTime - timeAtLastStabilization > 0.5)
-        {
-            double estimatedCurRPM = getSpinnerEncoderVal() - spinnerEncoderOffset; // gets current ticks
-            spinnerEncoderOffset = getSpinnerEncoderVal();
-
-            estimatedCurRPM /= curTime - timeAtLastStabilization;   // gets time
-            timeAtLastStabilization = curTime;
-            estimatedCurRPM /= 1140;
-
-            curPowerOfSpinner = RPMStabilizer.returnPowerToTry(curPowerOfSpinner, estimatedCurRPM, 700);
-            runSpinner(curPowerOfSpinner);
-        }
-
-    }
-    */
-
     public void checkButtons()
     {
         if(g1YPressed && getCurTime() - timeAtLastButtonPress > 0.2)
@@ -125,18 +84,6 @@ public class SpinnerTest extends TeleOp {
             //curPowerOfMotorSpinner = 0.0;
         }
     }
-
-    /*
-    public void capPower()
-    {
-        if(curPower < -1.0)
-            curPower = -1.0;
-        else if(curPower > 1.0)
-            curPower = 1.0;
-    }
-    */
-
-
 
     public void checkTriggers()
     {
