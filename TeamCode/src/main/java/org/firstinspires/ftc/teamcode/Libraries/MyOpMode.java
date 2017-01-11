@@ -396,6 +396,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		else if(speed < 0)
 			moveBackwards(0.03,speed);
 	}
+	public void arcTurnRightDrift(double speed)
+	{
+		if(speed > 0)
+			moveForwards(speed*.5,speed);
+		else if(speed < 0)
+			moveBackwards(speed*.5,speed);
+	}
 
 	public void arcTurnLeft(double speed) {
 		if(speed > 0)
@@ -700,7 +707,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				telemetry.update();
 				USDF = rangeF.getUltraSonicDistance();
 				USDB = rangeB.getUltraSonicDistance();
-				arcTurnRight(speed);
+				arcTurnRightDrift(speed);
 				idle();
 			}
 		}
@@ -714,7 +721,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				telemetry.update();
 				USDF = rangeF.getUltraSonicDistance();
 				USDB = rangeB.getUltraSonicDistance();
-				arcTurnRight(speed);
+				arcTurnRightDrift(speed);
 				idle();
 			}
 		}
@@ -769,8 +776,17 @@ public abstract class MyOpMode extends LinearOpMode {
 			case 6: return 13.7;
 			case 7: return 15.4;
 			case 8: return 18.25;
+			//unsure cases
+			case 9: return 21.0;
+			case 10: return 24.0;
+			case 11: return 26.6;
+			case 12: return 29.7;
+			case 13: return 32.8;
+			case 14: return 36.0;
+			case 15: return 38.6;
+			case 16: return 42.2;
 		}
-		return 18.25;
+		return 42.2;
 	}
 	public void turnParallelToWallWithGyroSimple(double speed, double count) throws InterruptedException{
 		double USDF = -1;
@@ -981,6 +997,7 @@ public abstract class MyOpMode extends LinearOpMode {
 					moveBackwards(-speed*1.2,speed);
 				if (colorB.beaconColor().equals("Blue"))
 				{
+					foundBeacon = true;
 					color = "Blue";
 				}
 				else if (colorB.beaconColor().equals("Red"))
@@ -1009,6 +1026,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				if (colorB.beaconColor().equals("Blue")) {
 					color = "Blue";
 				} else if (colorB.beaconColor().equals("Red")) {
+					foundBeacon = true;
 					color = "Red";
 				} else {
 					color = "Neither";
@@ -1256,19 +1274,22 @@ public abstract class MyOpMode extends LinearOpMode {
 							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
 						else
 							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
-						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						if(turningAngle > distFrom180 * 3.0) //use distfrom180
 						{
-							moveForwards(speed * 1.2, speed);
+							telemetry.addData("correcting for range sensor","");
+							telemetry.addData("turningAngle",turningAngle);
+							telemetry.addData("distFrom180",distFrom180);
+							moveForwards(speed*1.2,speed);
 						}
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDB - USDF >= 5.0) {
+									if (USDB - USDF >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveForwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveForwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1335,12 +1356,12 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDF - USDB >= 5.0) {
+									if (USDF - USDB >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveBackwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveBackwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1408,12 +1429,12 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDF - USDB >= 5.0) {
+									if (USDF - USDB >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveForwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveForwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1478,12 +1499,12 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDB - USDF >= 5.0) {
+									if (USDB - USDF >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveBackwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveBackwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1572,12 +1593,12 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDB - USDF >= 5.0) {
+									if (USDB - USDF >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveForwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveForwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1640,12 +1661,12 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDF - USDB >= 5.0) {
+									if (USDF - USDB >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveBackwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveBackwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1711,12 +1732,12 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDF - USDB >= 5.0) {
+									if (USDF - USDB >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveForwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveForwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveForwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
@@ -1780,12 +1801,12 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDB - USDF >= 5.0) {
+									if (USDB - USDF >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveBackwards(speed * 1.2, speed);
 									} else {
 										telemetry.addData("Drifting", "");
-										moveBackwards(speed * 1.2 * 1.4, speed * 0.6);
+										moveBackwards(speed * 1.2 * 1.5, speed * 0.5);
 									}
 									break;
 								case "01":
