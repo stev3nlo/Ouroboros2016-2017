@@ -8,11 +8,16 @@ import java.io.Serializable;
 public class DiagnosticData implements Serializable
 {
     protected String motorName;
-    protected double batteryVoltage;
+    protected int batteryVoltage;
     protected double powerSent;
     protected double RPM;
 
-    public DiagnosticData(String motorName, double batteryVoltage, double powerSent, double RPM)
+    public DiagnosticData()
+    {
+
+    }
+
+    public DiagnosticData(String motorName, int batteryVoltage, double powerSent, double RPM)
     {
         this.motorName = motorName;
         this.batteryVoltage = batteryVoltage;
@@ -25,17 +30,17 @@ public class DiagnosticData implements Serializable
         return motorName;
     }
 
-    protected double getBatteryVoltage()
+    public int getBatteryVoltage()
     {
         return batteryVoltage;
     }
 
-    protected double getPowerSent()
+    public double getPowerSent()
     {
         return powerSent;
     }
 
-    protected double RPM()
+    public double RPM()
     {
         return RPM;
     }

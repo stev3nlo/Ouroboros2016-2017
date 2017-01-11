@@ -41,6 +41,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected double timeAtLastSpinnerSlowdown;
 	protected double initAngle = 180.0;
 
+	protected double driftCounterDivisorLeft = 1.0;
+	protected double driftCounterDivisorRight = 1.0;
+
 
 
 	//drive train motors
@@ -160,6 +163,11 @@ public abstract class MyOpMode extends LinearOpMode {
 		reset();
 	}
 
+	public double getVoltage(String motorControllerName)
+	{
+		return hardwareMap.voltageSensor.get(motorControllerName).getVoltage();
+	}
+
 	//initialize sensors
 	public void initializeSensors() throws InterruptedException
 	{
@@ -235,10 +243,10 @@ public abstract class MyOpMode extends LinearOpMode {
 	 */
 	public void move(double speedL, double speedR)
 	{
-		motorL1.setPower(speedL);
-		motorL2.setPower(speedL);
-		motorR1.setPower(speedR);
-		motorR2.setPower(speedR);
+		motorL1.setPower(speedL/driftCounterDivisorLeft);
+		motorL2.setPower(speedL/driftCounterDivisorLeft);
+		motorR1.setPower(speedR/driftCounterDivisorRight);
+		motorR2.setPower(speedR/driftCounterDivisorRight);
 	}
 
 	public void moveManip(double speed)
@@ -820,7 +828,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				}
 				idle();
 			}
-			double distFrom180 = getAngleDiff(initAngle,startYaw);
+			double distFrom180 = getAngleDiff(initAngle, startYaw);
 			double turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
 			if(turningAngle > distFrom180 * 1.5) //use distfrom180
 			{
@@ -1083,6 +1091,144 @@ public abstract class MyOpMode extends LinearOpMode {
 			moveForwards(0.03);
 	}
 
+	public void moveStraight(double speed, boolean isForward)
+	{
+		if(isForward)
+		{
+			moveForwards(speed * 1.2, speed);
+		}
+		else
+		{
+			moveBackwards(speed*1.2,speed);
+		}
+	}
+
+	public void moveStraightDriftLeft(double speed, boolean isForward)
+	{
+		double driftMultiplierLeftSide = 1.4;
+		double driftMultiplierRightSide = 0.6;
+		if(isForward)
+		{
+			moveForwards(speed *driftMultiplierLeftSide, speed * driftMultiplierRightSide);
+		}
+		else
+		{
+			moveBackwards(speed * driftMultiplierLeftSide, speed * driftMultiplierRightSide);
+		}
+	}
+
+	public void moveStraightDriftRight(double speed, boolean isForward)
+	{
+		if(speed < 0)
+			speed *= -1;
+		double driftMultiplierLeftSide = 1.25;
+		if(isForward)
+		{
+			moveForwards(speed * driftMultiplierLeftSide, speed * 0.75);
+		}
+		else
+		{
+			moveBackwards(speed * driftMultiplierLeftSide, speed * 0.6);
+		}
+	}
+
+	public boolean checkIfShouldBeStabilizing(String color, boolean isBlue, boolean isForEncoderDist, int encoderDist, double startEnc, double currEnc)
+	{
+		if(opModeIsActive())
+		{
+			if(isBlue && color.equals("Blue") || !isBlue && color.equals("Red"))
+			{
+				return false;
+			}
+			else if(isForEncoderDist && Math.abs(currEnc - startEnc) > encoderDist)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void stabilizeAlongWall(double speed, double thresholdW, int targetDist, boolean isBlue, boolean isForEncoderDist, int encoderDist) throws InterruptedException
+	{
+		if(!isForEncoderDist)
+			encoderDist = Integer.MAX_VALUE;
+		String color = "Neither";
+		double USDF;
+		double USDB;
+		double startEnc = getAvgEnc();
+		double currEnc = startEnc;
+		boolean isForwards = speed > 0;
+		while(checkIfShouldBeStabilizing(color,isBlue,isForEncoderDist,encoderDist,startEnc,currEnc))
+		{
+			USDF = rangeF.getUltraSonicDistance();
+			USDB = rangeB.getUltraSonicDistance();
+			String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
+			telemetry.addData("stabilizeAlongWallWithRangeToBeacon", "");
+			telemetry.addData("caseName", caseName);
+			telemetry.addData("color", color);
+			telemetry.addData("USDF", USDF);
+			telemetry.addData("USDB", USDB);
+
+			currEnc = getAvgEnc();
+			telemetry.addData("avg Enc", startEnc);
+			telemetry.addData("curr Enc", currEnc);
+			startEnc = Math.abs(startEnc - currEnc);
+
+			double distFrom180 = getAngleDiff(initAngle, gyro.getYaw());
+			double turningAngle;
+			if (USDF > USDB)
+				turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+			else
+				turningAngle = lookUpTurningAngleForRangeDiff(USDB - USDF);
+			switch (caseName) {
+				case "00":
+					if (USDB - USDF >= 6.0) {
+						telemetry.addData("Not drifting", "");
+						moveStraight(speed, true);
+					} else {
+						telemetry.addData("Drifting", "");
+						moveStraightDriftLeft(speed, isForwards);
+					}
+					break;
+				case "01":
+					arcTurnRightToWall(speed * 1.4);
+					break;
+				case "02":
+					turnParallelToWallWithGyro(speed * 1.15, 0);
+					break;
+				case "10":
+					arcTurnRightToWall(-speed * 1.4);
+					break;
+				case "11":
+					moveStraight(speed, isForwards);
+					break;
+				case "12":
+					arcTurnLeftToWall(speed * 1.4);
+					break;
+				case "20":
+					turnParallelToWallWithGyro(speed * 1.15, 0);
+					break;
+				case "21":
+					arcTurnLeftToWall(-speed * 1.4);
+					break;
+				case "22":
+					moveStraightDriftRight(speed, isForwards);
+					break;
+			}
+			if (colorB.beaconColor().equals("Blue")) {
+				color = "Blue";
+			} else if (colorB.beaconColor().equals("Red")) {
+				color = "Red";
+			} else {
+				color = "Neither";
+			}
+			telemetry.update();
+			idle();
+		}
+	}
+
+	/*
+
 	public void stabilizeAlongWallWithRangeToBeacon(double speed, double thresholdA, double thresholdW, int targetDist, boolean isBlue) throws InterruptedException
 	{
 		double USDF;
@@ -1112,7 +1258,7 @@ public abstract class MyOpMode extends LinearOpMode {
 							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
 						if(turningAngle > distFrom180 * 2.0) //use distfrom180
 						{
-							moveForwards(speed*1.2,speed);
+							moveForwards(speed * 1.2, speed);
 						}
 						else {
 							switch (caseName) {
@@ -1398,10 +1544,10 @@ public abstract class MyOpMode extends LinearOpMode {
 			{
 				if(speed > 0)
 				{
-					int currEnc = getAvgEnc();
-					int avgEnc = currEnc;
-					int distMoved = Math.abs(avgEnc - currEnc);
-					while (distMoved < encoderDist && opModeIsActive()) {
+					int startEnc = getAvgEnc();
+					//int avgEnc = currEnc;
+					//int distMoved = Math.abs(avgEnc - currEnc);
+					while (startEnc < encoderDist && opModeIsActive()) {
 						USDF = rangeF.getUltraSonicDistance();
 						USDB = rangeB.getUltraSonicDistance();
 						String caseName = getCaseNameFromInfo(USDF, USDB, targetDist, thresholdW);
@@ -1409,10 +1555,10 @@ public abstract class MyOpMode extends LinearOpMode {
 						telemetry.addData("caseName",caseName);
 						telemetry.addData("USDF",USDF);
 						telemetry.addData("USDB", USDB);
-						avgEnc = getAvgEnc();
-						telemetry.addData("avg Enc", avgEnc);
-						telemetry.addData("curr Enc", currEnc);
-						distMoved = Math.abs(avgEnc - currEnc);
+						//avgEnc = getAvgEnc();
+						//telemetry.addData("avg Enc", avgEnc);
+						//telemetry.addData("curr Enc", currEnc);
+						//distMoved = Math.abs(avgEnc - currEnc);
 						double distFrom180 = getAngleDiff(initAngle,gyro.getYaw());
 						double turningAngle;
 						if(USDF > USDB)

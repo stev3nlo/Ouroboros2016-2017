@@ -30,7 +30,8 @@ public class TeleOp extends MyOpMode
     int numLoopsRemainining;
     double timeAtLastLoop;
     double timePerLoop = 1.0;
-    public int driverMode = 1;
+    public int driverModeLeft = 1;
+    public int driverModeRight = 1;
 
     public double g2y1;    //lift
     public double g2y2;    //manipulator
@@ -119,47 +120,54 @@ public class TeleOp extends MyOpMode
         {
             updateControllerVals();
             initCurtime(); //gets real time timer
-            if(driverMode == 0) {
-                move(g1y1, -g1y2/1.2); // moves drive wheels
-                /*motorL1.setPower(1.0);
+
+            if(g1Ltrig > 0.3)
+                driverModeLeft = 3;
+            else if(g1Lbump)
+                driverModeLeft = 2;
+            else
+                driverModeLeft = 1;
+
+            if(g1Rtrig > 0.3)
+                driverModeRight = 3;
+            else if(g1Rbump)
+                driverModeRight = 2;
+            else
+                driverModeRight = 1;
+            if(g1y1 > 0.1 || g1y1 < -0.1) {
+                if (driverModeLeft == 1) {
+                    motorL1.setPower(g1y1);
+                    motorL2.setPower(g1y1);
+                } else if (driverModeLeft == 2) {
+                    motorL1.setPower(g1y1 * 0.66);
+                    motorL2.setPower(g1y1 * 0.66);
+                } else {
+                    motorL1.setPower(g1y1 * 0.33);
+                    motorL2.setPower(g1y1 * 0.33);
+                }
+            }
+            else
+            {
+                motorL1.setPower(0.0);
                 motorL2.setPower(0.0);
+            }
+            if(g1y2 > 0.1 || g1y2 < -0.1) {
+                if (driverModeLeft == 1) {
+                    motorR1.setPower(-g1y2);
+                    motorR2.setPower(-g1y2);
+                } else if (driverModeLeft == 2) {
+                    motorR1.setPower(-g1y2 * 0.66);
+                    motorR2.setPower(-g1y2 * 0.66);
+                } else {
+                    motorR1.setPower(-g1y2 * 0.33);
+                    motorR2.setPower(-g1y2 * 0.33);
+                }
+            }
+            else
+            {
                 motorR1.setPower(0.0);
                 motorR2.setPower(0.0);
-                telemetry.addData("motorL1 being moved", "");*/
             }
-            else if(driverMode == 1) {
-                move(g1y1 * 0.75, (-g1y2 * 0.75) / 1.2);
-                /*motorL1.setPower(0.0);
-                motorL2.setPower(1.0);
-                motorR1.setPower(0.0);
-                motorR2.setPower(0.0);
-                telemetry.addData("motorL2 being moved", "");*/
-            }
-            else if(driverMode == 2) {
-                move(g1y1*0.5, (-g1y2*0.5)/1.2);
-                /*motorL1.setPower(0.0);
-                motorL2.setPower(0.0);
-                motorR1.setPower(1.0);
-                motorR2.setPower(0.0);
-                telemetry.addData("motorR1 being moved", "");*/
-            }
-            else if(driverMode == 3) {
-                move(g1y1*0.25, (-g1y2*0.25)/1.2);
-                /*motorL1.setPower(0.0);
-                motorL2.setPower(0.0);
-                motorR1.setPower(0.0);
-                motorR2.setPower(1.0);
-                telemetry.addData("motorR2 being moved", "");*/
-            }
-            if(g1APressed) {
-                driverMode = 0;
-            }
-            else if(g1BPressed)
-                driverMode = 1;
-            else if(g1YPressed)
-                driverMode = 2;
-            else if(g1XPressed)
-                driverMode = 3;
             moveManip(g2y1);
 
             //Stabilization
@@ -168,40 +176,12 @@ public class TeleOp extends MyOpMode
             {
                 shooterIsRunning = false;
                 runSpinner(0.0);
-                /*
-                shooterIsRunning = false;
-                firstCycleOfSpinner = true;
-                if(numCyclesOfSlowingSpinner==-1)
-                {
-                    numCyclesOfSlowingSpinner = 20;
-                    timeAtLastSpinnerSlowdown = getCurTime();
-                }
-                if(numCyclesOfSlowingSpinner >= 0 && getCurTime() - timeAtLastSpinnerSlowdown >= 0.3)
-                {
-                    runSpinner(curPowerOfMotorSpinner*((double)numCyclesOfSlowingSpinner/20.0));
-                    timeAtLastSpinnerSlowdown = getCurTime();
-                    if(numCyclesOfSlowingSpinner > 0)
-               --=0-=09-==-0980=r    numCyclesOfSlowingSpinner--;
-                }
-                */
             }
             //creates constant speed of spinner throughout game
             if(g2XPressed || shooterIsRunning)
             {
                 shooterIsRunning = true;
-                runSpinner(0.9);
-                /*
-                shooterIsRunning = true;
-                if(firstCycleOfSpinner) {
-                    firstCycleOfSpinner = false;
-                    initTime = getCurTime();
-                    timeAtLastStabilization = getCurTime();
-                    numCyclesOfSlowingSpinner = -1;
-                }
-                runRPMStabilization();
-
-                runSpinner(curPowerOfMotorSpinner);
-                */
+                runSpinner(0.84);
             }
 
 
@@ -220,10 +200,7 @@ public class TeleOp extends MyOpMode
             }
             */
 
-
-
             // stops spinner
-
 
             //releases balls from basket into spinner
             if (g2APressed)// && shooterIsRunning)
