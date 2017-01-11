@@ -134,34 +134,40 @@ public class TeleOp extends MyOpMode
                 driverModeRight = 2;
             else
                 driverModeRight = 1;
-            if(driverModeLeft == 1) {
-                motorL1.setPower(g1y1);
-                motorL2.setPower(g1y2);
-            }
-            else if(driverModeLeft == 2)
-            {
-                motorL1.setPower(g1y1*0.66);
-                motorL2.setPower(g1y1*0.66);
+            if(g1y1 > 0.1 || g1y1 < -0.1) {
+                if (driverModeLeft == 1) {
+                    motorL1.setPower(g1y1);
+                    motorL2.setPower(g1y1);
+                } else if (driverModeLeft == 2) {
+                    motorL1.setPower(g1y1 * 0.66);
+                    motorL2.setPower(g1y1 * 0.66);
+                } else {
+                    motorL1.setPower(g1y1 * 0.33);
+                    motorL2.setPower(g1y1 * 0.33);
+                }
             }
             else
             {
-                motorL1.setPower(g1y1*0.33);
-                motorL2.setPower(g1y1*0.33);
+                motorL1.setPower(0.0);
+                motorL2.setPower(0.0);
             }
 
-            if(driverModeLeft == 1) {
-                motorR1.setPower(-g1y1);
-                motorR2.setPower(-g1y2);
-            }
-            else if(driverModeLeft == 2)
-            {
-                motorR1.setPower(-g1y1*0.66);
-                motorR2.setPower(-g1y1*0.66);
+            if(g1y2 > 0.1 || g1y2 < -0.1) {
+                if (driverModeRight == 1) {
+                    motorR1.setPower(-g1y2);
+                    motorR2.setPower(-g1y2);
+                } else if (driverModeRight == 2) {
+                    motorR1.setPower(-g1y2 * 0.66);
+                    motorR2.setPower(-g1y2 * 0.66);
+                } else {
+                    motorR1.setPower(-g1y2 * 0.33);
+                    motorR2.setPower(-g1y2 * 0.33);
+                }
             }
             else
             {
-                motorR1.setPower(-g1y1*0.33);
-                motorR2.setPower(-g1y1*0.33);
+                motorR1.setPower(0.0);
+                motorR2.setPower(0.0);
             }
             moveManip(g2y1);
 

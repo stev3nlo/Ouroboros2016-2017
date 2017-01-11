@@ -768,8 +768,17 @@ public abstract class MyOpMode extends LinearOpMode {
 			case 6: return 13.7;
 			case 7: return 15.4;
 			case 8: return 18.25;
+			//unsure cases
+			case 9: return 21.0;
+			case 10: return 24.0;
+			case 11: return 26.6;
+			case 12: return 29.7;
+			case 13: return 32.8;
+			case 14: return 36.0;
+			case 15: return 38.6;
+			case 16: return 42.2;
 		}
-		return 18.25;
+		return 42.2;
 	}
 	public void turnParallelToWallWithGyroSimple(double speed, double count) throws InterruptedException{
 		double USDF = -1;
@@ -1119,14 +1128,17 @@ public abstract class MyOpMode extends LinearOpMode {
 							turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
 						else
 							turningAngle = lookUpTurningAngleForRangeDiff(USDB-USDF);
-						if(turningAngle > distFrom180 * 2.0) //use distfrom180
+						if(turningAngle > distFrom180 * 3.0) //use distfrom180
 						{
+							telemetry.addData("correcting for range sensor","");
+							telemetry.addData("turningAngle",turningAngle);
+							telemetry.addData("distFrom180",distFrom180);
 							moveForwards(speed*1.2,speed);
 						}
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDB - USDF >= 5.0) {
+									if (USDB - USDF >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveForwards(speed * 1.2, speed);
 									} else {
@@ -1198,7 +1210,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDF - USDB >= 5.0) {
+									if (USDF - USDB >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveBackwards(speed * 1.2, speed);
 									} else {
@@ -1271,7 +1283,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDF - USDB >= 5.0) {
+									if (USDF - USDB >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveForwards(speed * 1.2, speed);
 									} else {
@@ -1341,7 +1353,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDB - USDF >= 5.0) {
+									if (USDB - USDF >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveBackwards(speed * 1.2, speed);
 									} else {
@@ -1435,7 +1447,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDB - USDF >= 5.0) {
+									if (USDB - USDF >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveForwards(speed * 1.2, speed);
 									} else {
@@ -1503,7 +1515,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDF - USDB >= 5.0) {
+									if (USDF - USDB >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveBackwards(speed * 1.2, speed);
 									} else {
@@ -1574,7 +1586,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDF - USDB >= 5.0) {
+									if (USDF - USDB >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveForwards(speed * 1.2, speed);
 									} else {
@@ -1643,7 +1655,7 @@ public abstract class MyOpMode extends LinearOpMode {
 						else {
 							switch (caseName) {
 								case "00":
-									if (USDB - USDF >= 5.0) {
+									if (USDB - USDF >= 7.0) {
 										telemetry.addData("Not drifting", "");
 										moveBackwards(speed * 1.2, speed);
 									} else {
