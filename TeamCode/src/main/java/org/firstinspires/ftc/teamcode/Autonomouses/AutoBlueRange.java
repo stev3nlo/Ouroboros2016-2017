@@ -88,12 +88,12 @@ public class AutoBlueRange extends MyAutonomous {
 
         turnParallelToWallWithGyro(0.195, 0);
 
-        //stabilizeAlongWallWithRangeForEncoderDist(-0.19, 1.0, 4.0, 11, true, 2000);
-        //moveWithEncoders(-0.16,2000);
+        //Stabilizes along the wall for encoder distance
+        stabilizeAlongWall(-0.16, 4.0, 11, true, true, 2000);
         pause(0.1);
         turnParallelToWallWithGyro(0.195, 0);
         pause(0.1);
-        //stabilizeAlongWallWithRangeToBeacon(-0.115, 1.0, 3.0,10, true);
+        stabilizeAlongWall(-0.115, 4.0,11, true, false,-1);
 
 
         initCurtime();

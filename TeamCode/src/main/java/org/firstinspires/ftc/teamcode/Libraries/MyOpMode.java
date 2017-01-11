@@ -846,6 +846,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			}
 			double distFrom180 = getAngleDiff(initAngle, startYaw);
 			double turningAngle = lookUpTurningAngleForRangeDiff(USDF - USDB);
+			/*
 			if(turningAngle > distFrom180 * 1.5) //use distfrom180
 			{
 				if (startYaw > initAngle) {
@@ -856,7 +857,7 @@ public abstract class MyOpMode extends LinearOpMode {
 					turnLeft(0.03);
 				}
 			}
-			else {
+			else {*/
 				if (!broken && USDF > USDB) {
 					gyroTurnRight(speed, lookUpTurningAngleForRangeDiff(USDF - USDB));
 					turnLeft(0.03);
@@ -864,7 +865,7 @@ public abstract class MyOpMode extends LinearOpMode {
 					gyroTurnLeft(speed, lookUpTurningAngleForRangeDiff(USDB - USDF));
 					turnRight(0.03);
 				}
-			}
+			//}
 		}
 		try{pause(0.25);}catch(InterruptedException e){}
 		if(count < 0 && !broken && (Math.abs(USDF - USDB) >= 1.0))
