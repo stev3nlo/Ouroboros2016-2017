@@ -151,12 +151,11 @@ public class TeleOp extends MyOpMode
                 motorL1.setPower(0.0);
                 motorL2.setPower(0.0);
             }
-
             if(g1y2 > 0.1 || g1y2 < -0.1) {
-                if (driverModeRight == 1) {
+                if (driverModeLeft == 1) {
                     motorR1.setPower(-g1y2);
                     motorR2.setPower(-g1y2);
-                } else if (driverModeRight == 2) {
+                } else if (driverModeLeft == 2) {
                     motorR1.setPower(-g1y2 * 0.66);
                     motorR2.setPower(-g1y2 * 0.66);
                 } else {

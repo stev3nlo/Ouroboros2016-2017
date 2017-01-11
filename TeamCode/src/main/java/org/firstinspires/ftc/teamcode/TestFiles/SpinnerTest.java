@@ -22,157 +22,163 @@ import java.util.TreeMap;
  * Created by Spencer on 10/20/2016.
  */
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name="Spinner Test", group="Test")
-public class SpinnerTest extends TeleOp {
+public class SpinnerTest extends MyOpMode {
 
-    double targetRPM = 55;
-    double curFactor;
+    public double g1y1;    //left drive
+    public double g1y2;    //right drive
+    public double g1x1;
+    public double g1x2;
+    public boolean g1Lbump;
+    public boolean g1Rbump;
+    public double g1Ltrig;
+    public double g1Rtrig;
+    public boolean g1XPressed;
+    public boolean g1YPressed;
+    public boolean g1APressed;
+    public boolean g1BPressed;
+
+    public double g2y1;    //lift
+    public double g2y2;    //manipulator
+    public double g2x1;
+    public double g2x2;
+    public boolean g2Lbump;    //grab cap ball
+    public boolean g2Rbump;    //release cap ball
+    public double g2Ltrig;
+    public double g2Rtrig;
+    public boolean g2XPressed;     //start shooter spinner
+    public boolean g2YPressed;     //stop shooter spinner
+    public boolean g2APressed;     //toggle servo dropper
+    public boolean g2BPressed;
+
     double timeAtLastRPMUpdate;
-    double timeAtLastButtonPress;
-    double timeAtLastTriggerPress;
-    int targetTicksPerSecond;
-    double calcedRPMOfMotor;
-    boolean isStopped = true;
+    int motorL1StartEncoder;
+    int motorL2StartEncoder;
+    int motorR1StartEncoder;
+    int motorR2StartEncoder;
+    int motorSpinnerStartEncoder;
 
-    TreeMap<Double,Long> RPMs = new TreeMap<Double,Long>();
+    double curRPM;
 
-    //DcMotor motorSpinner;
-
-    public void initialize()
+    public void updateControllerVals()
     {
-        targetTicksPerSecond = ((int)(((double)(encoderTicksPerRotation*targetRPM))/60.0));
-        motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
-        //motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        //motorSpinner.setMaxSpeed(targetTicksPerSecond);
-        curFactor = 100;
-        curPowerOfMotorSpinner = 0.3;
+        g1y1 = gamepad1.left_stick_y;
+        g1y2 = gamepad1.right_stick_y;
+        g1x1 = gamepad1.left_stick_x;
+        g1x2 = gamepad1.right_stick_x;
+        g1Lbump = gamepad1.left_bumper;
+        g1Rbump = gamepad1.right_bumper;
+        g1Ltrig = gamepad1.left_trigger;
+        g1Rtrig = gamepad1.right_trigger;
+        g1XPressed = gamepad1.x;
+        g1APressed = gamepad1.a;
+        g1YPressed = gamepad1.y;
+        g1BPressed = gamepad1.b;
+
+        g2y1 = gamepad2.left_stick_y;
+        g2y2 = gamepad2.right_stick_y;
+        g2x1 = gamepad2.left_stick_x;
+        g2x2 = gamepad2.right_stick_x;
+        g2Lbump = gamepad2.left_bumper;
+        g2Rbump = gamepad2.right_bumper;
+        g2Ltrig = gamepad2.left_trigger;
+        g2Rtrig = gamepad2.right_trigger;
+        g2XPressed = gamepad2.x;
+        g2APressed = gamepad2.a;    //toggle servo dropper
+        g2YPressed = gamepad2.y;
+        g2BPressed = gamepad2.b;
     }
 
-    public void runTelemetry()
+    public double calculateRPM(String motorName)
     {
-        telemetry.addData("calcedRPMOfMotor",calcedRPMOfMotor);
-        telemetry.addData("curFactor",curFactor);
-        telemetry.addData("targetTicksPerSecond",targetTicksPerSecond);
-        telemetry.addData("encoderTicks",getSpinnerEncoderVal());
-        telemetry.addData("targetRPM",targetRPM);
-        telemetry.addData("curPower",curPowerOfMotorSpinner);
-        telemetry.addData("timeSinceLastTimeButtonPress ", getCurTime() - timeAtLastButtonPress);
-        telemetry.addData("timeSinceLastTriggerPress", getCurTime() - timeAtLastTriggerPress);
-        telemetry.addData("curTime",getCurTime());
-        telemetry.update();
+        double startEncoder;
+        double curEncoder;
+        double timePassed;
+        if(motorName.equals("motorL1"))
+        {
+            startEncoder = motorL1StartEncoder;
+            curEncoder = motorL1.getCurrentPosition();
+        }
+        else if(motorName.equals("motorL2"))
+        {
+            startEncoder = motorL2StartEncoder;
+            curEncoder = motorL2.getCurrentPosition();
+        }
+        else if(motorName.equals("motorR1"))
+        {
+            startEncoder = motorR1StartEncoder;
+            curEncoder = motorR1.getCurrentPosition();
+        }
+        else if(motorName.equals("motorR2"))
+        {
+            startEncoder = motorR2StartEncoder;
+            curEncoder = motorR2.getCurrentPosition();
+        }
+        else
+        {
+            startEncoder = motorSpinnerStartEncoder;
+            curEncoder = motorSpinner.getCurrentPosition();
+        }
+        initCurtime();
+        double thisTime = getCurTime();
+        timePassed = thisTime - timeAtLastRPMUpdate;
+        double RPM = (curEncoder - startEncoder) / timePassed;
+        RPM /= 1120;
+        return RPM;
     }
 
-    public void checkButtons()
+    public void runOpMode() throws InterruptedException
     {
-        if(g1YPressed && getCurTime() - timeAtLastButtonPress > 0.2)
-        {
-            timeAtLastButtonPress = getCurTime();
-            curFactor *= 10;
-        }
-        else if(g1APressed && getCurTime() - timeAtLastButtonPress > 0.2)
-        {
-            timeAtLastButtonPress = getCurTime();
-            curFactor /= 10;
-        }
-        else if(isStopped && g1BPressed && getCurTime() - timeAtLastButtonPress > 0.2)
-        {
-            timeAtLastButtonPress = getCurTime();
-            curPowerOfMotorSpinner = 1.0;
-        }
-        else if(!isStopped && g1BPressed && getCurTime() - timeAtLastButtonPress > 0.2)
-        {
-            timeAtLastButtonPress = getCurTime();
-            //curPowerOfMotorSpinner = 0.0;
-        }
-    }
-
-    public void checkTriggers()
-    {
-        if(g1Rtrig > 0.1 && getCurTime() - timeAtLastTriggerPress > 0.2)
-        {
-            targetRPM += curFactor;
-            timeAtLastTriggerPress = getCurTime();
-        }
-        else if(g1Rbump && getCurTime() - timeAtLastTriggerPress > 0.2)
-        {
-            targetRPM -= curFactor;
-            timeAtLastTriggerPress = getCurTime();
-        }
-    }
-
-    public Map.Entry getFirstSetFromHashMap(HashMap<Double,Long> single)
-    {
-        Iterator it = single.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            return pair;
-        }
-        return null;
-    }
-
-    public HashMap<Double,Long> getFirstEncoderTimeSetAfterTime(double t)
-    {
-        HashMap<Double,Long> vals = new HashMap<Double,Long>();
-        Iterator it = RPMs.entrySet().iterator();
-        ArrayList<Double> toRemove = new ArrayList<Double>();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            if((double)pair.getKey()>t)
-            {
-                vals.put((double)pair.getKey(),(long)pair.getValue());
-                break;
-            }
-            else
-            {
-                toRemove.add((double)pair.getKey());
-            }
-            it.remove(); // avoids a ConcurrentModificationException
-        }
-        while(toRemove.size()>0)
-            RPMs.remove(toRemove.remove(0));
-        return vals;
-    }
-
-    public void runOpMode()
-    {
-        initialize();
+        super.runOpMode();
         waitForStart();
+        double speed = 0.0;
         initCurtime();
         timeAtLastRPMUpdate = getCurTime();
-        timeAtLastButtonPress = getCurTime();
-        timeAtLastTriggerPress = getCurTime();
-        RPMs.put(getCurTime(),getSpinnerEncoderVal());
-        double initTime = getCurTime();
+        motorSpinnerStartEncoder = motorSpinner.getCurrentPosition();
         while(opModeIsActive())
         {
             updateControllerVals();
-            initCurtime();
-            checkButtons();
-            checkTriggers();
-            targetTicksPerSecond = ((int)(((double)(encoderTicksPerRotation*targetRPM))/60.0));
-            RPMs.put(getCurTime(),getSpinnerEncoderVal());
-            if(getCurTime() > initTime + 0.35) {
-                HashMap<Double, Long> firstEncoderTimeSetAfterTime = getFirstEncoderTimeSetAfterTime(getCurTime() - 0.3);
-                Map.Entry pair = getFirstSetFromHashMap(firstEncoderTimeSetAfterTime);
-                double oldTime = (double) pair.getKey();
-                long oldEncoderVal = (long) pair.getValue();
-                calcedRPMOfMotor = getSpinnerEncoderVal() - oldEncoderVal;
-                calcedRPMOfMotor /= 1120; //Number of rotations since last run
-                calcedRPMOfMotor /= getCurTime() - oldTime; //Number of rotations per second
-                calcedRPMOfMotor *= 60.0;
-                telemetry.addData("motorRPM", calcedRPMOfMotor);
-                if(calcedRPMOfMotor>targetRPM)
-                    curPowerOfMotorSpinner -= Math.sqrt(Math.abs(((calcedRPMOfMotor - targetRPM)*(calcedRPMOfMotor-targetRPM)*(calcedRPMOfMotor-targetRPM)))) / (750000.0*25);
-                else
-                    curPowerOfMotorSpinner += Math.sqrt(Math.abs(((calcedRPMOfMotor - targetRPM)*(calcedRPMOfMotor-targetRPM)*(calcedRPMOfMotor-targetRPM)))) / (750000.0*25);
-                if (curPowerOfMotorSpinner > 1.0)
-                    curPowerOfMotorSpinner = 1.0;
-                else if (curPowerOfMotorSpinner < 0.0)
-                    curPowerOfMotorSpinner = 0.0;
-                initTime = getCurTime();
+            if(g1Ltrig > 0.3 || g1Rtrig > 0.3)
+            {
+                openServoDropper();
             }
-            motorSpinner.setPower(curPowerOfMotorSpinner);
-            runTelemetry();
+            else if(g1Rbump || g1Lbump)
+                closeServoDropper();
+            if(g1XPressed)
+            {
+                speed += 0.01;
+            }
+            else if(g1YPressed)
+            {
+                speed -= 0.01;
+            }
+            else if(g1APressed)
+            {
+                speed += 0.1;
+            }
+            else if(g1BPressed)
+            {
+                speed -= 0.1;
+            }
+            if(speed < 0.0)
+                speed = 0.0;
+            else if(speed > 1.0)
+                speed = 1.0;
+            runSpinner(speed);
+            initCurtime();
+            if(timeAtLastRPMUpdate + 5.0 < getCurTime())
+            {
+                curRPM = calculateRPM("motorSpinner");
+                motorSpinnerStartEncoder = motorSpinner.getCurrentPosition();
+                timeAtLastRPMUpdate = getCurTime();
+            }
+            telemetry.addData("timeAtLastRPMUpdate",timeAtLastRPMUpdate);
+            telemetry.addData("curTime",getCurTime());
+            telemetry.addData("RPM",curRPM);
+            telemetry.addData("speed", speed);
+            telemetry.update();
+            pause(0.25);
             idle();
         }
     }
+
 }
