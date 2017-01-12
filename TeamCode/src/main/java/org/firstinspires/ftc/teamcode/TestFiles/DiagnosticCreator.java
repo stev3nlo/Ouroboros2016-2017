@@ -79,27 +79,27 @@ public class DiagnosticCreator extends MyOpMode
             }
             catch(FileNotFoundException fnfe)
             {
-
+                telemetry.addData("FNFE",fnfe);
             }
             catch(IOException ioe)
             {
-
+                telemetry.addData("IOE",ioe);
             }
         }
         catch(IOException ioe)
         {
-
+            telemetry.addData("IOE",ioe);
         }
         catch(ClassNotFoundException cnfe)
         {
-
+            telemetry.addData("cnfe",cnfe);
         }
     }
 
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
-        try{initializeDiagnosticLibrary();} catch(ClassNotFoundException cnfe){} catch(IOException ioe){}
+        try{initializeDiagnosticLibrary();} catch(ClassNotFoundException cnfe){telemetry.addData("cnfe",cnfe.getLocalizedMessage());} catch(IOException ioe){telemetry.addData("IOE",ioe.getLocalizedMessage());}
         telemetry.addData("File and diagnostic library initialized",dl);
         telemetry.update();
         waitForStart();

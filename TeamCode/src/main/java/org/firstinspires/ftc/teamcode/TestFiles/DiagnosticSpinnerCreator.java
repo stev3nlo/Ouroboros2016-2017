@@ -115,9 +115,9 @@ public class DiagnosticSpinnerCreator extends MyOpMode
         {
             telemetry.addData("loop","started");
             telemetry.update();
-            double curSpeed = 1.0;
+            double curSpeed = 0.7;
             double prevRPM = 4.0;
-            while(curSpeed >= 0.25 && getBatteryLevelAverage() > 1240 && prevRPM > 2.4)
+            while(curSpeed <= 0.979 && getBatteryLevelAverage() > 1250 && prevRPM > 2.26)
             {
                 if(opModeIsActive()) {
                     motorSpinner.setPower(curSpeed);
@@ -141,7 +141,18 @@ public class DiagnosticSpinnerCreator extends MyOpMode
                 //stopMotors();
                 motorSpinner.setPower(0.0);
                 pause(6.5);
+                /*if(prevRPM > 2.37)
+                    curSpeed -= 0.02;
+                if(prevRPM > 2.34)
+                    curSpeed -= 0.02;
                 curSpeed -= 0.02;
+                if(prevRPM >= 2.29 && prevRPM <= 2.28)
+                    curSpeed += 0.01;
+                if(curSpeed == 1.0 && prevRPM < 2.28)
+                    break;*/
+                if(prevRPM < 2.285)
+                    curSpeed += 0.01;
+                idle();
             }
             if(opModeIsActive()) {
                 try {

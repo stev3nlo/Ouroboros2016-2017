@@ -38,12 +38,12 @@ public class DiagnosticLibrary implements Serializable
     public double getSpeedForDiagnosticQuery(DiagnosticQuery diagnosticQuery)
     {
         DiagnosticMotorInfo dmi = getDiagnosticMotorInfoWithMotorName(diagnosticQuery.getMotorName());
-        out.println("YOLO"+dmi);
+        //out.println("YOLO"+dmi);
         int offset = 0;
         boolean shouldOscillateUp = true;
         double foundPower = -1.0;
         double closestAccuracy = -1;
-        while(offset >= -20 && offset <= 20)
+        while(offset >= -10 && offset <= 10)
         {
             out.println(offset);
             HashMap<Double,DiagnosticData> diagnosticDataByPower = dmi.getHashMapOfDiagnosticDataFromVoltage(diagnosticQuery.getBatteryVoltage()+offset);
@@ -52,7 +52,7 @@ public class DiagnosticLibrary implements Serializable
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
                 double degreeOfAccuracy = Math.abs(offset) + Math.abs(diagnosticQuery.getGoalRPM()-((DiagnosticData)pair.getValue()).RPM())*50;
-                out.println("DOA"+degreeOfAccuracy);
+                //out.println("DOA"+degreeOfAccuracy);
                 if(closestAccuracy < 0 || degreeOfAccuracy < closestAccuracy)
                 {
                     closestAccuracy = degreeOfAccuracy;
@@ -87,7 +87,7 @@ public class DiagnosticLibrary implements Serializable
     {
         String s = "";
         Iterator it = diagnosticMotorInfos.entrySet().iterator();
-        out.println("TOSTRING"+diagnosticMotorInfos);
+        //out.println("TOSTRING"+diagnosticMotorInfos);
         while (it.hasNext())
         {
             Map.Entry pair = (Map.Entry)it.next();

@@ -868,7 +868,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			//}
 		}
 		try{pause(0.25);}catch(InterruptedException e){}
-		if(count < 0 && !broken && (Math.abs(USDF - USDB) >= 1.0))
+		if(count < 3 && !broken && (Math.abs(USDF - USDB) >= 1.0))
 		{
 			turnParallelToWallWithGyro(speed, count + 1);
 		}
@@ -1471,7 +1471,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				avgEnc = getAvgEnc();
 				telemetry.addData("avg Enc", avgEnc);
 				telemetry.addData("curr Enc", currEnc);
-				move(1.2 * (-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))));
+				move((-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))));
 				distMoved = Math.abs(avgEnc - currEnc);
 				telemetry.update();
 				idle();
