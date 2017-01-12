@@ -99,11 +99,12 @@ public class AutoBlueSimple extends MyAutonomous {
         double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
         int adjustedBatteryLevel = (int)(batteryLevel * 100);
         DiagnosticQuery dq = new DiagnosticQuery("motorSpinner",adjustedBatteryLevel,2.285);
-        //double powerToSend = dl.getSpeedForDiagnosticQuery()
-        if (batteryLevel > 13.0)
-            runSpinner(0.82);
-        else
-            runSpinner(0.92);
+        double powerToSend = dl.getSpeedForDiagnosticQuery(dq);
+        runSpinner(powerToSend);
+        //if (batteryLevel > 13.0)
+        //    runSpinner(0.82);
+        //else
+        //    runSpinner(0.92);
         pause(0.1);
         moveWithEncoders(0.32, 3600);
         pause(0.1);
