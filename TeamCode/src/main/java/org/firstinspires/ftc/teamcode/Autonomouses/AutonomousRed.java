@@ -19,14 +19,14 @@ public class AutonomousRed extends MyAutonomous
 		initCurtime();
 		initTime = getCurTime();
 		simpleStabilizingLoop(1.0);
-		moveWithEncoders(-.8, 3100);
+		moveWithEncoders(-.8, 3100,.93,1);
 		simpleStabilizingLoop(1.0);
 		openServoDropper();
 		initTime = getCurTime();
 		simpleStabilizingLoop(1.5);
 		closeServoDropper();
 
-		moveWithEncoders(-.8, 3300);
+		moveWithEncoders(-.8, 3300,.93,1);
 		//double degreesToTurn = getDegreesToTurnFromDistances(rangeB.getDistance(DistanceUnit.CM),rangeF.getDistance(DistanceUnit.CM));
 		double degreesToTurn = 26.0;
 		telemetry.addData("degreesToTurn",degreesToTurn);

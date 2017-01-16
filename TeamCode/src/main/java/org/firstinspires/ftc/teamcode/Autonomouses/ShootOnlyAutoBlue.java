@@ -19,7 +19,7 @@ public class ShootOnlyAutoBlue extends MyAutonomous {
 		initCurtime();
 		initTime = getCurTime();
 		simpleStabilizingLoop(1.0);
-		moveWithEncoders(.8, 4200);
+		moveWithEncoders(.8, 4200,.93,1);
 		simpleStabilizingLoop(1.0);
 		openServoDropper();
 		initTime = getCurTime();

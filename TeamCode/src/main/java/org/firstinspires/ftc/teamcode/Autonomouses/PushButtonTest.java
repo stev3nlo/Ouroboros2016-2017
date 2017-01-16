@@ -18,6 +18,6 @@ public class PushButtonTest extends MyOpMode {
     {
         super.runOpMode();
         waitForStart();
-        moveWithEncoders(0.2,6000);
+        moveWithEncoders(0.2,6000,.93,1);
     }
 }

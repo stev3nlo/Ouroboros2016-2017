@@ -17,7 +17,7 @@ public class ShootRed extends MyAutonomous {
         pause(10);
         initCurtime();
         initTime = getCurTime();
-        moveWithEncoders(0.3, 4900);
+        moveWithEncoders(0.3, 4900,.93,1);
         runSpinner(1.0);
         pause(3);
         openServoDropper();

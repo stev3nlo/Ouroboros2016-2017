@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Red Range Test", group="Autonomous")
-public class AutoRedRangeTest extends MyAutonomous {
+@Autonomous(name="Auto Red Simple Test", group="Autonomous")
+public class AutoRedSimpleTest extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -33,7 +33,7 @@ public class AutoRedRangeTest extends MyAutonomous {
         //initializeSensors();
         double startAngle = gyro.getYaw();
         double yawDiff = 0.0;
-        while(!opModeIsActive())
+        while(!opModeIsActive() && !isStopRequested())
         {
             yawDiff = getAngleDiff(startAngle,gyro.getYaw());
             telemetry.addData("yawDiff",yawDiff);
@@ -47,20 +47,20 @@ public class AutoRedRangeTest extends MyAutonomous {
         if(batteryLevel > 13.0)
             runSpinner(0.8);
         else
-            runSpinner(0.9);
-        pause(0.5);
+            runSpinner(0.88);
+        pause(0.1);
         //moveAlongWallToBeacon(.3, 2.0, true);
-        moveWithEncoders(-.3, 3075,.93,1);
-        pause(0.5);
+        moveWithEncoders(-.4, 1850,.93,1);
+        pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
-        pause(0.5);
-        moveWithEncoders(-0.3, 3100,.93,1);
+        pause(0.1);
+        moveWithEncoders(-0.33,1550,.93,1);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(-0.2, yawDiff - 5.0);
+        gyroArcTurnRight(-0.2, yawDiff);
 
         while(opModeIsActive())
         {
@@ -69,19 +69,24 @@ public class AutoRedRangeTest extends MyAutonomous {
             telemetry.update();
             idle();
         }
-        /*
-        pause(0.5);
-        turnParallelToWall(0.19);
-        //17 max
-        //9 min
-        stabilizeAlongWallWithRangeForEncoderDist(-0.18, 1.0, 3.0, 13, false,1000);
-        stabilizeAlongWallWithRangeToBeacon(-0.12, 1.0, 3.0, 13, false);
-        pause(0.25);
-        turnParallelToWall(0.165);
-        pause(0.25);
-        driveAlongWallToBeacon(0.105, false);
-        pause(0.25);
 
+        /*
+        pause(0.25);
+        turnParallelToWallWithGyroSimple(0.195, 0);
+        pause(0.1);
+        moveWithEncoders(0.2,-2000);
+        pause(0.1);
+        driveAlongWallToBeacon(0.12,false);
+        pause(0.1);
+        /*
+        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(-0.105,false,400);
+        if(!foundBeacon) {
+            pause(0.2);
+            driveAlongWallToBeacon(0.105, false);
+        }
+        pause(0.1);
+        */
+/*
         pushButton();
 
         pause(0.25);
@@ -91,26 +96,28 @@ public class AutoRedRangeTest extends MyAutonomous {
             pushButton();
         }
 
-        turnParallelToWall(0.19);
+        turnParallelToWallWithGyro(0.195,0);
+        pause(0.1);
 
-        stabilizeAlongWallWithRangeForEncoderDist(0.18, 1.0, 3.0, 13, false, 2000);
-
-        turnParallelToWall(0.19);
-        stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 3.0, 13, false);
+        moveWithEncoders(0.4, 2000);
+        pause(0.25);
+        turnParallelToWallWithGyro(0.195,0);
+        pause(0.1);
+        //stabilizeAlongWallWithRangeToBeacon(0.125, 1.0, 4.0, 10, false);
 
 
         initCurtime();
 
         if(getCurTime() - startTime < 24.0) {
             pause(0.25);
-            turnParallelToWall(0.18);
+            turnParallelToWallWithGyro(0.195,0);
             pause(0.25);
             driveAlongWallToBeacon(-0.1, false);
             pushButton();
         }
         else if(getCurTime() - startTime < 26.0) {
             pause(0.25);
-            turnParallelToWall(0.18);
+            turnParallelToWallWithGyro(0.21,0);
             pause(0.25);
             pushButton();
         }

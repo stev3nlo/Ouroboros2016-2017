@@ -21,8 +21,8 @@ public class RangeTestTwo extends MyAutonomous {
 		while (opModeIsActive())
 		{
 
-			telemetry.addData("Range F", rangeF.getUltraSonicDistance());
-			telemetry.addData("Range B", rangeB.getUltraSonicDistance());
+			telemetry.addData("Range F", rangeF.getOpticDistance());
+			telemetry.addData("Range B", rangeB.getOpticDistance());
 			telemetry.update();
 
 			idle();

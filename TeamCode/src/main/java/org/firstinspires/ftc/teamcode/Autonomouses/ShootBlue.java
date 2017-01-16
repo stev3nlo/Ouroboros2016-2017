@@ -17,7 +17,7 @@ public class ShootBlue extends MyAutonomous {
         pause(10);
         initCurtime();
         initTime = getCurTime();
-        moveWithEncoders(-.3, 3800);
+        moveWithEncoders(-.3, 3800,.93,1);
         runSpinner(1.0);
         pause(3);
         openServoDropper();

@@ -406,7 +406,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void arcTurnLeft(double speed) {
 		if(speed > 0)
-			moveForwards(speed,0.03);
+			moveForwards(speed, 0.03);
 		else if(speed < 0)
 			moveBackwards(speed,0.03);
 	}
@@ -419,6 +419,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		while (opModeIsActive() && getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
 			telemetry.addData("startAngle",startAngle);
 			telemetry.addData("newAngle",newAngle);
+			if(getAngleDiff(newAngle,startAngle)>targetAngle/2)
+			{
+				rangeF.getUltraSonicDistance();
+				rangeB.getUltraSonicDistance();
+			}
+			//rangeF.getUltraSonicDistance();
+			//rangeB.getUltraSonicDistance();
 			telemetry.update();
 			newAngle = gyro.getYaw();		//updates the new angle constantly
 			idle();
@@ -768,8 +775,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		switch(intDiff)
 		{
 			case 0: return 0.0;
-			case 1: return 1.75;
-			case 2: return 5.0;
+			case 1: return 0.75;
+			case 2: return 3.3;
 			case 3: return 6.1;
 			case 4: return 9.8;
 			case 5: return 10.1;
@@ -830,16 +837,21 @@ public abstract class MyOpMode extends LinearOpMode {
 		if (opModeIsActive()) {
 			USDF = rangeF.getUltraSonicDistance();
 			USDB = rangeB.getUltraSonicDistance();
+			if(count == 0 && USDF > USDB)
+				count = 3;
+			else if(USDB > USDF && count == 0)
+				count = 2;
 			double startTime = getCurTime();
-			while((USDB == -1 || USDF == -1) && opModeIsActive())
+			while(opModeIsActive())
 			{
 				telemetry.addData("USDF", USDF);
 				telemetry.addData("USDB", USDB);
 				telemetry.addData("count",count);
 				telemetry.update();
 				initCurtime();
-				if(getCurTime() - startTime > 1.5) {
-					broken = true;
+				if(getCurTime() - startTime > 1.0) {
+					if(USDF==-1 || USDB == -1)
+						broken = true;
 					break;
 				}
 				idle();
@@ -858,6 +870,10 @@ public abstract class MyOpMode extends LinearOpMode {
 				}
 			}
 			else {*/
+			telemetry.addData("USDF",USDF);
+			telemetry.addData("USDB",USDB);
+			telemetry.update();
+			pause(2.0);
 				if (!broken && USDF > USDB) {
 					gyroTurnRight(speed, lookUpTurningAngleForRangeDiff(USDF - USDB));
 					turnLeft(0.03);
@@ -868,7 +884,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			//}
 		}
 		try{pause(0.25);}catch(InterruptedException e){}
-		if(count < 3 && !broken && (Math.abs(USDF - USDB) >= 1.0))
+		if(count < 0 && !broken && (Math.abs(USDF - USDB) >= 1.0))
 		{
 			turnParallelToWallWithGyro(speed, count + 1);
 		}
@@ -968,7 +984,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		return name;
 	}
 
-	public boolean driveAlongWallToBeaconOrForUnits(double speed, boolean isBlue, int encoderDist)
+	public boolean driveAlongWallToBeaconOrForUnits(double speed, boolean isBlue, int encoderDist, double leftMult, double rightMult)
 	{
 		boolean foundBeacon = false;
 		String color;
@@ -993,9 +1009,9 @@ public abstract class MyOpMode extends LinearOpMode {
 				avgEnc = getAvgEnc();
 				distMoved = Math.abs(avgEnc - currEnc);
 				if (speed > 0)
-					moveForwards(speed*1.2,speed);
+					moveForwards(speed*leftMult,speed*rightMult);
 				else
-					moveBackwards(-speed*1.2,speed);
+					moveBackwards(-speed*leftMult,speed*rightMult);
 				if (colorB.beaconColor().equals("Blue"))
 				{
 					foundBeacon = true;
@@ -1021,9 +1037,9 @@ public abstract class MyOpMode extends LinearOpMode {
 				avgEnc = getAvgEnc();
 				distMoved = Math.abs(avgEnc - currEnc);
 				if (speed > 0)
-					moveForwards(speed*1.2,speed);
+					moveForwards(speed*leftMult,speed*rightMult);
 				else
-					moveBackwards(-speed*1.2,speed);
+					moveBackwards(-speed*leftMult,speed*rightMult);
 				if (colorB.beaconColor().equals("Blue")) {
 					color = "Blue";
 				} else if (colorB.beaconColor().equals("Red")) {
@@ -1044,7 +1060,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		return foundBeacon;
 	}
 
-	public void driveAlongWallToBeacon(double speed, boolean isBlue)
+	public void driveAlongWallToBeacon(double speed, boolean isBlue, double leftMult, double rightMult)
 	{
 		String color = "Neither";
 		if (colorB.beaconColor().equals("Blue"))
@@ -1064,9 +1080,9 @@ public abstract class MyOpMode extends LinearOpMode {
 			while(!color.equals("Blue") && opModeIsActive())
 			{
 				if (speed > 0)
-					moveForwards(speed*1.2,speed);
+					moveForwards(speed*leftMult,speed*rightMult);
 				else
-					moveBackwards(-speed*1.2,speed);
+					moveBackwards(-speed*leftMult,speed*rightMult);
 				if (colorB.beaconColor().equals("Blue"))
 				{
 					color = "Blue";
@@ -1089,9 +1105,9 @@ public abstract class MyOpMode extends LinearOpMode {
 			while(!color.equals("Red") && opModeIsActive())
 			{
 				if (speed > 0)
-					moveForwards(speed*1.2,speed);
+					moveForwards(speed*leftMult,speed*rightMult);
 				else
-					moveBackwards(-speed*1.2,speed);
+					moveBackwards(-speed*leftMult,speed*rightMult);
 				if (colorB.beaconColor().equals("Blue")) {
 					color = "Blue";
 				} else if (colorB.beaconColor().equals("Red")) {
@@ -1114,11 +1130,11 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		if(isForward)
 		{
-			moveForwards(speed * 1.2, speed);
+			moveForwards(speed, speed);
 		}
 		else
 		{
-			moveBackwards(speed*1.2,speed);
+			moveBackwards(speed,speed);
 		}
 	}
 
@@ -1431,20 +1447,20 @@ public abstract class MyOpMode extends LinearOpMode {
 		telemetry.addData("timeSinceLastRPMUpdate", timeSinceLastRPMUpdate);
 	}
 
-	public void moveWithEncoders(double speed, int goal) {
+	public void moveWithEncoders(double speed, int goal, double leftMult, double rightMult) {
 		if(opModeIsActive()) {
 			int currEnc = getAvgEnc();
 			int avgEnc = currEnc;
 			if(speed > 0)
-				moveForwards(speed*1.2,speed);
+				moveForwards(speed * leftMult,speed * rightMult);
 			else
-				moveBackwards(speed*1.2,speed);
+				moveBackwards(speed * leftMult, speed * rightMult);
 			int distMoved = Math.abs(avgEnc - currEnc);
 			while (distMoved < goal && opModeIsActive()) {
 				avgEnc = getAvgEnc();
 				telemetry.addData("avg Enc", avgEnc);
 				telemetry.addData("curr Enc", currEnc);
-				move(1.2 * (-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))));
+				move((-speed * leftMult * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * rightMult * ((1 - (((double) distMoved / (double) goal) / 2)))));
 				distMoved = Math.abs(avgEnc - currEnc);
 				telemetry.update();
 				idle();
@@ -1458,14 +1474,38 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void moveWithEncodersCoast(double speed, int goal, double leftMult, double rightMult) {
+		if(opModeIsActive()) {
+			int currEnc = getAvgEnc();
+			int avgEnc = currEnc;
+			if(speed > 0)
+				moveForwards(speed * leftMult,speed * rightMult);
+			else
+				moveBackwards(speed * leftMult, speed * rightMult);
+			int distMoved = Math.abs(avgEnc - currEnc);
+			while (distMoved < goal && opModeIsActive()) {
+				avgEnc = getAvgEnc();
+				telemetry.addData("avg Enc", avgEnc);
+				telemetry.addData("curr Enc", currEnc);
+				move((-speed * leftMult * ((1 - (((double) distMoved / (double) goal) / 3)))), (speed * rightMult * ((1 - (((double) distMoved / (double) goal) / 3)))));
+				distMoved = Math.abs(avgEnc - currEnc);
+				telemetry.update();
+				idle();
+			}
+			move(0.0,0.0);
+			try{pause(0.2);}catch(Exception e){}
+			stopMotors();
+		}
+	}
+
 	public void moveWithEncodersCoast(double speed, int goal) {
 		if(opModeIsActive()) {
 			int currEnc = getAvgEnc();
 			int avgEnc = currEnc;
 			if(speed > 0)
-				moveForwards(speed*1.2,speed);
+				moveForwards(speed,speed);
 			else
-				moveBackwards(speed*1.2,speed);
+				moveBackwards(speed,speed);
 			int distMoved = Math.abs(avgEnc - currEnc);
 			while (distMoved < goal && opModeIsActive()) {
 				avgEnc = getAvgEnc();

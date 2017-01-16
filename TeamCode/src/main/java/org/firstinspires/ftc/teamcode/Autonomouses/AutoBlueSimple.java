@@ -105,14 +105,14 @@ public class AutoBlueSimple extends MyAutonomous {
         else
             runSpinner(0.92);
         pause(0.1);
-        moveWithEncoders(0.32, 3600);
+        moveWithEncoders(0.32, 3600,.93,1);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(0.25);
-        moveWithEncoders(0.25, 3300);
+        moveWithEncoders(0.25, 3300,.93,1);
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(0.2, yawDiff - 13.0);
@@ -122,17 +122,17 @@ public class AutoBlueSimple extends MyAutonomous {
         //9 min
         //stabilizeAlongWallWithRangeForEncoderDist(0.14, 1.0, 3.0, 11, true, 1000);
         //stabilizeAlongWallWithRangeToBeacon(0.115, 1.0, 3.0, 11, true);
-        moveWithEncoders(0.18,1500);
-        driveAlongWallToBeacon(0.95,true);
+        moveWithEncoders(0.18,1500,.93,1);
+        driveAlongWallToBeacon(0.95,true,.93,1);
 
         pause(0.1);
         turnParallelToWallWithGyro(0.195, 0);
         pause(0.1);
 
-        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(0.105, true, 400);
+        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(0.105, true, 400,.93,1);
         if (!foundBeacon) {
             pause(0.2);
-            driveAlongWallToBeacon(-0.105, true);
+            driveAlongWallToBeacon(-0.105, true,.93,1);
         }
         pause(0.1);
         pushButton();
@@ -147,9 +147,9 @@ public class AutoBlueSimple extends MyAutonomous {
 
         //Stabilizes along the wall for encoder distance
         //stabilizeAlongWall(-0.16, 4.0, 11, true, true, 2000);
-        moveWithEncoders(-0.25,2000);
+        moveWithEncoders(-0.25,2000,.93,1);
         pause(0.1);
-        driveAlongWallToBeacon(-0.125, true);
+        driveAlongWallToBeacon(-0.125, true,.93,1);
         pause(0.1);
         pushButton();
 

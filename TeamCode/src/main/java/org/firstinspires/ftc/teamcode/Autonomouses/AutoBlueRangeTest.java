@@ -46,7 +46,7 @@ public class AutoBlueRangeTest extends MyAutonomous {
         //moveAlongWallToBeacon(.3, 2.0, true);
         initCurtime();
         double startTime = getCurTime();
-        moveWithEncoders(.3, 3700);
+        moveWithEncoders(.3, 3700,.93,1);
         runSpinner(1.0);
         pause(0.5);
         openServoDropper();
@@ -55,7 +55,7 @@ public class AutoBlueRangeTest extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(0.5);
-        moveWithEncoders(0.3, 1900);
+        moveWithEncoders(0.3, 1900,.93,1);
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(0.2, yawDiff - 5.0);

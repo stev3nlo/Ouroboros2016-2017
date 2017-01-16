@@ -85,11 +85,11 @@ public class TeleOp extends MyOpMode
     {
         telemetry.addData("BEACON PUSH INFO","");
         telemetry.addData("curPowerOfMotorSpinner",curPowerOfMotorSpinner);
-        if(g2Ltrig > 0.4)
+        if(g2Ltrig > 0.6)
         {
             telemetry.addData("g2Ltrig being pressed", "LEFT");
         }
-        else if(g2Rtrig > 0.4)
+        else if(g2Rtrig > 0.6)
         {
             telemetry.addData("g2Rtrig being pressed", "RIGHT");
         }
@@ -101,8 +101,25 @@ public class TeleOp extends MyOpMode
         {
             telemetry.addData("No beacon control being pressed","");
         }
-        telemetry.addData("motorL1EncoderVal",getMotorL1EncoderVal());
-        telemetry.addData("motorR1EncoderVal",getMotorR1EncoderVal());
+        if(g1Ltrig > 0.6)
+        {
+            telemetry.addData("g1LTrig","PRESSED");
+        }
+        else
+        {
+            telemetry.addData("g1LTrig","NOT PRESSED");
+        }
+        if(g1Rtrig > 0.4)/* la la la la la la la la la la la
+        */
+        {
+            telemetry.addData("g1RTrig","PRESSED");
+        }
+        else
+        {
+            telemetry.addData("g1RTrig","NOT PRESSED");
+        }
+        //telemetry.addData("motorL1EncoderVal",getMotorL1EncoderVal());
+        //telemetry.addData("motorR1EncoderVal",getMotorR1EncoderVal());
         telemetry.update();
     }
 
@@ -121,30 +138,22 @@ public class TeleOp extends MyOpMode
             updateControllerVals();
             initCurtime(); //gets real time timer
 
-            if(g1Ltrig > 0.3)
+            if(g1Ltrig > 0.6)
                 driverModeLeft = 3;
             else if(g1Lbump)
                 driverModeLeft = 2;
             else
                 driverModeLeft = 1;
 
-            if(g1Rtrig > 0.3)
+            if(g1Rtrig > 0.6)
                 driverModeRight = 3;
             else if(g1Rbump)
                 driverModeRight = 2;
             else
                 driverModeRight = 1;
             if(g1y1 > 0.1 || g1y1 < -0.1) {
-                if (driverModeLeft == 1) {
-                    motorL1.setPower(g1y1);
-                    motorL2.setPower(g1y1);
-                } else if (driverModeLeft == 2) {
-                    motorL1.setPower(g1y1 * 0.66);
-                    motorL2.setPower(g1y1 * 0.66);
-                } else {
-                    motorL1.setPower(g1y1 * 0.33);
-                    motorL2.setPower(g1y1 * 0.33);
-                }
+                motorL1.setPower(g1y1/driverModeLeft);
+                motorL2.setPower(g1y1/driverModeLeft);
             }
             else
             {
@@ -152,16 +161,8 @@ public class TeleOp extends MyOpMode
                 motorL2.setPower(0.0);
             }
             if(g1y2 > 0.1 || g1y2 < -0.1) {
-                if (driverModeLeft == 1) {
-                    motorR1.setPower(-g1y2);
-                    motorR2.setPower(-g1y2);
-                } else if (driverModeLeft == 2) {
-                    motorR1.setPower(-g1y2 * 0.66);
-                    motorR2.setPower(-g1y2 * 0.66);
-                } else {
-                    motorR1.setPower(-g1y2 * 0.33);
-                    motorR2.setPower(-g1y2 * 0.33);
-                }
+                motorR1.setPower(-g1y2/driverModeRight);
+                motorR2.setPower(-g1y2/driverModeRight);
             }
             else
             {
@@ -212,11 +213,11 @@ public class TeleOp extends MyOpMode
                 closeServoDropper();
             }
 
-            if(g2Ltrig > 0.3)
+            if(g2Ltrig > 0.6)
             {
                 moveBeaconPusherOut();
             }
-            else if(g2Rtrig > 0.3)
+            else if(g2Rtrig > 0.6)
             {
                 moveBeaconPusherOut();
             }

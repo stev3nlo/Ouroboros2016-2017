@@ -31,7 +31,7 @@ public class AutonomousBlue extends MyAutonomous {
 		simpleStabilizingLoop(1.5);
 		closeServoDropper();
 
-		moveWithEncoders(.8, 3700);
+		moveWithEncoders(.8, 3700,.93,1);
 		double degreesToTurn = 0.0;
 		//double degreesToTurn = getDegreesToTurnFromDistances(rangeF.getDistance(DistanceUnit.CM),rangeB.getDistance(DistanceUnit.CM));
 		if(degreesToTurn > 0)

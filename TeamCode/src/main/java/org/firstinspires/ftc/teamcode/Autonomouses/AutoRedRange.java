@@ -50,34 +50,33 @@ public class AutoRedRange extends MyAutonomous {
             runSpinner(0.88);
         pause(0.1);
         //moveAlongWallToBeacon(.3, 2.0, true);
-        moveWithEncoders(-.4, 2900);
+        moveWithEncoders(-.35, 2000, 0.93, 1);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(0.1);
-        moveWithEncoders(-0.33,3400);
+        moveWithEncoders(-0.28, 2780, 0.93, 1);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(-0.2, yawDiff - 13.0);
+        gyroArcTurnRight(-0.2, yawDiff - 6.0);
 
         pause(0.25);
-        turnParallelToWallWithGyroSimple(0.195, 0);
+        turnParallelToWallWithGyro(0.195, 0);
         pause(0.1);
-        //17 max
-        //9 min
-        //stabilizeAlongWallWithRangeForEncoderDist(-0.14, 1.0, 4.0, 10, false, 1000);
-        //stabilizeAlongWallWithRangeToBeacon(-0.125, 1.0, 4.0, 10, false);
+        moveWithEncoders(0.2,2000,.93,1);
         pause(0.1);
-        turnParallelToWallWithGyro(0.195,0);
+        driveAlongWallToBeacon(0.12,false,.93,1);
         pause(0.1);
+        /*
         boolean foundBeacon = driveAlongWallToBeaconOrForUnits(-0.105,false,400);
         if(!foundBeacon) {
             pause(0.2);
             driveAlongWallToBeacon(0.105, false);
         }
         pause(0.1);
+        */
 
         pushButton();
 
@@ -91,7 +90,7 @@ public class AutoRedRange extends MyAutonomous {
         turnParallelToWallWithGyro(0.195,0);
         pause(0.1);
 
-        moveWithEncoders(0.4, 2000);
+        moveWithEncoders(0.4, 2000,.93,1);
         pause(0.25);
         turnParallelToWallWithGyro(0.195,0);
         pause(0.1);
@@ -104,7 +103,7 @@ public class AutoRedRange extends MyAutonomous {
             pause(0.25);
             turnParallelToWallWithGyro(0.195,0);
             pause(0.25);
-            driveAlongWallToBeacon(-0.1, false);
+            driveAlongWallToBeacon(-0.1, false,.93,1);
             pushButton();
         }
         else if(getCurTime() - startTime < 26.0) {

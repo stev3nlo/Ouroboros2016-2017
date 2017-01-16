@@ -51,14 +51,14 @@ public class AutoBlueRange extends MyAutonomous {
         else
             runSpinner(0.92);
         pause(0.1);
-        moveWithEncoders(0.32, 3600);
+        moveWithEncoders(0.32, 3600,.93,1);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(0.25);
-        moveWithEncoders(0.25, 3300);
+        moveWithEncoders(0.25, 3300,.93,1);
 
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(0.2, yawDiff - 13.0);
@@ -72,10 +72,10 @@ public class AutoBlueRange extends MyAutonomous {
         turnParallelToWallWithGyro(0.195, 0);
         pause(0.1);
 
-        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(0.105, true, 400);
+        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(0.105, true, 400,.93,1);
         if (!foundBeacon) {
             pause(0.2);
-            driveAlongWallToBeacon(-0.105, true);
+            driveAlongWallToBeacon(-0.105, true,.93,1);
         }
         pause(0.1);
         pushButton();
@@ -101,10 +101,10 @@ public class AutoBlueRange extends MyAutonomous {
         if (getCurTime() - startTime < 20.0) {
             turnParallelToWallWithGyro(0.195, 0);
             pause(0.1);
-            foundBeacon = driveAlongWallToBeaconOrForUnits(-0.105, true, 400);
+            foundBeacon = driveAlongWallToBeaconOrForUnits(-0.105, true, 400,.93,1);
             if (!foundBeacon) {
                 pause(0.2);
-                driveAlongWallToBeacon(0.105, true);
+                driveAlongWallToBeacon(0.105, true,.93,1);
             }
             pause(0.1);
             turnParallelToWallWithGyro(0.195, 0);
@@ -113,14 +113,14 @@ public class AutoBlueRange extends MyAutonomous {
         } else if (getCurTime() - startTime < 24.0) {
             turnParallelToWallWithGyro(0.195, 0);
             pause(0.1);
-            foundBeacon = driveAlongWallToBeaconOrForUnits(-0.105, true, 400);
+            foundBeacon = driveAlongWallToBeaconOrForUnits(-0.105, true, 400,.93,1);
             if (!foundBeacon) {
                 pause(0.2);
-                driveAlongWallToBeacon(0.105, true);
+                driveAlongWallToBeacon(0.105, true,.93,1);
             }
             pushButton();
         } else if (getCurTime() - startTime < 28.0) {
-            foundBeacon = driveAlongWallToBeaconOrForUnits(0.105, true, 400);
+            foundBeacon = driveAlongWallToBeaconOrForUnits(0.105, true, 400,.93,1);
             pushButton();
         } else {
             pushButton();
