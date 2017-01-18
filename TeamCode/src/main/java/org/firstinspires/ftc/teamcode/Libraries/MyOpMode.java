@@ -430,10 +430,11 @@ public abstract class MyOpMode extends LinearOpMode {
 			newAngle = gyro.getYaw();		//updates the new angle constantly
 			idle();
 		}
-		if(speed>0)
-			turnLeft(0.03);
-		else
-			turnRight(0.03);
+		move(0.0,0.0);
+		//if(speed>0)
+		//	turnLeft(0.03);
+		//else
+		//	turnRight(0.03);
 		try{pause(0.2);}catch(Exception e){}
 	}
 
@@ -1053,10 +1054,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				idle();
 			}
 		}
-		if(speed > 0)
-			moveBackwards(0.03);
-		else
-			moveForwards(0.03);
+		move(0.0,0.0);
 		return foundBeacon;
 	}
 
@@ -1271,6 +1269,52 @@ public abstract class MyOpMode extends LinearOpMode {
 		moveBeaconPusherIn();
 	}
 
+	public double valToPushOutBeaconPusherFromDist(int dist)
+	{
+		switch(dist)
+		{
+			case 2: return 0.9;
+			case 3: return 0.8;
+			case 4: return 0.7;
+			case 5: return 0.6;
+			case 6: return 0.5;
+			case 7: return 0.4;
+			case 8: return 0.3;
+			case 9: return 0.2;
+			case 10: return 0.1;
+			case 11: return 0.0;
+			case 12: return 0.0;
+			case 13: return 0.0;
+			case 14: return 0.0;
+			case 15: return 0.0;
+			case 16: return 0.0;
+			case 17: return 0.0;
+			case 18: return 0.0;
+			case 19: return 0.0;
+			case 20: return 0.0;
+		}
+		return 0.0;
+	}
+
+	public void pushButtonDistance(double dist) {
+		moveBeaconPusherOut();
+		try{pause(2.5);}catch(Exception e){}
+		moveBeaconPusherIn();
+	}
+
+	public void pushButtonWithSpeed() {
+		initCurtime();
+		double startTime = getCurTime();
+		double curTimeInLoop = getCurTime();
+		while(curTimeInLoop - startTime < 3.0 && opModeIsActive())
+		{
+			initCurtime();
+			double curPos = Math.sqrt(3.0) - Math.sqrt((curTimeInLoop-startTime));
+			curPos /= Math.sqrt(3.0);
+			servoBeaconPusher.setPosition(curPos);
+			idle();
+		}
+	}
 
 	public void moveBeaconPusherOut()
 		{
@@ -1498,6 +1542,86 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void moveWithEncodersCoastExtra(double speed, int goal, double leftMult, double rightMult) {
+		if(opModeIsActive()) {
+			int currEnc = getAvgEnc();
+			int avgEnc = currEnc;
+			if(speed > 0)
+				moveForwards(speed * leftMult,speed * rightMult);
+			else
+				moveBackwards(speed * leftMult, speed * rightMult);
+			int distMoved = Math.abs(avgEnc - currEnc);
+			double curSpeed = speed;
+			while (distMoved < goal && opModeIsActive()) {
+				avgEnc = getAvgEnc();
+				telemetry.addData("avg Enc", avgEnc);
+				telemetry.addData("curr Enc", currEnc);
+
+				if(distMoved < goal/3)
+					curSpeed = speed * (((double)distMoved) / (((double)goal)/3));
+				else if(distMoved > ((2*goal)/3)) {
+					double factor = -1 * (distMoved - goal);
+					factor /= goal / 3;
+					curSpeed = speed * factor;
+				}
+				else
+					curSpeed = speed;
+				if(Math.abs(curSpeed) > 1.0)
+					if (speed < 0)
+						curSpeed = -1.0;
+					else
+						curSpeed = 1.0;
+				else if(Math.abs(curSpeed) < 0.13) {
+					if (speed < 0)
+						curSpeed = -0.13;
+					else
+						curSpeed = 0.13;
+				}
+				telemetry.addData("curSpeed",curSpeed);
+				//move((-speed * leftMult * ((1 - (((double) distMoved / (double) goal) / 3)))), (speed * rightMult * ((1 - (((double) distMoved / (double) goal) / 3)))));
+				move(leftMult*-curSpeed,rightMult*curSpeed);
+				distMoved = Math.abs(avgEnc - currEnc);
+				telemetry.update();
+				idle();
+			}
+			move(0.0,0.0);
+			try{pause(0.2);}catch(Exception e){}
+			stopMotors();
+		}
+	}
+
+	public void moveToWallWithRange(double speed, double goalUSDB, double goalUSDF, double goalDistance, double rMult, double lMult)
+	{
+		double USDB;
+		double USDF;
+		USDB = rangeB.getUltraSonicDistance();
+		USDF = rangeF.getUltraSonicDistance();
+		boolean goalFMet = false;
+		boolean goalBMet = false;
+		boolean goalDistMoved = false;
+		int startEnc = getAvgEnc();
+		while(!goalBMet && !goalFMet && !goalDistMoved)
+		{
+			USDB = rangeB.getUltraSonicDistance();
+			USDF = rangeF.getUltraSonicDistance();
+			moveBackwards(speed*lMult,speed*rMult);
+			if (USDF<=goalUSDF)
+			{
+				goalFMet = true;
+			}
+			else if (USDB<=goalUSDB)
+			{
+				goalBMet = true;
+			}
+			else if (getAvgEnc()-startEnc>= goalDistance)
+			{
+				goalDistMoved = true;
+			}
+			idle();
+		}
+		move(0.0,0.0);
+	}
+
 	public void moveWithEncodersCoast(double speed, int goal) {
 		if(opModeIsActive()) {
 			int currEnc = getAvgEnc();
@@ -1511,6 +1635,29 @@ public abstract class MyOpMode extends LinearOpMode {
 				avgEnc = getAvgEnc();
 				telemetry.addData("avg Enc", avgEnc);
 				telemetry.addData("curr Enc", currEnc);
+				move((-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))));
+				distMoved = Math.abs(avgEnc - currEnc);
+				telemetry.update();
+				idle();
+			}
+		}
+	}
+
+	public void moveWithEncodersCoastExtra(double speed, int goal) {
+		if(opModeIsActive()) {
+			int currEnc = getAvgEnc();
+			int avgEnc = currEnc;
+			if(speed > 0)
+				moveForwards(speed,speed);
+			else
+				moveBackwards(speed,speed);
+			int distMoved = Math.abs(avgEnc - currEnc);
+			while (distMoved < goal && opModeIsActive()) {
+				avgEnc = getAvgEnc();
+				telemetry.addData("avg Enc", avgEnc);
+				telemetry.addData("curr Enc", currEnc);
+				if(distMoved < goal/3)
+
 				move((-speed * ((1 - (((double) distMoved / (double) goal) / 2)))), (speed * ((1 - (((double) distMoved / (double) goal) / 2)))));
 				distMoved = Math.abs(avgEnc - currEnc);
 				telemetry.update();

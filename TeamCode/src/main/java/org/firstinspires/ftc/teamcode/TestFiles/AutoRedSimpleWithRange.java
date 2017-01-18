@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomouses;
+package org.firstinspires.ftc.teamcode.TestFiles;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 
@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Red Simple", group="Autonomous")
-public class AutoRedSimple extends MyAutonomous {
+@Autonomous(name="Auto Red Simple with Range", group="Autonomous")
+public class AutoRedSimpleWithRange extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -57,9 +57,9 @@ public class AutoRedSimple extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(0.1);
-        moveWithEncodersCoast(-0.28, 2250, 0.93, 1);
+        moveWithEncodersCoast(-0.28, 1750, 0.93, 1);
 
-
+        //moveToWallWithRange()
         //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(-0.2, yawDiff -8);
 

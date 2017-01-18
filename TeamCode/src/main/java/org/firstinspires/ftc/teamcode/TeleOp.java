@@ -109,8 +109,7 @@ public class TeleOp extends MyOpMode
         {
             telemetry.addData("g1LTrig","NOT PRESSED");
         }
-        if(g1Rtrig > 0.4)/* la la la la la la la la la la la
-        */
+        if(g1Rtrig > 0.6)
         {
             telemetry.addData("g1RTrig","PRESSED");
         }

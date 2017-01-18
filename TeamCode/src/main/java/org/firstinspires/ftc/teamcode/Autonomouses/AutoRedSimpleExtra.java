@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Red Simple", group="Autonomous")
-public class AutoRedSimple extends MyAutonomous {
+@Autonomous(name="Auto Red Simple Extra", group="Autonomous")
+public class AutoRedSimpleExtra extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -50,33 +50,29 @@ public class AutoRedSimple extends MyAutonomous {
             runSpinner(0.88);
         pause(0.1);
         //moveAlongWallToBeacon(.3, 2.0, true);
-        moveWithEncodersCoast(-.35, 1500, 0.93, 1);
+        moveWithEncodersCoastExtra(-.35, 1500, 1.0, 0.86);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(0.1);
-        moveWithEncodersCoast(-0.28, 2250, 0.93, 1);
+        moveWithEncodersCoastExtra(-0.28, 1580, 1.0, 0.86);
 
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(-0.2, yawDiff -8);
+        gyroArcTurnRight(-0.2, yawDiff);
 
         pause(0.25);
         //turnParallelToWallWithGyro(0.195, 0);
         pause(0.1);
         //moveWithEncoders(0.2,-2000);
-        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(.12,false,2500, 0.93, 1);
+        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(.12,false,1400, 1.0,0.86);
         pause(.1);
         if (!foundBeacon)
         {
             driveAlongWallToBeacon(-.12, false,0.93, 1);
         }
-        telemetry.addData("USDF",rangeF.getUltraSonicDistance());
-        telemetry.addData("USDB",rangeB.getUltraSonicDistance());
-        telemetry.update();
-        pause(2.0);
 
         pause(0.1);
         /*
@@ -98,15 +94,28 @@ public class AutoRedSimple extends MyAutonomous {
             pushButton();
             pause(0.25);
         }
-        gyroTurnRight(0.15,getAngleDiff(prevGyroHeading,gyro.getYaw()-2.0));
 
+        telemetry.addData("USDF",rangeF.getUltraSonicDistance());
+        telemetry.addData("USDB",rangeB.getUltraSonicDistance());
+        telemetry.update();
+        pause(1.0);
+        double USDF = rangeF.getUltraSonicDistance();
+        double USDB = rangeB.getUltraSonicDistance();
+        telemetry.addData("USDF",USDF);
+        telemetry.addData("USDB",USDB);
+        double angleDiff = getAngleDiff(prevGyroHeading,gyro.getYaw());
+        telemetry.addData("angleDiff",angleDiff);
+        telemetry.update();
+        if(Math.abs(USDF)-Math.abs(USDB) > 2.0) {
+            gyroTurnRight(0.15, angleDiff);
+        }
         //turnParallelToWallWithGyro(0.195,0);
         pause(0.1);
 
         moveWithEncodersCoast(-0.36, 2000,.93,1);
         pause(0.25);
 
-        driveAlongWallToBeacon(-.12,false,.93,1);
+        driveAlongWallToBeacon(-.12, false, .93, 1);
         pushButton();
 
         pause(0.25);

@@ -17,12 +17,13 @@ public class RangeTestTwo extends MyAutonomous {
 
 	public void runOpMode() throws InterruptedException {
 		super.runOpMode();
+		double gyroStart = gyro.getYaw();
 		waitForStart();
 		while (opModeIsActive())
 		{
-
-			telemetry.addData("Range F", rangeF.getOpticDistance());
-			telemetry.addData("Range B", rangeB.getOpticDistance());
+			telemetry.addData("Range F", rangeF.getUltraSonicDistance());
+			telemetry.addData("Range B", rangeB.getUltraSonicDistance());
+			telemetry.addData("gyroOffset",getAngleDiff(gyroStart,gyro.getYaw()));
 			telemetry.update();
 
 			idle();
