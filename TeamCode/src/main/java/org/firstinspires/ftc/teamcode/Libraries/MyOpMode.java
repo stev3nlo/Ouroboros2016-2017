@@ -1365,6 +1365,26 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void pushButtonWithSpeedUntilFlashing() {
+		initCurtime();
+		double startTime = getCurTime();
+		double curTimeInLoop = getCurTime();
+		boolean colorIsGray = false;
+		while(!colorIsGray && curTimeInLoop - startTime < 3.0 && opModeIsActive())
+		{
+			initCurtime();
+			curTimeInLoop = getCurTime();
+			double curPos = Math.sqrt(3.0) - Math.sqrt((curTimeInLoop-startTime));
+			curPos /= Math.sqrt(3.0);
+			servoBeaconPusher.setPosition(curPos);
+			telemetry.addData("colorB",""+colorB);
+			telemetry.update();
+			if(colorB.beaconColor().equals("Neither"))
+				colorIsGray = true;
+			idle();
+		}
+	}
+
 	public void moveBeaconPusherOut()
 		{
 		double v = 0.0;
