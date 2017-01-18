@@ -106,17 +106,17 @@ public class AutoBlueSimple extends MyAutonomous {
         //else
         //    runSpinner(0.92);
         pause(0.1);
-        moveWithEncoders(0.32, 3600,.93,1);
+        moveWithEncoders(0.32, 2000,.93,1);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(0.25);
-        moveWithEncoders(0.25, 3300,.93,1);
+        moveWithEncoders(0.25, 1500,.93,1);
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(0.2, yawDiff - 13.0);
+        gyroArcTurnRight(0.2, yawDiff);
         pause(0.1);
         turnParallelToWallWithGyroSimple(0.195, 0);
         //17 max
