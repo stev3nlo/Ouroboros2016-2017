@@ -1309,6 +1309,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		while(curTimeInLoop - startTime < 3.0 && opModeIsActive())
 		{
 			initCurtime();
+			curTimeInLoop = getCurTime();
 			double curPos = Math.sqrt(3.0) - Math.sqrt((curTimeInLoop-startTime));
 			curPos /= Math.sqrt(3.0);
 			servoBeaconPusher.setPosition(curPos);
