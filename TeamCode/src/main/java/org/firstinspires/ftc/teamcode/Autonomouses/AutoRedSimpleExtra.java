@@ -85,7 +85,7 @@ public class AutoRedSimpleExtra extends MyAutonomous {
         */
         double prevGyroHeading = gyro.getYaw();
 
-        pushButton();
+        pushButtonWithDistance();
 
         pause(0.25);
         if(colorB.getColor().equals("Blue"))

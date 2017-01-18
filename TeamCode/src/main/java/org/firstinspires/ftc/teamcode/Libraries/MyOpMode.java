@@ -18,6 +18,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import static java.lang.Integer.parseInt;
+
 /**
  * @author 		Steven Lo
  * @version 	1.0			(I don't know what this really is)
@@ -1269,29 +1271,75 @@ public abstract class MyOpMode extends LinearOpMode {
 		moveBeaconPusherIn();
 	}
 
+	public void pushButtonWithDistance()
+	{
+		double USDF = rangeF.getUltraSonicDistance();
+		double USDB = rangeB.getUltraSonicDistance();
+		double dist = 0.0;
+
+		if (Math.abs(USDF - USDB) < 2 && USDF!=-1 && USDB != -1)
+		{
+			dist = valToPushOutBeaconPusherFromDist(Integer.getInteger(USDF + ""));
+			moveBeaconPusherOutDist(dist);
+		}
+		else if(USDF != -1 && Math.abs(USDF - USDB) < 4)
+		{
+			dist = valToPushOutBeaconPusherFromDist(Integer.getInteger((USDF+2) + ""));
+			moveBeaconPusherOutDist(dist);
+		}
+		else
+		{
+			moveBeaconPusherOutDist(dist);
+		}
+
+	}
+
+	public void pushButtonWithDistanceOutput()
+	{
+		double USDF = rangeF.getUltraSonicDistance();
+		double USDB = rangeB.getUltraSonicDistance();
+		double dist = 0.0;
+
+		if (Math.abs(USDF - USDB) < 2 && USDF!=-1 && USDB != -1)
+		{
+			dist = valToPushOutBeaconPusherFromDist(Integer.getInteger(USDF + ""));
+			telemetry.addData("dist", dist);
+			telemetry.update();
+		}
+		else if(USDF != -1 && Math.abs(USDF - USDB) < 4)
+		{
+			dist = valToPushOutBeaconPusherFromDist(Integer.getInteger((USDF+2) + ""));
+			telemetry.addData("dist", dist);
+			telemetry.update();
+		}
+		else
+		{
+			telemetry.addData("dist", dist);
+			telemetry.update();
+		}
+
+	}
+
 	public double valToPushOutBeaconPusherFromDist(int dist)
 	{
 		switch(dist)
 		{
-			case 2: return 0.9;
-			case 3: return 0.8;
-			case 4: return 0.7;
+			case 1: return 0.6;
+			case 2: return 0.6;
+			case 3: return 0.6;
+			case 4: return 0.6;
 			case 5: return 0.6;
-			case 6: return 0.5;
-			case 7: return 0.4;
-			case 8: return 0.3;
-			case 9: return 0.2;
-			case 10: return 0.1;
-			case 11: return 0.0;
-			case 12: return 0.0;
-			case 13: return 0.0;
-			case 14: return 0.0;
-			case 15: return 0.0;
-			case 16: return 0.0;
-			case 17: return 0.0;
-			case 18: return 0.0;
-			case 19: return 0.0;
-			case 20: return 0.0;
+			case 6: return 0.6;
+			case 7: return 0.6;
+			case 8: return 0.6;
+			case 9: return 0.6;
+			case 10: return 0.6;
+			case 11: return 0.4;
+			case 12: return 0.35;
+			case 13: return 0.3;
+			case 14: return 0.25;
+			case 15: return 0.2;
+			case 16: return 0.15;
 		}
 		return 0.0;
 	}
@@ -1319,9 +1367,13 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void moveBeaconPusherOut()
 		{
-		//TEST VALUES
 		double v = 0.0;
 		servoBeaconPusher.setPosition(v);
+	}
+
+	public void moveBeaconPusherOutDist(double dist)
+	{
+		servoBeaconPusher.setPosition(dist);
 	}
 
 	public void moveBeaconPusherIn()
