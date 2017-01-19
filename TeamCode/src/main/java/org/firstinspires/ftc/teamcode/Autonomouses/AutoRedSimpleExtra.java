@@ -91,7 +91,7 @@ public class AutoRedSimpleExtra extends MyAutonomous {
         if(colorB.getColor().equals("Blue"))
         {
             pause(5.0);
-            pushButton();
+            pushButtonWithDistance();
             pause(0.25);
         }
 
@@ -106,7 +106,7 @@ public class AutoRedSimpleExtra extends MyAutonomous {
         double angleDiff = getAngleDiff(prevGyroHeading,gyro.getYaw());
         telemetry.addData("angleDiff",angleDiff);
         telemetry.update();
-        if(Math.abs(USDF)-Math.abs(USDB) > 2.0) {
+        if(Math.abs(USDF-USDB) > 2.0) {
             gyroTurnRight(0.15, angleDiff);
         }
         //turnParallelToWallWithGyro(0.195,0);
@@ -122,7 +122,7 @@ public class AutoRedSimpleExtra extends MyAutonomous {
         if(colorB.getColor().equals("Blue"))
         {
             pause(5.0);
-            pushButton();
+            pushButtonWithDistance();
         }
         moveWithEncodersCoast(-0.4,1500,0.93,1.0);
     }

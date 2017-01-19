@@ -53,17 +53,17 @@ public class AutoBlueSimpleExtra extends MyAutonomous {
 
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnLeft(-0.2, yawDiff);
+        gyroArcTurnLeft(0.2, yawDiff);
 
         pause(0.25);
         //turnParallelToWallWithGyro(0.195, 0);
         pause(0.1);
         //moveWithEncoders(0.2,-2000);
-        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(.12,false,1400, 1.0,0.86);
+        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(-.12,false,1400, 1.0,0.86);
         pause(.1);
         if (!foundBeacon)
         {
-            driveAlongWallToBeacon(-.12, false,0.93, 1);
+            driveAlongWallToBeacon(-12, false,0.93, 1);
         }
 
         pause(0.1);
@@ -80,10 +80,10 @@ public class AutoBlueSimpleExtra extends MyAutonomous {
         pushButtonWithDistance();
 
         pause(0.25);
-        if(colorB.getColor().equals("Blue"))
+        if(colorB.getColor().equals("Red"))
         {
             pause(5.0);
-            pushButton();
+            pushButtonWithDistance();
             pause(0.25);
         }
 
@@ -98,26 +98,25 @@ public class AutoBlueSimpleExtra extends MyAutonomous {
         double angleDiff = getAngleDiff(prevGyroHeading,gyro.getYaw());
         telemetry.addData("angleDiff",angleDiff);
         telemetry.update();
-        if(Math.abs(USDF)-Math.abs(USDB) > 2.0) {
+        if(Math.abs(USDF-USDB) > 2.0) {
             gyroTurnLeft(0.15, angleDiff);
         }
         //turnParallelToWallWithGyro(0.195,0);
         pause(0.1);
 
-        moveWithEncodersCoast(-0.36, 2000,.93,1);
+        moveWithEncodersCoast(0.36, 2000,.93,1);
         pause(0.25);
 
-        driveAlongWallToBeacon(-.12, false, .93, 1);
-        pushButton();
+        driveAlongWallToBeacon(.12, false, .93, 1);
+        pushButtonWithDistance();
 
         pause(0.25);
-        if(colorB.getColor().equals("Blue"))
+        if(colorB.getColor().equals("Red"))
         {
             pause(5.0);
-            pushButton();
+            pushButtonWithDistance();
         }
-        moveWithEncodersCoast(-0.4,1500,0.93,1.0);
+        moveWithEncodersCoast(0.4,1500,0.93,1.0);
     }
-
 
 }
