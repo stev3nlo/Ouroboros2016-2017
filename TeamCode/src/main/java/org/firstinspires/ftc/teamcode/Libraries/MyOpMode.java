@@ -987,6 +987,60 @@ public abstract class MyOpMode extends LinearOpMode {
 		return name;
 	}
 
+	public void driveToNextBeacon(double speed, boolean isBlue, int encoderDist, double leftMult, double rightMult)
+	{
+		String color;
+		if (colorB.beaconColor().equals("Blue"))
+		{
+			color = "Blue";
+		}
+		else if (colorB.beaconColor().equals("Red"))
+		{
+			color = "Red";
+		}
+		else
+		{
+			color = "Neither";
+		}
+		String targetColor;
+		if(isBlue)
+			targetColor = "Blue";
+		else
+			targetColor = "Red";
+		int currEnc = getAvgEnc();
+		int avgEnc = currEnc;
+		int distMoved = Math.abs(avgEnc - currEnc);
+		double curSpeedL = -leftMult * speed;
+		double curSpeedR = rightMult * speed;
+		while(opModeIsActive() && (distMoved < 2000 || !color.equals(targetColor)))
+		{
+			if(distMoved < 2000)
+			{
+				curSpeedL = -leftMult * speed * ((1 - (((double) distMoved / (double) encoderDist) / 2)));
+				curSpeedR = rightMult * speed * ((1 - (((double) distMoved / (double) encoderDist) / 2)));
+			}
+			move(curSpeedL,curSpeedR);
+			if (colorB.beaconColor().equals("Blue"))
+			{
+				color = "Blue";
+			}
+			else if (colorB.beaconColor().equals("Red"))
+			{
+				color = "Red";
+			}
+			else
+			{
+				color = "Neither";
+			}
+			avgEnc = getAvgEnc();
+			distMoved = Math.abs(avgEnc - currEnc);
+			telemetry.addData("distMoved",distMoved);
+			telemetry.update();
+			idle();
+		}
+		moveForwards(0.0);
+	}
+
 	public boolean driveAlongWallToBeaconOrForUnits(double speed, boolean isBlue, int encoderDist, double leftMult, double rightMult)
 	{
 		boolean foundBeacon = false;
@@ -1266,27 +1320,32 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	//Methods to control button pushing
 	public void pushButton() {
-		moveBeaconPusherOut();
-		try{pause(2.5);}catch(Exception e){}
-		moveBeaconPusherIn();
+		if(opModeIsActive()) {
+			moveBeaconPusherOut();
+			try {
+				pause(2.5);
+			} catch (Exception e) {
+			}
+			moveBeaconPusherIn();
+		}
 	}
 
 	public void pushButtonWithDistance()
 	{
-		double USDF = rangeF.getUltraSonicDistance();
-		double USDB = rangeB.getUltraSonicDistance();
+		int USDF = rangeF.getUltraSonicDistance();
+		int USDB = rangeB.getUltraSonicDistance();
 		double dist = 0.0;
 
 		if (Math.abs(USDF - USDB) < 2 && USDF!=-1 && USDB != -1)
 		{
-			dist = valToPushOutBeaconPusherFromDist(Integer.getInteger(USDF + ""));
+			dist = valToPushOutBeaconPusherFromDist(USDF);
 			moveBeaconPusherOutDist(dist);
 		}
-		else if(USDF != -1 && Math.abs(USDF - USDB) < 4)
-		{
-			dist = valToPushOutBeaconPusherFromDist(Integer.getInteger((USDF+2) + ""));
-			moveBeaconPusherOutDist(dist);
-		}
+//		else if(USDF != -1 && Math.abs(USDF - USDB) < 4)
+//		{
+//			dist = valToPushOutBeaconPusherFromDist(Integer.getInteger((USDF+2) + ""));
+//			moveBeaconPusherOutDist(dist);
+//		}
 		else
 		{
 			moveBeaconPusherOutDist(dist);
@@ -1306,12 +1365,12 @@ public abstract class MyOpMode extends LinearOpMode {
 			telemetry.addData("dist", dist);
 			telemetry.update();
 		}
-		else if(USDF != -1 && Math.abs(USDF - USDB) < 4)
-		{
-			dist = valToPushOutBeaconPusherFromDist(Integer.getInteger((USDF+2) + ""));
-			telemetry.addData("dist", dist);
-			telemetry.update();
-		}
+//		else if(USDF != -1 && Math.abs(USDF - USDB) < 4)
+//		{
+//			dist = valToPushOutBeaconPusherFromDist(Integer.getInteger((USDF+2) + ""));
+//			telemetry.addData("dist", dist);
+//			telemetry.update();
+//		}Z
 		else
 		{
 			telemetry.addData("dist", dist);
@@ -1324,22 +1383,22 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		switch(dist)
 		{
-			case 1: return 0.6;
-			case 2: return 0.6;
-			case 3: return 0.6;
-			case 4: return 0.6;
-			case 5: return 0.6;
-			case 6: return 0.6;
-			case 7: return 0.6;
-			case 8: return 0.6;
-			case 9: return 0.6;
-			case 10: return 0.6;
-			case 11: return 0.4;
-			case 12: return 0.35;
-			case 13: return 0.3;
-			case 14: return 0.25;
-			case 15: return 0.2;
-			case 16: return 0.15;
+			case 1: return 0.73;
+			case 2: return 0.73;
+			case 3: return 0.73;
+			case 4: return 0.73;
+			case 5: return 0.73;
+			case 6: return 0.73;
+			case 7: return 0.73;
+			case 8: return 0.73;
+			case 9: return 0.68;
+			case 10: return 0.63;
+			case 11: return 0.43;
+			case 12: return 0.38;
+			case 13: return 0.34;
+			case 14: return 0.39;
+			case 15: return 0.23;
+			case 16: return 0.18;
 		}
 		return 0.0;
 	}

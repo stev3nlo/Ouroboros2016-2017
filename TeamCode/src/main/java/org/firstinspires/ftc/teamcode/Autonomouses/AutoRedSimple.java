@@ -50,28 +50,28 @@ public class AutoRedSimple extends MyAutonomous {
             runSpinner(0.88);
         pause(0.1);
         //moveAlongWallToBeacon(.3, 2.0, true);
-        moveWithEncodersCoast(-.35, 1500, 0.93, 1);
+        moveWithEncodersCoast(-.35, 1300, 0.93, 1);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
-        pause(0.1);
-        moveWithEncodersCoast(-0.28, 2250, 0.93, 1);
+        pause(1.0);
+        moveWithEncodersCoast(-0.22, 2750, 0.93, 1);
 
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(-0.2, yawDiff -8);
+        gyroArcTurnRight(-0.2, yawDiff -14);
 
         pause(0.25);
         //turnParallelToWallWithGyro(0.195, 0);
         pause(0.1);
         //moveWithEncoders(0.2,-2000);
-        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(.12,false,2500, 0.93, 1);
+        boolean foundBeacon = driveAlongWallToBeaconOrForUnits(.105,false,2100, 0.93, 1);
         pause(.1);
         if (!foundBeacon)
         {
-            driveAlongWallToBeacon(-.12, false,0.93, 1);
+            driveAlongWallToBeacon(-.09, false,0.93, 1);
         }
         telemetry.addData("USDF",rangeF.getUltraSonicDistance());
         telemetry.addData("USDB",rangeB.getUltraSonicDistance());
@@ -89,7 +89,12 @@ public class AutoRedSimple extends MyAutonomous {
         */
         double prevGyroHeading = gyro.getYaw();
 
-        pushButton();
+        if(opModeIsActive()) {
+            pushButtonWithDistance();
+            pause(1.5);
+            moveBeaconPusherIn();
+            pause(1.5);
+        }
 
         pause(0.25);
         if(colorB.getColor().equals("Blue"))
@@ -98,22 +103,20 @@ public class AutoRedSimple extends MyAutonomous {
             pushButton();
             pause(0.25);
         }
-        gyroTurnRight(0.15,getAngleDiff(prevGyroHeading,gyro.getYaw()-2.0));
+        //gyroTurnRight(0.15,getAngleDiff(prevGyroHeading,gyro.getYaw()-2.0));
 
         //turnParallelToWallWithGyro(0.195,0);
         pause(0.1);
 
-        moveWithEncodersCoast(-0.36, 2000,.93,1);
-        pause(0.25);
-
-        driveAlongWallToBeacon(-.12,false,.93,1);
+        driveToNextBeacon(-0.22,false,2000,0.93,1.0);
+        pause(0.5);
         pushButton();
 
         pause(0.25);
         if(colorB.getColor().equals("Blue"))
         {
             pause(5.0);
-            pushButton();
+            pushButtonWithDistance();
         }
         moveWithEncodersCoast(-0.4,1500,0.93,1.0);
     }

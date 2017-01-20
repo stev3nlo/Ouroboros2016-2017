@@ -144,7 +144,7 @@ public class AutoBlueSimple extends MyAutonomous {
             pushButton();
         }
 
-        turnParallelToWallWithGyro(0.195, 0);
+        //turnParallelToWallWithGyro(0.195, 0);
 
         //Stabilizes along the wall for encoder distance
         //stabilizeAlongWall(-0.16, 4.0, 11, true, true, 2000);
