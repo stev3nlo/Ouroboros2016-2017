@@ -17,11 +17,15 @@ public class ShootBlue extends MyAutonomous {
         pause(10);
         initCurtime();
         initTime = getCurTime();
-        moveWithEncoders(-.3, 3800,.93,1);
+        moveWithEncoders(-.3, 3750, .93, 1);
         runSpinner(1.0);
         pause(3);
         openServoDropper();
-        pause(4);
+        pause(1);
+        closeServoDropper();
+        pause(2);
+        openServoDropper();
+        pause(2);
         initTime = getCurTime();
         closeServoDropper();
     }

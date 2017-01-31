@@ -183,13 +183,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		telemetry.addData("ColorB", "Initialized");
 		telemetry.update();
 		//pause(1.0);
-		rangeF = new SensorMRRange(hardwareMap.get(I2cDevice.class,"rangeF"));
-		telemetry.addData("RangeF", "Initialized");
-		telemetry.update();
+		//rangeF = new SensorMRRange(hardwareMap.get(I2cDevice.class,"rangeF"));
+		//telemetry.addData("RangeF", "Initialized");
+		//telemetry.update();
 		//pause(1.0);
-		rangeB = new SensorMRRange(hardwareMap.get(I2cDevice.class,"rangeB"));
-		telemetry.addData("RangeB", "Initialized");
-		telemetry.update();
+		//rangeB = new SensorMRRange(hardwareMap.get(I2cDevice.class,"rangeB"));
+	//	telemetry.addData("RangeB", "Initialized");
+		//telemetry.update();
 		//pause(1.0);
 		//colorC.sensorSetup(0x2e);
 		//colorR.sensorSetup(0x2a);
@@ -197,13 +197,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		telemetry.addData("ColorB", "I2C address");
 		telemetry.update();
 		//pause(1.0);
-		rangeF.sensorSetup(0x4a);
-		telemetry.addData("RangeF", "I2C address");
-		telemetry.update();
+		//rangeF.sensorSetup(0x4a);
+		//telemetry.addData("RangeF", "I2C address");
+		//telemetry.update();
 		//pause(1.0);
-		rangeB.sensorSetup(0x4c);
-		telemetry.addData("RangeB", "I2C address");
-		telemetry.update();
+		//rangeB.sensorSetup(0x4c);
+		//telemetry.addData("RangeB", "I2C address");
+		//telemetry.update();
 		//pause(1.0);
 		telemetry.addData("sensors", "initialized");
 		telemetry.update();
@@ -421,11 +421,12 @@ public abstract class MyOpMode extends LinearOpMode {
 		while (opModeIsActive() && getAngleDiff(newAngle, startAngle) < targetAngle) {		//uses the abs value so this method can be used to turn the other way
 			telemetry.addData("startAngle",startAngle);
 			telemetry.addData("newAngle",newAngle);
+			/*
 			if(getAngleDiff(newAngle,startAngle)>targetAngle/2)
 			{
 				rangeF.getUltraSonicDistance();
 				rangeB.getUltraSonicDistance();
-			}
+			}*/
 			//rangeF.getUltraSonicDistance();
 			//rangeB.getUltraSonicDistance();
 			telemetry.update();
@@ -840,10 +841,11 @@ public abstract class MyOpMode extends LinearOpMode {
 		if (opModeIsActive()) {
 			USDF = rangeF.getUltraSonicDistance();
 			USDB = rangeB.getUltraSonicDistance();
+			/*
 			if(count == 0 && USDF > USDB)
 				count = 3;
 			else if(USDB > USDF && count == 0)
-				count = 2;
+				count = 2;*/
 			double startTime = getCurTime();
 			while(opModeIsActive())
 			{
@@ -852,7 +854,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				telemetry.addData("count",count);
 				telemetry.update();
 				initCurtime();
-				if(getCurTime() - startTime > 1.0) {
+				if(getCurTime() - startTime > 0.25) {
 					if(USDF==-1 || USDB == -1)
 						broken = true;
 					break;
@@ -1034,6 +1036,8 @@ public abstract class MyOpMode extends LinearOpMode {
 			}
 			avgEnc = getAvgEnc();
 			distMoved = Math.abs(avgEnc - currEnc);
+			if(leftMult < 0.93 || rightMult < 1.0)
+				telemetry.addData("drifting","true");
 			telemetry.addData("distMoved",distMoved);
 			telemetry.update();
 			idle();
@@ -1110,7 +1114,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				idle();
 			}
 		}
-		move(0.0,0.0);
+		move(0.0, 0.0);
 		return foundBeacon;
 	}
 
@@ -1330,6 +1334,17 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void pushButtonWithRollers() {
+		if(opModeIsActive()) {
+			moveBeaconPusherOutRollers();
+			try {
+				pause(2.5);
+			} catch (Exception e) {
+			}
+			moveBeaconPusherIn();
+		}
+	}
+
 	public void pushButtonWithDistance()
 	{
 		int USDF = rangeF.getUltraSonicDistance();
@@ -1383,22 +1398,22 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		switch(dist)
 		{
-			case 1: return 0.73;
-			case 2: return 0.73;
-			case 3: return 0.73;
-			case 4: return 0.73;
-			case 5: return 0.73;
-			case 6: return 0.73;
-			case 7: return 0.73;
-			case 8: return 0.73;
-			case 9: return 0.68;
-			case 10: return 0.63;
-			case 11: return 0.43;
-			case 12: return 0.38;
-			case 13: return 0.34;
-			case 14: return 0.39;
-			case 15: return 0.23;
-			case 16: return 0.18;
+			case 1: return 0.65;
+			case 2: return 0.65;
+			case 3: return 0.65;
+			case 4: return 0.65;
+			case 5: return 0.65;
+			case 6: return 0.65;
+			case 7: return 0.65;
+			case 8: return 0.55;
+			case 9: return 0.49;
+			case 10: return 0.37;//changed
+			case 11: return 0.3;//changed
+			case 12: return 0.21;//changed
+			case 13: return 0.13;//changed
+			case 14: return 0.07;
+			case 15: return 0;
+			case 16: return 0;
 		}
 		return 0.0;
 	}
@@ -1447,6 +1462,12 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void moveBeaconPusherOut()
 		{
 		double v = 0.0;
+		servoBeaconPusher.setPosition(v);
+	}
+
+	public void moveBeaconPusherOutRollers()
+	{
+		double v = 0.6;
 		servoBeaconPusher.setPosition(v);
 	}
 
@@ -1503,6 +1524,8 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void pause(double t) throws InterruptedException {
 		initCurtime();
+
+		//hacked
 		double startTime = getCurTime();
 		while (opModeIsActive() && getCurTime() < startTime + t)
 		{

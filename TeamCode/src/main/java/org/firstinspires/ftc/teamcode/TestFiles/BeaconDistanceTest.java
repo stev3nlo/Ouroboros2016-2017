@@ -16,15 +16,15 @@ public class BeaconDistanceTest extends MyAutonomous {
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
         pause(2.0);
-//        while(!opModeIsActive() && !isStopRequested())
-//        {
-//
-//            telemetry.addData("rangeF", rangeF.getUltraSonicDistance());
-//            telemetry.addData("rangeB", rangeB.getUltraSonicDistance());
-//            pushButtonWithDistanceOutput();
-//            telemetry.update();
-//            idle();
-//        }
+        while(!opModeIsActive() && !isStopRequested())
+        {
+
+            telemetry.addData("rangeF", rangeF.getUltraSonicDistance());
+            telemetry.addData("rangeB", rangeB.getUltraSonicDistance());
+            //pushButtonWithDistanceOutput();
+            telemetry.update();
+            idle();
+        }
         waitForStart();
         while (opModeIsActive()) {
             pushButtonWithDistance();
