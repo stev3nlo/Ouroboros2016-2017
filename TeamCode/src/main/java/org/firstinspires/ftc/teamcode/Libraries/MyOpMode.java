@@ -89,11 +89,10 @@ public abstract class MyOpMode extends LinearOpMode {
 
 
 
-
 	//sensors
 	/**
 	 * Adafruit IMU Object
-	 * 
+	 *
 	 */
 	protected SensorAdafruitIMU gyro;
 
@@ -659,7 +658,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	}
 
 
-	
+
 	//Essential shooter methods
 	/**
 	 * This method will reset all the values to the default (stopped, initial positions)
@@ -1345,7 +1344,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		if(opModeIsActive()) {
 			moveBeaconPusherOutRollers();
 			try {
-				pause(2.5);
+				pause(2);
 			} catch (Exception e) {
 			}
 			moveBeaconPusherIn();
@@ -1489,14 +1488,14 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void moveRollersUp()
 	{
-		servoRollerB.setPower(speedOfMovingRollers);
 		servoRollerF.setPower(speedOfMovingRollers);
+		servoRollerB.setPower(speedOfMovingRollers);
 	}
 
 	public void moveRollersDown()
 	{
-		servoRollerB.setPower(-speedOfMovingRollers);
 		servoRollerF.setPower(-speedOfMovingRollers);
+		servoRollerB.setPower(-speedOfMovingRollers);
 	}
 
 	public void moveBeaconPusherOut()
@@ -1887,6 +1886,5 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
 	}
 }
