@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Libraries;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.I2cAddr;
@@ -46,6 +47,12 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected double driftCounterDivisorLeft = 1.0;
 	protected double driftCounterDivisorRight = 1.0;
 
+	public boolean areRollersDropping = false;
+	public boolean areRollersRaising = false;
+	public double speedOfMovingRollers = 0.9;
+	public double startTimeOfDroppingRollers = 0.0;
+	public double startTimeOfRaisingRollers = 0.0;
+	public double rollerMovementTime = 1.0;
 
 
 	//drive train motors
@@ -75,6 +82,8 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected Servo servoDropper;	// servo for manipulator
 	protected Servo servoBeaconPusher;
 	protected Servo servoWheelBeaconPusher;
+	protected CRServo servoRollerF;
+	protected CRServo servoRollerB;
 	//protected Servo servoRangeF;
 	//protected Servo servoRangeB;
 
@@ -1343,6 +1352,21 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void pushButtonWithRollersQuick() {
+		if(opModeIsActive()) {
+			moveBeaconPusherOutRollers();
+			try {
+				pause(0.5);
+			} catch (Exception e) {
+			}
+			moveBeaconPusherIn();
+			try {
+				pause(0.5);
+			} catch (Exception e) {
+			}
+		}
+	}
+
 	public void pushButtonWithDistance()
 	{
 		int USDF = rangeF.getUltraSonicDistance();
@@ -1457,8 +1481,26 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void stopRollers()
+	{
+		servoRollerB.setPower(0.0);
+		servoRollerF.setPower(0.0);
+	}
+
+	public void moveRollersUp()
+	{
+		servoRollerB.setPower(speedOfMovingRollers);
+		servoRollerF.setPower(speedOfMovingRollers);
+	}
+
+	public void moveRollersDown()
+	{
+		servoRollerB.setPower(-speedOfMovingRollers);
+		servoRollerF.setPower(-speedOfMovingRollers);
+	}
+
 	public void moveBeaconPusherOut()
-		{
+	{
 		double v = 0.0;
 		servoBeaconPusher.setPosition(v);
 	}
