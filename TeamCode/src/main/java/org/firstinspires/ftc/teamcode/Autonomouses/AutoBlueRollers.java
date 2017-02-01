@@ -57,18 +57,24 @@ public class AutoBlueRollers extends MyAutonomous {
         closeServoDropper();
         runSpinner(0.0);
         pause(1.0);
-        moveWithEncodersCoast(0.22, 1500, 1.0, 1);
+        telemetry.addData("move forwards to wall", "");
+        moveWithEncodersCoast(0.22, 2100, 1.0, 1);
 
-        gyroArcTurnRight(0.2, yawDiff - 3);
 
-        moveWithEncodersCoast(0.22, 3500, 1.0, 0.7);
+        telemetry.addData("arc turn", "");
+        gyroArcTurnRight(0.2, yawDiff - 17);
 
-        driveAlongWallToBeacon(-0.13, true, 1.0, 0.7);
+        telemetry.addData("move forward past 2nd beacon", "");
+        moveWithEncodersCoast(0.22, 3500, 1.0, 0.6);
+
+        telemetry.addData("move backwards to 2nd beacon", "");
+        driveAlongWallToBeacon(-0.16, true, 1.0, 0.7);
 
         pushButtonWithRollers();
         pause(0.5);
-
-        driveToNextBeacon(-0.25,false,2000,1.0,0.7);
+        
+		telemetry.addData("driving to beacon", "");
+        driveToNextBeacon(-0.32,false,2000,1.0,0.7);
 
         pushButtonWithRollers();
 

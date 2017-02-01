@@ -1467,7 +1467,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void moveBeaconPusherOutRollers()
 	{
-		double v = 0.6;
+		double v = 0.5;
 		servoBeaconPusher.setPosition(v);
 	}
 
