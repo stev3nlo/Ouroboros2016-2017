@@ -74,7 +74,8 @@ public class AutoBlueRollers extends MyAutonomous {
         pause(0.5);
         
 		telemetry.addData("driving to beacon", "");
-        driveToNextBeacon(-0.32,false,2000,1.0,0.7);
+        driveToNextBeacon(-0.32,true,1500,1.0,0.7);
+        pause(0.5);
 
         pushButtonWithRollers();
 

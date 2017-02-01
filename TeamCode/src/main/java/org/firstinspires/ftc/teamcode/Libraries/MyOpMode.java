@@ -1036,8 +1036,6 @@ public abstract class MyOpMode extends LinearOpMode {
 			}
 			avgEnc = getAvgEnc();
 			distMoved = Math.abs(avgEnc - currEnc);
-			if(leftMult < 0.93 || rightMult < 1.0)
-				telemetry.addData("drifting","true");
 			telemetry.addData("distMoved",distMoved);
 			telemetry.update();
 			idle();

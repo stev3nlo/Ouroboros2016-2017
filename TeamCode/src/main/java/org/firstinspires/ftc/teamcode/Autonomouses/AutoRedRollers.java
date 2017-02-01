@@ -51,28 +51,28 @@ public class AutoRedRollers extends MyAutonomous {
         else
             runSpinner(0.88);
         pause(0.1);
-        moveWithEncodersCoast(-.35, 1280, 1.0, 1);
+        moveWithEncodersCoast(-.35, 1450, 1.0, 1);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
         runSpinner(0.0);
         pause(1.0);
-        moveWithEncodersCoast(-0.22, 2170, 1.0, 1);
+        moveWithEncodersCoast(-0.22, 2400, 1.0, 1);
 
 
         //moveWithEncoders(.5, 1000);
-        gyroArcTurnRight(-0.26, yawDiff -3);
+        gyroArcTurnRight(-0.26, yawDiff -17);
 
-        moveWithEncodersCoast(0.22, 3500, 1.0, 0.7);
+        moveWithEncodersCoast(-0.22, 4100, 1.0, 0.7);
 
-        driveAlongWallToBeacon(-.15, false,1.0, 0.7);
+        driveAlongWallToBeacon(.15, false,1.0, 0.7);
 
         pushButtonWithRollers();
 
         pause(0.5);
 
-        driveToNextBeacon(-0.25,false,2000,1.0,0.7);
+        driveToNextBeacon(0.32,false,1500,1.0,0.7);
         pause(0.5);
         pushButtonWithRollers();
     }
