@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.adafruit.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Libraries.MotorScaler;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
+import org.firstinspires.ftc.teamcode.Libraries.SensorAdafruitIMU;
 import org.firstinspires.ftc.teamcode.Libraries.SensorMRColor;
 
 import java.io.IOException;
@@ -47,29 +49,28 @@ public class TeleOp extends MyOpMode
     public boolean g2APressed;     //toggle servo dropper
     public boolean g2BPressed;
 
-    public boolean servoBeaconPusherIsExtending;
-    public boolean servoBeaconPusherIsRetracting;
-
     long timeAtEndOfLastCycle;
 
     double timeBallsFinishDropping;
 
     public boolean firstCycleOfSpinner;
 
-    boolean isInterruptibleRoutineRedToBlueRunning;
-    boolean isInterruptibleRoutineBlueToRedRunning;
-    boolean hasGyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlueBeenInitialized;
-    boolean hasInterruptibleRoutineBeganRollingAlongWall;
-    double gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue;
+    boolean isInterruptibleRoutineRedToBlueRunning = false;
+    boolean isInterruptibleRoutineBlueToRedRunning = false;
+    boolean hasGyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlueBeenInitialized = false;
+    boolean hasInterruptibleRoutineBeganRollingAlongWall = false;
+    double gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue = 0.0;
 
-    boolean isInterruptibleRoutineDriveForwardsToRedAndPressRunning;
-    boolean isInterruptibleRoutineDriveBackwardsToRedAndPressRunning;
-    boolean isInterruptibleRoutineDriveForwardsToBlueAndPressRunning;
-    boolean isInterruptibleRoutineDriveBackwardsToBlueAndPressRunning;
-    boolean inDrivingRoutineHasColorBeenSeen;
+    boolean isInterruptibleRoutineDriveForwardsToRedAndPressRunning = false;
+    boolean isInterruptibleRoutineDriveBackwardsToRedAndPressRunning = false;
+    boolean isInterruptibleRoutineDriveForwardsToBlueAndPressRunning = false;
+    boolean isInterruptibleRoutineDriveBackwardsToBlueAndPressRunning = false;
+    boolean inDrivingRoutineHasColorBeenSeen = false;
 
-    double startTimeInterruptibleRoutineRedToBlue;
-    double startTimeInterruptibleRoutineBlueToRed;
+    double startTimeInterruptibleRoutineRedToBlue = 0.0;
+    double startTimeInterruptibleRoutineBlueToRed = 0.0;
+
+    boolean areRollersRaised = true;
 
     public void updateControllerVals()
     {
@@ -136,24 +137,32 @@ public class TeleOp extends MyOpMode
         {
             telemetry.addData("g1RTrig","NOT PRESSED");
         }
-        //telemetry.addData("motorL1EncoderVal",getMotorL1EncoderVal());
-        //telemetry.addData("motorR1EncoderVal",getMotorR1EncoderVal());
         telemetry.update();
     }
 
     public void initializeBeaconColorSensor()
     {
         colorB = new SensorMRColor(hardwareMap.colorSensor.get("colorB"));
+        colorB.sensorSetup(0x2c);
+    }
+
+    public void initializeGyro()
+    {
+        gyro = new SensorAdafruitIMU(hardwareMap.get(BNO055IMU.class, "gyro"));
+        telemetry.addData("Gyro", "Initialized");
+        telemetry.update();
+    }
+
+    public boolean isInterruptibleRoutineRunning()
+    {
+        return isInterruptibleRoutineBlueToRedRunning || isInterruptibleRoutineRedToBlueRunning;
     }
 
     public void runOpMode() throws InterruptedException
     {
         super.runOpMode();
         initializeBeaconColorSensor();
-        //motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        //motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        //motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        initializeGyro();
         waitForStart();
 
         timeAtLastLoop = getCurTime();
@@ -177,11 +186,13 @@ public class TeleOp extends MyOpMode
                 driverModeRight = 2;
             else
                 driverModeRight = 1;
+            telemetry.addData("driverModeLeft",driverModeLeft);
+            telemetry.addData("driverModeRight",driverModeRight);
             if(g1y1 > 0.1 || g1y1 < -0.1) {
                 motorL1.setPower(g1y1/driverModeLeft);
                 motorL2.setPower(g1y1/driverModeLeft);
             }
-            else
+            else if(!isInterruptibleRoutineRunning())
             {
                 motorL1.setPower(0.0);
                 motorL2.setPower(0.0);
@@ -190,7 +201,7 @@ public class TeleOp extends MyOpMode
                 motorR1.setPower(-g1y2/driverModeRight);
                 motorR2.setPower(-g1y2/driverModeRight);
             }
-            else
+            else if(!isInterruptibleRoutineRunning())
             {
                 motorR1.setPower(0.0);
                 motorR2.setPower(0.0);
@@ -210,23 +221,6 @@ public class TeleOp extends MyOpMode
                 shooterIsRunning = true;
                 runSpinner(0.88);
             }
-
-
-            //No stabilization
-
-            /*
-            if(g2YPressed || !shooterIsRunning)
-            {
-                runSpinner(0.0);
-                shooterIsRunning = false;
-            }
-            if(g2XPressed || shooterIsRunning)
-            {
-                shooterIsRunning = true;
-                runSpinner(0.35);
-            }
-            */
-
             // stops spinner
 
             //releases balls from basket into spinner
@@ -261,14 +255,14 @@ public class TeleOp extends MyOpMode
 
                 }
             }
-            else if(g1YPressed) //blue to red (forwards)
+            else if(!isInterruptibleRoutineBlueToRedRunning && g1YPressed) //blue to red (forwards)
             {
                 isInterruptibleRoutineBlueToRedRunning = true;
                 hasGyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlueBeenInitialized = false;
                 hasInterruptibleRoutineBeganRollingAlongWall = false;
                 startTimeInterruptibleRoutineBlueToRed = getCurTime();
             }
-            else if(g1APressed) //red to blue (backwards)
+            else if(!isInterruptibleRoutineRedToBlueRunning && g1APressed) //red to blue (backwards)
             {
                 isInterruptibleRoutineRedToBlueRunning = true;
                 hasGyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlueBeenInitialized = false;
@@ -280,57 +274,81 @@ public class TeleOp extends MyOpMode
             {
                 stopRollers();
                 areRollersDropping = false;
+                areRollersRaised = false;
             }
             else if(areRollersRaising && getCurTime() - rollerMovementTime > startTimeOfRaisingRollers)
             {
-                stopRollers();
+                holdRollersUp();
                 areRollersRaising = false;
+                areRollersRaised = true;
             }
 
             //Check if is interrupted
+            telemetry.addData("yaw", curYaw);
+            telemetry.addData("beaconColor",beaconColor);
             if(isInterruptibleRoutineBlueToRedRunning)
             {
-                if(!hasGyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlueBeenInitialized)
-                    gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue = gyro.getYaw();
-                if(hasInterruptibleRoutineBeganRollingAlongWall)
-                {
-                    moveForwards(0.5,0.3);
+                if(g1y1>0.1 || g1y1<-0.1 || g1y2 > 0.1 || g1y2 < -0.1) {
+                    isInterruptibleRoutineBlueToRedRunning = false;
+                    telemetry.addData("BROKEN","ROUTINE");
+                    moveForwards(0.0);
                 }
-                else if(getAngleDiff(gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue,curYaw) < 25)
-                {
-                    moveForwards(0.4, 0.5);
-                }
-                else if(getAngleDiff(gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue,curYaw) >= 25 && getAngleDiff(gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue,curYaw) < 85)
-                {
-                    moveForwards(0.1, 0.5);
-                }
-                else if(getAngleDiff(gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue,curYaw) >= 85)
-                {
-                    hasInterruptibleRoutineBeganRollingAlongWall = true;
-                    moveForwards(0.18,0.13);
-                }
-                if(getCurTime() - startTimeInterruptibleRoutineRedToBlue > 1.0 && !beaconColor.equals("Neither")) {
-                    if((g1BPressed && beaconColor.equals("Red")) || (g1XPressed && beaconColor.equals("Blue"))) {
-                        isInterruptibleRoutineBlueToRedRunning = false;
-                        hasInterruptibleRoutineBeganRollingAlongWall = false;
-                        moveForwards(0.0);
-                        pushButtonWithRollersQuick();
+                else {
+                    telemetry.addData("interruptibleRoutineRunning", "true");
+                    if (!hasGyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlueBeenInitialized) {
+                        gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue = gyro.getYaw();
+                        hasGyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlueBeenInitialized = true;
                     }
-                    else if(!g1BPressed && !g1XPressed)
+                    if (hasInterruptibleRoutineBeganRollingAlongWall) {
+                        moveForwards(0.18, 0.13);
+                        telemetry.addData("driving along next wall",true);
+                    } else if (getAngleDiff(gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue, curYaw) < 25) {
+                        moveForwards(0.05, 0.3);
+                        telemetry.addData("initial drift",true);
+                    } else if (getAngleDiff(gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue, curYaw) >= 25 && getAngleDiff(gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue, curYaw) < 85) {
+                        moveForwards(0.0, 0.5);
+                        telemetry.addData("hard turn",true);
+                    } else if (getAngleDiff(gyroInitValueForInterruptibleRoutineBlueToRedOrRedToBlue, curYaw) >= 65) {
+                        hasInterruptibleRoutineBeganRollingAlongWall = true;
+                        moveForwards(0.18, 0.13);
+                    }
+                    telemetry.addData("timeRunningIt",getCurTime()-startTimeInterruptibleRoutineBlueToRed);
+                    /*
+                    if(beaconColor.equals("Blue"))
                     {
                         isInterruptibleRoutineBlueToRedRunning = false;
                         hasInterruptibleRoutineBeganRollingAlongWall = false;
                         moveForwards(0.0);
-                    }
+                    }*/
+                    /*
+                    if (getCurTime() - startTimeInterruptibleRoutineRedToBlue > 1.0 && !beaconColor.equals("Neither")) {
+                        if ((g1BPressed && beaconColor.equals("Red")) || (g1XPressed && beaconColor.equals("Blue"))) {
+                            isInterruptibleRoutineBlueToRedRunning = false;
+                            hasInterruptibleRoutineBeganRollingAlongWall = false;
+                            moveForwards(0.0);
+                            pushButtonWithRollersQuick();
+                        } else if (!g1BPressed && !g1XPressed) {
+                            isInterruptibleRoutineBlueToRedRunning = false;
+                            hasInterruptibleRoutineBeganRollingAlongWall = false;
+                            moveForwards(0.0);
+                        }
+                    }*/
                 }
             }
 
             if(isInterruptibleRoutineRedToBlueRunning)
             {
-                moveForwards(0.5, 0.4);
-                if(getCurTime() - startTimeInterruptibleRoutineRedToBlue > 1.0 && !beaconColor.equals("Neither")) {
-                    isInterruptibleRoutineBlueToRedRunning = false;
+                if(g1y1>0.1 || g1y1<-0.1 || g1y2 > 0.1 || g1y2 < -0.1) {
+                    isInterruptibleRoutineRedToBlueRunning = false;
                     moveForwards(0.0);
+                }
+                else {
+                    telemetry.addData("interruptibleRoutineRedToBlueRunning", "true");
+                    moveForwards(0.5, 0.4);
+                    if (getCurTime() - startTimeInterruptibleRoutineRedToBlue > 1.0 && !beaconColor.equals("Neither")) {
+                        isInterruptibleRoutineRedToBlueRunning = false;
+                        moveForwards(0.0);
+                    }
                 }
             }
 
@@ -377,9 +395,7 @@ public class TeleOp extends MyOpMode
                 moveBeaconPusherIn();
             }
 
-
             updateTelemetry();
-            //timeAtEndOfLastCycle = System.nanoTime()/1000000000;
             idle();
         }
     }

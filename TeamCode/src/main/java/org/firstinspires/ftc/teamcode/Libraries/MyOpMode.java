@@ -49,7 +49,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public boolean areRollersDropping = false;
 	public boolean areRollersRaising = false;
-	public double speedOfMovingRollers = 0.9;
+	public double speedOfMovingRollers = 0.2;
 	public double startTimeOfDroppingRollers = 0.0;
 	public double startTimeOfRaisingRollers = 0.0;
 	public double rollerMovementTime = 1.0;
@@ -157,18 +157,13 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorManip = hardwareMap.dcMotor.get("motorManip");
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
 		servoDropper = hardwareMap.servo.get("servoDropper");
+		servoRollerF = hardwareMap.crservo.get("servoRollerF");
+		servoRollerB = hardwareMap.crservo.get("servoRollerB");
 		closeServoDropper();
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 		moveBeaconPusherIn();
-		servoWheelBeaconPusher = hardwareMap.servo.get("servoWheelBeaconPusher");
-		pullInWheelBeaconPusher();
-
-
-
 		curPowerOfMotorSpinner = 0.9;
 		motorSpinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-		//motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		//motorSpinner.setMaxSpeed((int)(((double)(encoderTicksPerRotation*goalRPM))/60.0));
 
 		reset();
 	}
@@ -1496,6 +1491,12 @@ public abstract class MyOpMode extends LinearOpMode {
 	{
 		servoRollerF.setPower(-speedOfMovingRollers);
 		servoRollerB.setPower(-speedOfMovingRollers);
+	}
+
+	public void holdRollersUp()
+	{
+		servoRollerB.setPower(-0.05);
+		servoRollerF.setPower(-0.05);
 	}
 
 	public void moveBeaconPusherOut()
