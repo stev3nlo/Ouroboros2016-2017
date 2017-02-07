@@ -270,13 +270,13 @@ public class TeleOp extends MyOpMode
                 startTimeInterruptibleRoutineRedToBlue = getCurTime();
             }
 
-            if(areRollersDropping && getCurTime() - rollerMovementTime > startTimeOfDroppingRollers)
+            if(areRollersDropping && getCurTime() - rollerMovementTimeDown > startTimeOfDroppingRollers)
             {
                 stopRollers();
                 areRollersDropping = false;
                 areRollersRaised = false;
             }
-            else if(areRollersRaising && getCurTime() - rollerMovementTime > startTimeOfRaisingRollers)
+            else if(areRollersRaising && getCurTime() - rollerMovementTimeUp > startTimeOfRaisingRollers)
             {
                 holdRollersUp();
                 areRollersRaising = false;
@@ -358,7 +358,7 @@ public class TeleOp extends MyOpMode
                 {
                     if(areRollersRaising)
                     {
-                        startTimeOfDroppingRollers = getCurTime() + getCurTime() - rollerMovementTime - startTimeOfRaisingRollers;
+                        startTimeOfDroppingRollers = getCurTime() + getCurTime() - rollerMovementTimeDown - startTimeOfRaisingRollers;
                         areRollersRaising = false;
                     }
                     else
@@ -375,7 +375,7 @@ public class TeleOp extends MyOpMode
                 {
                     if(areRollersDropping)
                     {
-                        startTimeOfRaisingRollers = getCurTime() + getCurTime() - rollerMovementTime - startTimeOfDroppingRollers;
+                        startTimeOfRaisingRollers = getCurTime() + getCurTime() - rollerMovementTimeUp - startTimeOfDroppingRollers;
                         areRollersDropping = false;
                     }
                     else
