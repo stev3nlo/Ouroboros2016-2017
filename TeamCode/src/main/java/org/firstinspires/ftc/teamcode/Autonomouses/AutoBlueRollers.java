@@ -88,7 +88,7 @@ public class AutoBlueRollers extends MyAutonomous {
         moveRollersUp();
         pause(rollerMovementTimeUp);
         holdRollersUp();
-        gyroArcTurnLeft(.2,120);
+        gyroArcTurnLeft(-.2,120);
         pause(.5);
     }
 }
