@@ -45,10 +45,7 @@ public class AutoBlueRollers extends MyAutonomous {
         initCurtime();
         double startTime = getCurTime();
         double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-        if(batteryLevel > 13.0)
-            runSpinner(0.8);
-        else
-            runSpinner(0.88);
+        runSpinner(1.0);
         pause(0.1);
         moveWithEncodersCoast(.3, 2100, 1.0, 1.0);
         pause(0.1);
@@ -76,7 +73,7 @@ public class AutoBlueRollers extends MyAutonomous {
 
         pushButtonWithRollers();
         pause(0.5);
-        
+
 		telemetry.addData("driving to beacon", "");
         driveToNextBeacon(-0.32,true,1500,1.0,0.75);
         pause(0.5);
