@@ -60,13 +60,13 @@ public class AutoBlueRollers extends MyAutonomous {
         moveRollersDown();
         pause(rollerMovementTimeDown);
         stopRollers();
-        moveWithEncodersCoast(0.28, 450, 1.0, 1);
+        moveWithEncodersCoast(0.28, 440, 1.0, 1);
 
         telemetry.addData("arc turn", "");
-        gyroArcTurnRight(0.2, yawDiff - 13);
+        gyroArcTurnRight(0.2, yawDiff - 12);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        moveWithEncodersCoast(0.22, 4000, 1.0, 0.7);
+        moveWithEncodersCoast(0.22, 4000, 1.0, 0.8);
 
         telemetry.addData("move backwards to 2nd beacon", "");
         driveAlongWallToBeacon(-0.16, true, 1.0, 0.7);
@@ -75,7 +75,7 @@ public class AutoBlueRollers extends MyAutonomous {
         pause(0.5);
 
 		telemetry.addData("driving to beacon", "");
-        driveToNextBeacon(-0.32,true,1500,1.0,0.75);
+        driveToNextBeacon(-0.36,true,1500,1.0,0.75);
         pause(0.5);
 
         pushButtonWithRollers();
@@ -84,7 +84,16 @@ public class AutoBlueRollers extends MyAutonomous {
         moveRollersUp();
         pause(rollerMovementTimeUp);
         holdRollersUp();
-        gyroArcTurnRight(.3,120);
+        double baseAngle = gyro.getYaw();
+        double curAngle = baseAngle;
+        while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120)
+        {
+            moveForwards(0.08,0.4);
+            curAngle = gyro.getYaw();
+            idle();
+        }
+        //
+        // gyroArcTurnRight(.4,120);
         pause(.5);
     }
 }
