@@ -18,7 +18,6 @@ import java.io.ObjectOutputStream;
  * Created by spencersharp on 1/11/17.
  */
 @Autonomous(name="Spinner Query Test", group="Test")
-
 public class SpinnerQueryTest extends MyOpMode
 {
     DiagnosticLibrary dl;

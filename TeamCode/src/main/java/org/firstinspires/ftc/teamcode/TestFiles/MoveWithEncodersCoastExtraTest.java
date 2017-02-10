@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TestFiles;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
@@ -8,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 /**
  * Created by spencersharp on 1/16/17.
  */
-@Autonomous(name="Beacon Drift Test", group="Test")
+@Disabled//(name="Beacon Drift Test", group="Test")
 public class MoveWithEncodersCoastExtraTest extends MyAutonomous
 {
     public void runOpMode() throws InterruptedException

@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
  * Created by Morgannanez on 1/18/17.
  */
 
-@Autonomous(name="Auto Blue Simple Extra", group="Autonomous")
+@Disabled//(name="Auto Blue Simple Extra", group="Autonomous")
 public class AutoBlueSimpleExtra extends MyAutonomous {
 
     public void runOpMode() throws InterruptedException {

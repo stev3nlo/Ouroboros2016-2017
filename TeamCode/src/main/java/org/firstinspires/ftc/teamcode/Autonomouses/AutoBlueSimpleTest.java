@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.Libraries.DiagnosticQuery;
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
@@ -23,7 +24,7 @@ import java.io.ObjectOutputStream;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Blue Simple Test", group="Autonomous")
+@Disabled//(name="Auto Blue Simple Test", group="Autonomous")
 public class AutoBlueSimpleTest extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot

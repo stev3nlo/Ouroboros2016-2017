@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomouses;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
  * Created by Steven on 11/11/2016.
  */
 
-@Autonomous(name="Manip Test", group="Test")
+@Disabled//(name="Manip Test", group="Test")
 public class ManipTest extends MyOpMode {
 
     @Override

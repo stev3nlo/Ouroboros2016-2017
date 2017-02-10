@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TestFiles;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
@@ -9,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
  * Created by Morgannanez on 11/15/16.
  */
 
+@Disabled//(name = "AutoRangeTest", group = "Test")
 public class AutoRangeTest extends MyOpMode {
 
     SensorMRRange rangeF;

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomouses;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 
@@ -8,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
  * Created by Morgannanez on 1/6/17.
  */
 
-@Autonomous(name="Partner Blue Shoot", group="Auto")
+@Disabled//(name="Partner Blue Shoot", group="Auto")
 public class ShootBlue extends MyAutonomous {
     @Override
     public void runOpMode() throws InterruptedException {

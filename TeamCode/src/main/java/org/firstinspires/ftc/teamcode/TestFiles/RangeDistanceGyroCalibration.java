@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.TestFiles;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 
-@Autonomous(name="RangeDistanceGyroCalibration", group="Test")
+@Disabled//(name="RangeDistanceGyroCalibration", group="Test")
 public class RangeDistanceGyroCalibration extends MyAutonomous
 {
     public void runOpMode() throws InterruptedException
