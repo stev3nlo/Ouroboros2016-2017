@@ -49,11 +49,11 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public boolean areRollersDropping = false;
 	public boolean areRollersRaising = false;
-	public double speedOfMovingRollers = 0.13;
+	public double speedOfMovingRollers = 0.115;
 	public double startTimeOfDroppingRollers = 0.0;
 	public double startTimeOfRaisingRollers = 0.0;
-	public double rollerMovementTimeUp = 1.32 ;
-	public double rollerMovementTimeDown = 1.1;
+	public double rollerMovementTimeUp = 1.32;
+	public double rollerMovementTimeDown = 1.2;
 
 
 	//drive train motors

@@ -52,7 +52,7 @@ public class AutoRedRollers extends MyAutonomous {
         openServoDropper();
         pause(1.5);
         closeServoDropper();
-        //runSpinner(0.0);
+        runSpinner(0.0);
         pause(1.0);
 
         telemetry.addData("move forwards to wall", "");
@@ -66,7 +66,7 @@ public class AutoRedRollers extends MyAutonomous {
         gyroArcTurnRight(-0.26, yawDiff - 12);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        moveWithEncodersCoast(-0.22, 4100, 1.0, 0.7);
+        moveWithEncodersCoast(-0.22, 4100, 1.0, 0.6);
 
         telemetry.addData("move backwards to 2nd beacon", "");
         driveAlongWallToBeacon(.15, false,1.0, 0.7);
