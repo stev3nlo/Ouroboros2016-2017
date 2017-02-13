@@ -49,11 +49,11 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public boolean areRollersDropping = false;
 	public boolean areRollersRaising = false;
-	public double speedOfMovingRollers = 0.115;
+	public double speedOfMovingRollers = 0.1;
 	public double startTimeOfDroppingRollers = 0.0;
 	public double startTimeOfRaisingRollers = 0.0;
 	public double rollerMovementTimeUp = 1.32;
-	public double rollerMovementTimeDown = 1.2;
+	public double rollerMovementTimeDown = 1.3;
 
 
 	//drive train motors
@@ -84,7 +84,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected Servo servoBeaconPusher;
 	protected Servo servoWheelBeaconPusher;
 	protected CRServo servoRollerF;
-	protected CRServo servoRollerB;
+	protected Servo servoRollerB;
 	//protected Servo servoRangeF;
 	//protected Servo servoRangeB;
 
@@ -159,7 +159,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
 		servoDropper = hardwareMap.servo.get("servoDropper");
 		servoRollerF = hardwareMap.crservo.get("servoRollerF");
-		servoRollerB = hardwareMap.crservo.get("servoRollerB");
+		servoRollerB = hardwareMap.servo.get("servoRollerB");
 		closeServoDropper();
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 		moveBeaconPusherIn();
@@ -1476,27 +1476,47 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void moveFrontRollerUp()
+	{
+		servoRollerF.setPower(-1.0);
+	}
+
+	public void moveBackRollerUp()
+	{
+		servoRollerB.setPosition(1.0);
+	}
+
+	public void moveFrontRollerDown()
+	{
+		servoRollerF.setPower(1.0);
+	}
+
+	public void moveBackRollerDown()
+	{
+		servoRollerB.setPosition(0.0);
+	}
+
 	public void stopRollers()
 	{
-		servoRollerB.setPower(0.0);
+		//servoRollerB.setPosition(0.0);
 		servoRollerF.setPower(0.0);
 	}
 
 	public void moveRollersUp()
 	{
 		servoRollerF.setPower(-1.0);
-		servoRollerB.setPower(-speedOfMovingRollers);
+		servoRollerB.setPosition(1.0);
 	}
 
 	public void moveRollersDown()
 	{
 		servoRollerF.setPower(1.0);
-		servoRollerB.setPower(speedOfMovingRollers);
+		servoRollerB.setPosition(0.0);
 	}
 
 	public void holdRollersUp()
 	{
-		servoRollerB.setPower(-0.05);
+		servoRollerB.setPosition(0);
 		servoRollerF.setPower(-0.05);
 	}
 
