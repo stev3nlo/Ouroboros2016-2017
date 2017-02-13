@@ -44,7 +44,8 @@ public class AutoRedRollers extends MyAutonomous {
         waitForStart();
         initCurtime();
         double startTime = getCurTime();
-        //runSpinner(1.0);
+        double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
+        runSpinner(1.0);
         pause(0.1);
         moveWithEncodersCoast(-.35, 1450, 1.0, 1);
         pause(0.1);
@@ -53,20 +54,46 @@ public class AutoRedRollers extends MyAutonomous {
         closeServoDropper();
         //runSpinner(0.0);
         pause(1.0);
-        moveWithEncodersCoast(-0.22, 2400, 1.0, 1);
 
-        gyroArcTurnRight(-0.26, yawDiff -17);
+        telemetry.addData("move forwards to wall", "");
+        moveRollersDown();
+        pause(rollerMovementTimeDown);
+        stopRollers();
+        moveWithEncodersCoast(-0.22, 800, 1.0, 1);
 
+
+        telemetry.addData("arc turn", "");
+        gyroArcTurnRight(-0.26, yawDiff - 12);
+
+        telemetry.addData("move forward past 2nd beacon", "");
         moveWithEncodersCoast(-0.22, 4100, 1.0, 0.7);
 
+        telemetry.addData("move backwards to 2nd beacon", "");
         driveAlongWallToBeacon(.15, false,1.0, 0.7);
 
         pushButtonWithRollers();
-
         pause(0.5);
 
+        telemetry.addData("driving to beacon", "");
         driveToNextBeacon(0.32,false,1500,1.0,0.7);
         pause(0.5);
+
         pushButtonWithRollers();
+
+        pause(0.5);
+        moveRollersUp();
+
+        pause(rollerMovementTimeUp);
+        holdRollersUp();
+        double baseAngle = gyro.getYaw();
+        double curAngle = baseAngle;
+        while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120)
+        {
+            moveBackwards(0.08,0.4);
+            curAngle = gyro.getYaw();
+            idle();
+        }
+
+        pause(.5);
     }
 }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.TestFiles;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 
 import org.firstinspires.ftc.robotcontroller.external.samples.SensorMROpticalDistance;
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 /**
  * Created by Morgannanez on 11/22/16.
  */
-@Autonomous(name="OpticalDistanceTest", group="Test")
+@Disabled//(name="OpticalDistanceTest", group="Test")
 public class OpticalDistanceTest extends MyOpMode {
 
     MROpticalDistanceSensor ods;

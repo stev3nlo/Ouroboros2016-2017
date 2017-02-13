@@ -4,9 +4,12 @@ package org.firstinspires.ftc.teamcode.Autonomouses;
  * Created by Morgannanez on 10/10/16.
  */
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
 import org.firstinspires.ftc.teamcode.Libraries.RPMStabilizer;
 
+@Disabled
 public class AutoOpBlue extends MyOpMode {
 
     public void runOpMode() throws InterruptedException {

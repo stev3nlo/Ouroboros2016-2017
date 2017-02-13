@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.TestFiles;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 
-@com.qualcomm.robotcore.eventloop.opmode.Autonomous(name="Turn Parallel to Wall Test", group="Test")
+@Disabled//(name="Turn Parallel to Wall Test", group="Test")
 public class TurnToWallTest extends MyAutonomous
 {
     public void runOpMode() throws InterruptedException {

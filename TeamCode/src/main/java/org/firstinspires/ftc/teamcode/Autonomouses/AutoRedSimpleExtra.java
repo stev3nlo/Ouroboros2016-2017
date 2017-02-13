@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomouses;
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Libraries.MyAutonomous;
 import org.firstinspires.ftc.teamcode.Libraries.MyOpMode;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Red Simple Extra", group="Autonomous")
+@Disabled//(name="Auto Red Simple Extra", group="Autonomous")
 public class AutoRedSimpleExtra extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot

@@ -55,12 +55,13 @@ public class AutoBlueRollers extends MyAutonomous {
         runSpinner(0.0);
         pause(1.0);
 
-        
+
         telemetry.addData("move forwards to wall", "");
         moveRollersDown();
         pause(rollerMovementTimeDown);
         stopRollers();
         moveWithEncodersCoast(0.28, 440, 1.0, 1);
+
 
         telemetry.addData("arc turn", "");
         gyroArcTurnRight(0.2, yawDiff - 12);
@@ -82,13 +83,14 @@ public class AutoBlueRollers extends MyAutonomous {
 
         pause(0.5);
         moveRollersUp();
+
         pause(rollerMovementTimeUp);
         holdRollersUp();
         double baseAngle = gyro.getYaw();
         double curAngle = baseAngle;
         while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120)
         {
-            moveBackwards(0.08,0.4);
+            moveForwards(0.08,0.4);
             curAngle = gyro.getYaw();
             idle();
         }
