@@ -153,7 +153,7 @@ public class TeleOp extends MyOpMode
 
     public boolean isInterruptibleRoutineRunning()
     {
-        return isInterruptibleRoutineBlueToRedRunning || isInterruptibleRoutineRedToBlueRunning;
+        return isInterruptibleRoutineBlueToRedRunning || isInterruptibleRoutineRedToBlueRunning || isInterruptibleRoutineDriveBackwardsToBlueAndPressRunning || isInterruptibleRoutineDriveForwardsToBlueAndPressRunning || isInterruptibleRoutineDriveForwardsToRedAndPressRunning || isInterruptibleRoutineDriveBackwardsToRedAndPressRunning;
     }
 
     public void stopAllRoutines()
@@ -196,24 +196,7 @@ public class TeleOp extends MyOpMode
                 driverModeRight = 1;
             telemetry.addData("driverModeLeft",driverModeLeft);
             telemetry.addData("driverModeRight",driverModeRight);
-            if(g1y1 > 0.1 || g1y1 < -0.1) {
-                motorL1.setPower(g1y1/driverModeLeft);
-                motorL2.setPower(g1y1/driverModeLeft);
-            }
-            else if(!isInterruptibleRoutineRunning())
-            {
-                motorL1.setPower(0.0);
-                motorL2.setPower(0.0);
-            }
-            if(g1y2 > 0.1 || g1y2 < -0.1) {
-                motorR1.setPower(-g1y2/driverModeRight);
-                motorR2.setPower(-g1y2/driverModeRight);
-            }
-            else if(!isInterruptibleRoutineRunning())
-            {
-                motorR1.setPower(0.0);
-                motorR2.setPower(0.0);
-            }
+
             moveManip(-g2y1);
 
             //Stabilization
@@ -534,6 +517,23 @@ public class TeleOp extends MyOpMode
             }
             else if(g2Rbump) {
                 moveBeaconPusherIn();
+            }
+
+            if(!isInterruptibleRoutineRunning()) {
+                if (g1y1 > 0.1 || g1y1 < -0.1) {
+                    motorL1.setPower(g1y1 / driverModeLeft);
+                    motorL2.setPower(g1y1 / driverModeLeft);
+                } else {
+                    motorL1.setPower(0.0);
+                    motorL2.setPower(0.0);
+                }
+                if (g1y2 > 0.1 || g1y2 < -0.1) {
+                    motorR1.setPower(-g1y2 / driverModeRight);
+                    motorR2.setPower(-g1y2 / driverModeRight);
+                } else {
+                    motorR1.setPower(0.0);
+                    motorR2.setPower(0.0);
+                }
             }
 
             updateTelemetry();
