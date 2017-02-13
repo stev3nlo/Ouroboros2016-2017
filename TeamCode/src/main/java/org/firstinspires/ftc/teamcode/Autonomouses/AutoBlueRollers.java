@@ -88,12 +88,10 @@ public class AutoBlueRollers extends MyAutonomous {
         double curAngle = baseAngle;
         while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120)
         {
-            moveForwards(0.08,0.4);
+            moveBackwards(0.08,0.4);
             curAngle = gyro.getYaw();
             idle();
         }
-        //
-        // gyroArcTurnRight(.4,120);
         pause(.5);
     }
 }

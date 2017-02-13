@@ -36,7 +36,6 @@ public class AutoRedRollers extends MyAutonomous {
         while(!opModeIsActive() && !isStopRequested())
         {
             yawDiff = getAngleDiff(startAngle,gyro.getYaw());
-            //telemetry.addData("yawDiff",yawDiff);
             boolean isGyroGood = yawDiff < 60.0;
             telemetry.addData("isGyroGood",isGyroGood);
             telemetry.update();
@@ -45,20 +44,17 @@ public class AutoRedRollers extends MyAutonomous {
         waitForStart();
         initCurtime();
         double startTime = getCurTime();
-        //double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-        runSpinner(1.0);
+        //runSpinner(1.0);
         pause(0.1);
         moveWithEncodersCoast(-.35, 1450, 1.0, 1);
         pause(0.1);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
-        runSpinner(0.0);
+        //runSpinner(0.0);
         pause(1.0);
         moveWithEncodersCoast(-0.22, 2400, 1.0, 1);
 
-
-        //moveWithEncoders(.5, 1000);
         gyroArcTurnRight(-0.26, yawDiff -17);
 
         moveWithEncodersCoast(-0.22, 4100, 1.0, 0.7);
