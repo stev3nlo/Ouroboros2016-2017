@@ -214,7 +214,7 @@ public class TeleOp extends MyOpMode
                 motorR1.setPower(0.0);
                 motorR2.setPower(0.0);
             }
-            moveManip(g2y1);
+            moveManip(-g2y1);
 
             //Stabilization
 
@@ -306,6 +306,7 @@ public class TeleOp extends MyOpMode
             telemetry.addData("beaconColor",beaconColor);
             if(isInterruptibleRoutineDriveForwardsToRedAndPressRunning)
             {
+                telemetry.addData("isInterruptibleRoutineDriveForwardsToRedAndPressRunning",true);
                 if(g1y1>0.1 || g1y1<-0.1 || g1y2 > 0.1 || g1y2 < -0.1) {
                     isInterruptibleRoutineDriveForwardsToRedAndPressRunning = false;
                     telemetry.addData("BROKEN", "ROUTINE");
@@ -322,6 +323,7 @@ public class TeleOp extends MyOpMode
             }
             else if(isInterruptibleRoutineDriveBackwardsToRedAndPressRunning)
             {
+                telemetry.addData("isInterruptibleRoutineDriveForwardsToBlueAndPressRunning",true);
                 if(g1y1>0.1 || g1y1<-0.1 || g1y2 > 0.1 || g1y2 < -0.1) {
                     isInterruptibleRoutineDriveBackwardsToRedAndPressRunning = false;
                     telemetry.addData("BROKEN","ROUTINE");
@@ -338,6 +340,7 @@ public class TeleOp extends MyOpMode
             }
             else if(isInterruptibleRoutineDriveForwardsToBlueAndPressRunning)
             {
+                telemetry.addData("isInterruptibleRoutineDriveForwardsToBlueAndPressRunning",true);
                 if(g1y1>0.1 || g1y1<-0.1 || g1y2 > 0.1 || g1y2 < -0.1) {
                     isInterruptibleRoutineDriveForwardsToBlueAndPressRunning = false;
                     telemetry.addData("BROKEN","ROUTINE");
@@ -354,6 +357,7 @@ public class TeleOp extends MyOpMode
             }
             else if(isInterruptibleRoutineDriveBackwardsToBlueAndPressRunning)
             {
+                telemetry.addData("isInterruptibleRoutineDriveBackwardsToBlueAndPressRunning",true);
                 if(g1y1>0.1 || g1y1<-0.1 || g1y2 > 0.1 || g1y2 < -0.1) {
                     isInterruptibleRoutineDriveBackwardsToBlueAndPressRunning = false;
                     telemetry.addData("BROKEN","ROUTINE");
