@@ -45,9 +45,12 @@ public class AutoBlueRollers extends MyAutonomous {
         initCurtime();
         double startTime = getCurTime();
         double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-        runSpinner(1.0);
+        if(batteryLevel > 13.0)
+            runSpinner(0.8);
+        else
+            runSpinner(0.88);
         pause(0.1);
-        moveWithEncodersCoast(.3, 2100, 1.0, 1.0);
+        moveWithEncodersCoast(.3, 2450, 1.0, 1.0);
         pause(0.1);
         openServoDropper();
         pause(1.5);
@@ -55,18 +58,17 @@ public class AutoBlueRollers extends MyAutonomous {
         runSpinner(0.0);
         pause(1.0);
 
-        
+
         telemetry.addData("move forwards to wall", "");
         moveRollersDown();
-        pause(rollerMovementTimeDown);
-        stopRollers();
-        moveWithEncodersCoast(0.28, 440, 1.0, 1);
+        moveWithEncodersCoast(0.22, 1700, 1.0, 1);
+
 
         telemetry.addData("arc turn", "");
-        gyroArcTurnRight(0.2, yawDiff - 12);
+        gyroArcTurnRight(0.2, yawDiff - 17);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        moveWithEncodersCoast(0.22, 4000, 1.0, 0.8);
+        moveWithEncodersCoast(0.22, 3500, 1.0, 0.6);
 
         telemetry.addData("move backwards to 2nd beacon", "");
         driveAlongWallToBeacon(-0.16, true, 1.0, 0.7);
@@ -75,25 +77,14 @@ public class AutoBlueRollers extends MyAutonomous {
         pause(0.5);
 
 		telemetry.addData("driving to beacon", "");
-        driveToNextBeacon(-0.36,true,1500,1.0,0.75);
+        driveToNextBeacon(-0.32,true,1500,1.0,0.75);
         pause(0.5);
 
         pushButtonWithRollers();
 
         pause(0.5);
         moveRollersUp();
-        pause(rollerMovementTimeUp);
-        holdRollersUp();
-        double baseAngle = gyro.getYaw();
-        double curAngle = baseAngle;
-        while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120)
-        {
-            moveForwards(0.08,0.4);
-            curAngle = gyro.getYaw();
-            idle();
-        }
-        //
-        // gyroArcTurnRight(.4,120);
+        gyroArcTurnLeft(.2,120);
         pause(.5);
     }
 }
