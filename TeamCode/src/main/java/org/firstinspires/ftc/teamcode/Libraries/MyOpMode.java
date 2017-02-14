@@ -84,7 +84,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	protected Servo servoBeaconPusher;
 	protected Servo servoWheelBeaconPusher;
 	protected CRServo servoRollerF;
-	protected CRServo servoRollerB;
+	protected Servo servoRollerB;
 	//protected Servo servoRangeF;
 	//protected Servo servoRangeB;
 
@@ -159,7 +159,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorSpinner = hardwareMap.dcMotor.get("motorSpinner");
 		servoDropper = hardwareMap.servo.get("servoDropper");
 		servoRollerF = hardwareMap.crservo.get("servoRollerF");
-		servoRollerB = hardwareMap.crservo.get("servoRollerB");
+		servoRollerB = hardwareMap.servo.get("servoRollerB");
 		closeServoDropper();
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 		moveBeaconPusherIn();
@@ -1478,25 +1478,24 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void stopRollers()
 	{
-		servoRollerB.setPower(0.0);
+		//servoRollerB.setPosition(0.8);
 		servoRollerF.setPower(0.0);
 	}
 
 	public void moveRollersUp()
 	{
 		servoRollerF.setPower(-1.0);
-		servoRollerB.setPower(-speedOfMovingRollers);
+		servoRollerB.setPosition(0.0);
 	}
 
 	public void moveRollersDown()
 	{
 		servoRollerF.setPower(1.0);
-		servoRollerB.setPower(speedOfMovingRollers);
+		servoRollerB.setPosition(1.0);
 	}
 
 	public void holdRollersUp()
 	{
-		servoRollerB.setPower(-0.05);
 		servoRollerF.setPower(-0.05);
 	}
 

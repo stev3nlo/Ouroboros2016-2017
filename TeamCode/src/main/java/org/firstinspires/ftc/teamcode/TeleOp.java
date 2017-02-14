@@ -25,6 +25,9 @@ public class TeleOp extends MyOpMode
     public boolean g1APressed;
     public boolean g1BPressed;
 
+    public double curYaw;
+    public String beaconColor;
+
     int numLoopsRemainining;
     double timeAtLastLoop;
     double timePerLoop = 1.0;
@@ -171,6 +174,8 @@ public class TeleOp extends MyOpMode
         super.runOpMode();
         initializeBeaconColorSensor();
         initializeGyro();
+        beaconColor = colorB.beaconColor();
+        curYaw = gyro.getYaw();
         waitForStart();
 
         timeAtLastLoop = getCurTime();
@@ -178,8 +183,6 @@ public class TeleOp extends MyOpMode
         {
             updateControllerVals();
             initCurtime(); //gets real time timer
-            String beaconColor = colorB.beaconColor();
-            double curYaw = gyro.getYaw();
 
             if(g1Ltrig > 0.6)
                 driverModeLeft = 3;
@@ -284,9 +287,12 @@ public class TeleOp extends MyOpMode
                 areRollersRaised = true;
             }
 
-            //Check if is interrupted
-            telemetry.addData("yaw", curYaw);
-            telemetry.addData("beaconColor",beaconColor);
+            if(isInterruptibleRoutineRunning()) {
+                curYaw = gyro.getYaw();
+                beaconColor = colorB.beaconColor();
+                telemetry.addData("yaw", curYaw);
+                telemetry.addData("beaconColor", beaconColor);
+            }
             if(isInterruptibleRoutineDriveForwardsToRedAndPressRunning)
             {
                 telemetry.addData("isInterruptibleRoutineDriveForwardsToRedAndPressRunning",true);
@@ -389,10 +395,10 @@ public class TeleOp extends MyOpMode
                             telemetry.addData("hard turn", true);
                         }
                     }
-                    else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) < 2000) {
+                    else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) < 1500) {
                         moveForwards(0.25, 0.25);
                         telemetry.addData("initial straight",true);
-                    } else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) >= 2000) {
+                    } else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) >= 1500) {
                         hasInterruptibleRoutineBeganTurning = true;
                         moveForwards(0.0, 0.5);
                         telemetry.addData("hard turn",true);
@@ -449,10 +455,10 @@ public class TeleOp extends MyOpMode
                             telemetry.addData("hard turn", true);
                         }
                     }
-                    else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) < 1500) {
+                    else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) < 1200) {
                         moveBackwards(0.25, 0.25);
                         telemetry.addData("initial straight",true);
-                    } else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) >= 1500) {
+                    } else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) >= 1200) {
                         hasInterruptibleRoutineBeganTurning = true;
                         moveBackwards(0.0, 0.5);
                         telemetry.addData("hard turn",true);
