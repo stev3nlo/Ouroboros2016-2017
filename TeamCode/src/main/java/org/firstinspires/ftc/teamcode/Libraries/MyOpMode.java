@@ -49,11 +49,11 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public boolean areRollersDropping = false;
 	public boolean areRollersRaising = false;
-	public double speedOfMovingRollers = 0.13;
+	public double speedOfMovingRollers = 0.1;
 	public double startTimeOfDroppingRollers = 0.0;
 	public double startTimeOfRaisingRollers = 0.0;
-	public double rollerMovementTimeUp = 1.32 ;
-	public double rollerMovementTimeDown = 1.1;
+	public double rollerMovementTimeUp = 1.32;
+	public double rollerMovementTimeDown = 1.3;
 
 
 	//drive train motors
@@ -1476,22 +1476,41 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void moveFrontRollerUp()
+	{
+		servoRollerF.setPower(-1.0);
+	}
+
+	public void moveBackRollerUp()
+	{
+		servoRollerB.setPosition(1.0);
+	}
+
+	public void moveFrontRollerDown()
+	{
+		servoRollerF.setPower(1.0);
+	}
+
+	public void moveBackRollerDown()
+	{
+		servoRollerB.setPosition(0.0);
+	}
+
 	public void stopRollers()
 	{
-		//servoRollerB.setPosition(0.8);
 		servoRollerF.setPower(0.0);
 	}
 
 	public void moveRollersUp()
 	{
 		servoRollerF.setPower(-1.0);
-		servoRollerB.setPosition(0.0);
+		servoRollerB.setPosition(1.0);
 	}
 
 	public void moveRollersDown()
 	{
 		servoRollerF.setPower(1.0);
-		servoRollerB.setPosition(1.0);
+		servoRollerB.setPosition(0.0);
 	}
 
 	public void holdRollersUp()
