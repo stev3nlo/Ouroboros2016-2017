@@ -123,6 +123,7 @@ public class SpinnerTest extends MyOpMode {
         timePassed = thisTime - timeAtLastRPMUpdate;
         double RPM = (curEncoder - startEncoder) / timePassed;
         RPM /= 1120;
+        RPM *= 60;
         return RPM;
     }
 
@@ -130,7 +131,7 @@ public class SpinnerTest extends MyOpMode {
     {
         super.runOpMode();
         waitForStart();
-        int speed = 3670;
+        int speed = 5240;
         initCurtime();
         timeAtLastRPMUpdate = getCurTime();
         motorSpinnerStartEncoder = motorSpinner.getCurrentPosition();
@@ -163,9 +164,9 @@ public class SpinnerTest extends MyOpMode {
                 speed = 0;
             motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motorSpinner.setMaxSpeed(speed);
-            runSpinner(1.0);
+            runSpinner(0.7);
             initCurtime();
-            if(timeAtLastRPMUpdate + 5.0 < getCurTime())
+            if(timeAtLastRPMUpdate + 0.1 < getCurTime())
             {
                 curRPM = calculateRPM("motorSpinner");
                 motorSpinnerStartEncoder = motorSpinner.getCurrentPosition();

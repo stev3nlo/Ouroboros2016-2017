@@ -1907,6 +1907,6 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		motorSpinner.setMaxSpeed(3670);
+		motorSpinner.setMaxSpeed(4450);
 	}
 }
