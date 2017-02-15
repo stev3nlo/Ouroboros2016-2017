@@ -278,6 +278,8 @@ public class TeleOp extends MyOpMode
             }
 
 
+            int interruptibleRoutineRedToBlueDist = 1200;
+            int interruptibleRoutineBlueToRedDist = 1500;
 
             if(areRollersDropping && getCurTime() - rollerMovementTimeDown > startTimeOfDroppingRollers)
             {
@@ -400,10 +402,10 @@ public class TeleOp extends MyOpMode
                             telemetry.addData("hard turn", true);
                         }
                     }
-                    else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) < 1500) {
+                    else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) < interruptibleRoutineBlueToRedDist) {
                         moveForwards(0.25, 0.25);
                         telemetry.addData("initial straight",true);
-                    } else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) >= 1500) {
+                    } else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) >= interruptibleRoutineBlueToRedDist) {
                         hasInterruptibleRoutineBeganTurning = true;
                         moveForwards(0.0, 0.5);
                         telemetry.addData("hard turn",true);
@@ -460,10 +462,10 @@ public class TeleOp extends MyOpMode
                             telemetry.addData("hard turn", true);
                         }
                     }
-                    else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) < 1200) {
+                    else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) < interruptibleRoutineRedToBlueDist) {
                         moveBackwards(0.25, 0.25);
                         telemetry.addData("initial straight",true);
-                    } else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) >= 1200) {
+                    } else if (Math.abs(curDist-interruptibleRoutineInitEncoderVal) >= interruptibleRoutineRedToBlueDist) {
                         hasInterruptibleRoutineBeganTurning = true;
                         moveBackwards(0.0, 0.5);
                         telemetry.addData("hard turn",true);
