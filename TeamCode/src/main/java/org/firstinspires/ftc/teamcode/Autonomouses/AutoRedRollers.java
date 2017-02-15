@@ -45,10 +45,14 @@ public class AutoRedRollers extends MyAutonomous {
         initCurtime();
         double startTime = getCurTime();
         double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-        runSpinner(0.7);
+        runSpinner(0.92);
         pause(0.1);
         moveWithEncodersCoast(-.35, 1250, 1.0, 1);
-        pause(0.1);
+        pause(0.5);
+        moveRollersDown();
+        pause(rollerMovementTimeDown);
+        stopRollers();
+        pause(0.5);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
@@ -56,10 +60,8 @@ public class AutoRedRollers extends MyAutonomous {
         pause(1.0);
 
         telemetry.addData("move forwards to wall", "");
-        moveRollersDown();
-        pause(rollerMovementTimeDown);
-        stopRollers();
-        moveWithEncodersCoast(-0.22, 1300, 1.0, 1);
+
+        moveWithEncodersCoast(-0.22, 1500, 1.0, 1);
 
 
         telemetry.addData("arc turn", "");
@@ -76,7 +78,7 @@ public class AutoRedRollers extends MyAutonomous {
         pause(0.5);
 
         telemetry.addData("driving to beacon", "");
-        driveToNextBeacon(0.38,false,1500,1.0,0.7);
+        driveToNextBeacon(0.34,false,1650,1.0,0.7);
         pause(0.5);
 
         pushButtonWithRollers();

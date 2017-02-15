@@ -48,7 +48,11 @@ public class AutoBlueRollers extends MyAutonomous {
         runSpinner(1.0);
         pause(0.1);
         moveWithEncodersCoast(.3, 2100, 1.0, 1.0);
-        pause(0.1);
+        pause(0.5);
+        moveRollersDown();
+        pause(rollerMovementTimeDown);
+        stopRollers();
+        pause(0.5);
         openServoDropper();
         pause(1.5);
         closeServoDropper();
@@ -57,9 +61,6 @@ public class AutoBlueRollers extends MyAutonomous {
 
 
         telemetry.addData("move forwards to wall", "");
-        moveRollersDown();
-        pause(rollerMovementTimeDown);
-        stopRollers();
         moveWithEncodersCoast(0.28, 440, 1.0, 1);
 
 

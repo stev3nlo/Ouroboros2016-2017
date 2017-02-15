@@ -1504,13 +1504,13 @@ public abstract class MyOpMode extends LinearOpMode {
 	public void moveRollersUp()
 	{
 		servoRollerF.setPower(-1.0);
-		servoRollerB.setPosition(1.0);
+		servoRollerB.setPosition(0.1);
 	}
 
 	public void moveRollersDown()
 	{
 		servoRollerF.setPower(1.0);
-		servoRollerB.setPosition(0.0);
+		servoRollerB.setPosition(1.0);
 	}
 
 	public void holdRollersUp()
@@ -1748,6 +1748,40 @@ public abstract class MyOpMode extends LinearOpMode {
 				move((-speed * leftMult * ((1 - (((double) distMoved / (double) goal) / 3)))), (speed * rightMult * ((1 - (((double) distMoved / (double) goal) / 3)))));
 				distMoved = Math.abs(avgEnc - currEnc);
 				telemetry.update();
+				idle();
+			}
+			move(0.0,0.0);
+			try{pause(0.2);}catch(Exception e){}
+			stopMotors();
+		}
+	}
+
+	public void moveWithEncodersCoastAndDropRollers(double speed, int goal, double leftMult, double rightMult) {
+		if(opModeIsActive()) {
+			int currEnc = getAvgEnc();
+			int avgEnc = currEnc;
+			if(speed > 0)
+				moveForwards(speed * leftMult,speed * rightMult);
+			else
+				moveBackwards(speed * leftMult, speed * rightMult);
+			int distMoved = Math.abs(avgEnc - currEnc);
+			initCurtime();
+			double startTimeForRollersDropping = getCurTime();
+			while (getCurTime()-startTimeForRollersDropping < rollerMovementTimeDown && distMoved < goal && opModeIsActive()) {
+				avgEnc = getAvgEnc();
+				telemetry.addData("avg Enc", avgEnc);
+				telemetry.addData("curr Enc", currEnc);
+				distMoved = Math.abs(avgEnc - currEnc);
+				telemetry.update();
+				if(distMoved < goal)
+					move((-speed * leftMult * ((1 - (((double) distMoved / (double) goal) / 3)))), (speed * rightMult * ((1 - (((double) distMoved / (double) goal) / 3)))));
+				else
+					move(0.0,0.0);
+
+				if(getCurTime()-startTimeForRollersDropping < rollerMovementTimeDown)
+					moveRollersDown();
+				else
+					stopRollers();
 				idle();
 			}
 			move(0.0,0.0);
