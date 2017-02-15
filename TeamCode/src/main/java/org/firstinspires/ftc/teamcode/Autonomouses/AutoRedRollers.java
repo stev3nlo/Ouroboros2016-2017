@@ -45,7 +45,7 @@ public class AutoRedRollers extends MyAutonomous {
         initCurtime();
         double startTime = getCurTime();
         double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-        runSpinner(0.92);
+        runSpinner(0.86);
         pause(0.1);
         moveWithEncodersCoast(-.35, 1250, 1.0, 1);
         pause(0.5);
