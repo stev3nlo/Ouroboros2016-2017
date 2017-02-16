@@ -201,9 +201,9 @@ public class TeleOp extends MyOpMode
             telemetry.addData("driverModeRight",driverModeRight);
 
             if(g2y1>0.1)
-                moveManip(1.0);
-            else if(g2y1 < -0.1)
                 moveManip(-1.0);
+            else if(g2y1 < -0.1)
+                moveManip(1.0);
             else
                 moveManip(0.0);
 

@@ -278,7 +278,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void closeServoDropper()
 	{
-		setServoDropperPosition(.7);
+		setServoDropperPosition(0.75);
 	}
 
 	public long getSpinnerEncoderVal()
@@ -1941,6 +1941,6 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		motorSpinner.setMaxSpeed(9001);
+		motorSpinner.setMaxSpeed(3500);
 	}
 }

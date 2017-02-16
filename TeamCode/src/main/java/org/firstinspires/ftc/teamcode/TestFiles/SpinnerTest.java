@@ -131,7 +131,7 @@ public class SpinnerTest extends MyOpMode {
     {
         super.runOpMode();
         waitForStart();
-        int speed = 5240;
+        double speed = 0.7;
         initCurtime();
         timeAtLastRPMUpdate = getCurTime();
         motorSpinnerStartEncoder = motorSpinner.getCurrentPosition();
@@ -146,25 +146,27 @@ public class SpinnerTest extends MyOpMode {
                 closeServoDropper();
             if(g1XPressed)
             {
-                speed += 1;
+                speed += 0.01;
             }
             else if(g1YPressed)
             {
-                speed -= 1;
+                speed -= 0.01;
             }
             else if(g1APressed)
             {
-                speed += 10;
+                speed += 0.1;
             }
             else if(g1BPressed)
             {
-                speed -= 10;
+                speed -= 0.1;
             }
             if(speed < 0)
                 speed = 0;
-            motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorSpinner.setMaxSpeed(speed);
-            runSpinner(0.7);
+            else if(speed>1.0)
+                speed = 1.0;
+            //motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            //motorSpinner.setMaxSpeed(speed);
+            runSpinner(speed);
             initCurtime();
             if(timeAtLastRPMUpdate + 0.1 < getCurTime())
             {
