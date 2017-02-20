@@ -1776,23 +1776,26 @@ public abstract class MyOpMode extends LinearOpMode {
 				color = "Neither";
 			}
 			boolean seesBeacon = false;
-			while (!seesBeacon && distMoved < goal && opModeIsActive()) {
+			while (distMoved < goal && opModeIsActive()) {
 				avgEnc = getAvgEnc();
 				double curYaw = gyro.getYaw();
 				telemetry.addData("avg Enc", avgEnc);
 				telemetry.addData("curr Enc", currEnc);
 				color = colorB.beaconColor();
+				telemetry.addData("AngleDiff",getAngleDiff(curYaw,startYaw));
 				if(getAngleDiff(curYaw, startYaw) < 15) {
-					move((-speed * leftMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))), (speed * rightMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))));
+					moveBackwards(speed*leftMult,speed*rightMult);
+					//move((-speed * leftMult * ((1 - (((double) (distMoved-minDist) / (double) (goal-minDist)) / 3)))), (speed * rightMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))));
 				}
 				else
 				{
-					move((-speed * minMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))), (speed * minMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))));
+					moveBackwards(speed*minMult,speed*minMult);
+					//move((-speed * minMult * ((1 - (((double) (distMoved-minDist) / (double) (goal-minDist)) / 3)))), (speed * minMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))));
 				}
-				if(color.equals("Blue") && isBlue)
-					seesBeacon = true;
-				else if(color.equals("Red") && !isBlue)
-					seesBeacon = true;
+				//if(color.equals("Blue") && isBlue)
+				//	seesBeacon = true;
+				//else if(color.equals("Red") && !isBlue)
+				//	seesBeacon = true;
 				distMoved = Math.abs(avgEnc - currEnc);
 				telemetry.update();
 				idle();
