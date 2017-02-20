@@ -1733,6 +1733,76 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void moveWithEncodersCoastToWallOrToBeaconWithMinDist(double speed, int goal, int minDist, boolean isBlue, double leftMult, double rightMult) {
+		if(opModeIsActive()) {
+			int currEnc = getAvgEnc();
+			int avgEnc = currEnc;
+			double startYaw = gyro.getYaw();
+			if(speed > 0)
+				moveForwards(speed * leftMult,speed * rightMult);
+			else
+				moveBackwards(speed * leftMult, speed * rightMult);
+			int distMoved = Math.abs(avgEnc - currEnc);
+			double minMult = Math.min(leftMult,rightMult);
+			while(distMoved < minDist && opModeIsActive())
+			{
+				avgEnc = getAvgEnc();
+				telemetry.addData("avg Enc", avgEnc);
+				telemetry.addData("curr Enc", currEnc);
+				double curYaw = gyro.getYaw();
+				if(getAngleDiff(curYaw,startYaw) < 15) {
+					move((-speed * leftMult), (speed * rightMult));
+				}
+				else
+				{
+					move(-speed * minMult, speed * minMult);
+				}
+					//move((-speed * leftMult * ((1 - (((double) distMoved / (double) goal) / 3)))), (speed * rightMult * ((1 - (((double) distMoved / (double) goal) / 3)))));
+				distMoved = Math.abs(avgEnc - currEnc);
+				telemetry.update();
+				idle();
+			}
+			String color = "Neither";
+			if (colorB.beaconColor().equals("Blue"))
+			{
+				color = "Blue";
+			}
+			else if (colorB.beaconColor().equals("Red"))
+			{
+				color = "Red";
+			}
+			else
+			{
+				color = "Neither";
+			}
+			boolean seesBeacon = false;
+			while (!seesBeacon && distMoved < goal && opModeIsActive()) {
+				avgEnc = getAvgEnc();
+				double curYaw = gyro.getYaw();
+				telemetry.addData("avg Enc", avgEnc);
+				telemetry.addData("curr Enc", currEnc);
+				color = colorB.beaconColor();
+				if(getAngleDiff(curYaw, startYaw) < 15) {
+					move((-speed * leftMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))), (speed * rightMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))));
+				}
+				else
+				{
+					move((-speed * minMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))), (speed * minMult * ((1 - (((double) distMoved-minDist / (double) goal-minDist) / 3)))));
+				}
+				if(color.equals("Blue") && isBlue)
+					seesBeacon = true;
+				else if(color.equals("Red") && !isBlue)
+					seesBeacon = true;
+				distMoved = Math.abs(avgEnc - currEnc);
+				telemetry.update();
+				idle();
+			}
+			move(0.0,0.0);
+			try{pause(0.2);}catch(Exception e){}
+			stopMotors();
+		}
+	}
+
 	public void moveWithEncodersCoast(double speed, int goal, double leftMult, double rightMult) {
 		if(opModeIsActive()) {
 			int currEnc = getAvgEnc();
