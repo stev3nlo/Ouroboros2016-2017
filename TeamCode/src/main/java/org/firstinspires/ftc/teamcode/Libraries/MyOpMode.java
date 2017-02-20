@@ -1803,6 +1803,32 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+	public void moveWithEncodersCoastWithMaxTime(double speed, int goal, double maxTime, double leftMult, double rightMult) {
+		if(opModeIsActive()) {
+			int currEnc = getAvgEnc();
+			int avgEnc = currEnc;
+			if(speed > 0)
+				moveForwards(speed * leftMult,speed * rightMult);
+			else
+				moveBackwards(speed * leftMult, speed * rightMult);
+			int distMoved = Math.abs(avgEnc - currEnc);
+			initCurtime();
+			double startTime = getCurTime();
+			while (getCurTime()-startTime<maxTime && distMoved < goal && opModeIsActive()) {
+				avgEnc = getAvgEnc();
+				telemetry.addData("avg Enc", avgEnc);
+				telemetry.addData("curr Enc", currEnc);
+				getCurTime();
+				distMoved = Math.abs(avgEnc - currEnc);
+				telemetry.update();
+				idle();
+			}
+			move(0.0,0.0);
+			try{pause(0.2);}catch(Exception e){}
+			stopMotors();
+		}
+	}
+
 	public void moveWithEncodersCoast(double speed, int goal, double leftMult, double rightMult) {
 		if(opModeIsActive()) {
 			int currEnc = getAvgEnc();
