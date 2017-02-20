@@ -218,7 +218,7 @@ public class TeleOp extends MyOpMode
             if(g2XPressed || shooterIsRunning)
             {
                 shooterIsRunning = true;
-                runSpinner(0.86);
+                runSpinner(curPowerOfMotorSpinner);
             }
             // stops spinner
 

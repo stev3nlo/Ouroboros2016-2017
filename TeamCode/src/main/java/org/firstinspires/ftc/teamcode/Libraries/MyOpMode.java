@@ -120,7 +120,7 @@ public abstract class MyOpMode extends LinearOpMode {
 	//protected double curPowerOfMotorR1 = 0.0;
 	//protected double curPowerOfMotorL1 = 0.0;
 	//protected double curPowerOfMotorManip = 0.0;
-	protected double curPowerOfMotorSpinner = 0.9;
+	protected double curPowerOfMotorSpinner = 0.61;
 
 	public long spinnerEncoderOffset = 0;
 
@@ -163,7 +163,8 @@ public abstract class MyOpMode extends LinearOpMode {
 		closeServoDropper();
 		servoBeaconPusher = hardwareMap.servo.get("servoBeaconPusher");
 		moveBeaconPusherIn();
-		curPowerOfMotorSpinner = 0.9;
+		moveBackRollerDown(); //for some reason needs to be down, movebackrollerup made it in down position
+		curPowerOfMotorSpinner = 0.61;
 		motorSpinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
 		reset();
@@ -1018,9 +1019,9 @@ public abstract class MyOpMode extends LinearOpMode {
 		int distMoved = Math.abs(avgEnc - currEnc);
 		double curSpeedL = -leftMult * speed;
 		double curSpeedR = rightMult * speed;
-		while(opModeIsActive() && (distMoved < 2000 || !color.equals(targetColor)))
+		while(opModeIsActive() && (distMoved < encoderDist || !color.equals(targetColor)))
 		{
-			if(distMoved < 2000)
+			if(distMoved < encoderDist)
 			{
 				curSpeedL = -leftMult * speed * ((1 - (((double) distMoved / (double) encoderDist) / 2)));
 				curSpeedR = rightMult * speed * ((1 - (((double) distMoved / (double) encoderDist) / 2)));
@@ -1526,7 +1527,7 @@ public abstract class MyOpMode extends LinearOpMode {
 
 	public void moveBeaconPusherOutRollers()
 	{
-		double v = 0.5;
+		double v = 0.35;
 		servoBeaconPusher.setPosition(v);
 	}
 
@@ -1941,6 +1942,6 @@ public abstract class MyOpMode extends LinearOpMode {
 		motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 		motorSpinner.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-		motorSpinner.setMaxSpeed(3500);
+		motorSpinner.setMaxSpeed(4500);
 	}
 }

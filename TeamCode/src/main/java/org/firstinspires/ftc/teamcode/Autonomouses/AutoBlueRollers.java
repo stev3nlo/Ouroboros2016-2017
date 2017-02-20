@@ -45,9 +45,9 @@ public class AutoBlueRollers extends MyAutonomous {
         initCurtime();
         double startTime = getCurTime();
         double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-        runSpinner(0.86);
+        runSpinner(curPowerOfMotorSpinner);
         pause(0.1);
-        moveWithEncodersCoast(.3, 2100, 1.0, 1.0);
+        moveWithEncodersCoast(.3, 2500, 1.0, 1.0);
         pause(0.5);
         moveRollersDown();
         pause(rollerMovementTimeDown);
@@ -61,24 +61,24 @@ public class AutoBlueRollers extends MyAutonomous {
 
 
         telemetry.addData("move forwards to wall", "");
-        moveWithEncodersCoast(0.28, 440, 1.0, 1);
+        moveWithEncodersCoast(0.28, 400, 1.0, 1);
 
 
         telemetry.addData("arc turn", "");
-        gyroArcTurnRight(0.2, yawDiff - 12);
+        gyroArcTurnRight(0.2, yawDiff - 8);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        moveWithEncodersCoast(0.22, 4000, 1.0, 0.8);
+        moveWithEncodersCoast(0.26,4500,1.0,0.8);
+        //moveForUnits(0.22, 4400, 1.0, 0.8);
 
         telemetry.addData("move backwards to 2nd beacon", "");
-        driveAlongWallToBeacon(-0.16, true, 1.0, 0.7);
-
+        driveAlongWallToBeacon(-0.135, true, 1.0, 0.7);
+        moveForwards(0.03);
         pushButtonWithRollers();
-        pause(0.5);
 
 		telemetry.addData("driving to beacon", "");
-        driveToNextBeacon(-0.36,true,1500,1.0,0.75);
-        pause(0.5);
+        driveToNextBeacon(-0.255,true,1500,1.0,0.75);
+        moveForwards(0.02);
 
         pushButtonWithRollers();
 
@@ -89,7 +89,7 @@ public class AutoBlueRollers extends MyAutonomous {
         holdRollersUp();
         double baseAngle = gyro.getYaw();
         double curAngle = baseAngle;
-        while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120)
+        while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120) //if runs into pole, doesn't stop; add second check statement with encoder change maybe
         {
             moveForwards(0.08,0.4);
             curAngle = gyro.getYaw();

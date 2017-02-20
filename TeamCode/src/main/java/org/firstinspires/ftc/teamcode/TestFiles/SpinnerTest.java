@@ -131,7 +131,7 @@ public class SpinnerTest extends MyOpMode {
     {
         super.runOpMode();
         waitForStart();
-        double speed = 0.7;
+        double speed = curPowerOfMotorSpinner;
         initCurtime();
         timeAtLastRPMUpdate = getCurTime();
         motorSpinnerStartEncoder = motorSpinner.getCurrentPosition();

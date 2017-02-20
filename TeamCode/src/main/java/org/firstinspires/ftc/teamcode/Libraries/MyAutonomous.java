@@ -15,7 +15,7 @@ public class MyAutonomous extends MyOpMode
         motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);*/
-        motorSpinner.setMaxSpeed(3500);
+        motorSpinner.setMaxSpeed(4500);
         initializeSensors();
         pause(1.0);
         initAngle = gyro.getYaw();

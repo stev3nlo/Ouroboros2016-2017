@@ -45,9 +45,9 @@ public class AutoRedRollers extends MyAutonomous {
         initCurtime();
         double startTime = getCurTime();
         double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-        runSpinner(0.86);
+        runSpinner(curPowerOfMotorSpinner);
         pause(0.1);
-        moveWithEncodersCoast(-.35, 1250, 1.0, 1);
+        moveWithEncodersCoast(-.35, 1450, 1.0, 1);
         pause(0.5);
         moveRollersDown();
         pause(rollerMovementTimeDown);
@@ -61,14 +61,14 @@ public class AutoRedRollers extends MyAutonomous {
 
         telemetry.addData("move forwards to wall", "");
 
-        moveWithEncodersCoast(-0.22, 1500, 1.0, 1);
+        moveWithEncodersCoast(-0.22, 1550, 1.0, 1);
 
 
         telemetry.addData("arc turn", "");
-        gyroArcTurnRight(-0.26, yawDiff - 11);
+        gyroArcTurnRight(-0.26, yawDiff - 8);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        driveToNextBeacon(-0.38, false, 4400, 1.0, 0.6);
+        moveWithEncodersCoast(-0.38, 4100, 1.0, 0.6);
         pause(0.5);
 
         telemetry.addData("move backwards to 2nd beacon", "");
@@ -78,8 +78,10 @@ public class AutoRedRollers extends MyAutonomous {
         pause(0.5);
 
         telemetry.addData("driving to beacon", "");
-        driveToNextBeacon(0.34,false,1650,1.0,0.7);
-        pause(0.5);
+        driveToNextBeacon(0.28,false,1600,1.0,0.7);
+        //*****************Spencer: I turned speed down from .31 to .28 after seeing semi-s first match auto move past the 2nd beacon
+        moveBackwards(0.03);
+        //pause(0.5);
 
         pushButtonWithRollers();
 
