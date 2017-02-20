@@ -68,7 +68,7 @@ public class AutoBlueRollers extends MyAutonomous {
         gyroArcTurnRight(0.2, yawDiff - 8);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        moveWithEncodersCoastToWallOrToBeaconWithMinDist(0.36,4500,1500,true,1.0,0.8);
+        moveWithEncodersCoastToWallOrToBeaconWithMinDist(0.36,4400,1500,true,1.0,0.8);
         //moveForUnits(0.22, 4400, 1.0, 0.8);
 
         telemetry.addData("move backwards to 2nd beacon", "");
@@ -89,10 +89,9 @@ public class AutoBlueRollers extends MyAutonomous {
         double curAngle = baseAngle;
         while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120) //if runs into pole, doesn't stop; add second check statement with encoder change maybe
         {
-            moveForwards(0.08,0.4);
+            moveForwards(0.06,0.4);
             curAngle = gyro.getYaw();
             idle();
         }
-        pause(.5);
     }
 }

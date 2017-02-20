@@ -147,7 +147,7 @@ public class SensorMRColor {
 		if (getBlue() >= 5)// && getBlue() > getRed()){// && getBlue() > getRed()) {
 		{
 			return "Blue";
-		} else if (getRed() >= 2 && getRed() > getBlue()) {
+		} else if (getRed() >= 3 && getRed() > getBlue()) {
 			return "Red";
 		} else {
 			return "Neither";
