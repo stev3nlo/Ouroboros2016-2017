@@ -200,6 +200,9 @@ public class TeleOp extends MyOpMode
             telemetry.addData("driverModeLeft",driverModeLeft);
             telemetry.addData("driverModeRight",driverModeRight);
 
+            double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
+
+
             if(g2y1>0.1)
                 moveManip(-1.0);
             else if(g2y1 < -0.1)
