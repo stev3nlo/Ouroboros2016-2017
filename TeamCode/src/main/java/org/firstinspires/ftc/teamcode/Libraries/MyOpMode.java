@@ -1832,6 +1832,81 @@ public abstract class MyOpMode extends LinearOpMode {
 		}
 	}
 
+//	public void moveWithEncodersCoastWithMaxTimeWithDriftAfterContact(double speed, int goal,
+//																	  double maxTime,
+//																	  double leftMult,
+//																	  double rightMult,
+//																	  int angChangeGoal) {
+//		double startAng = gyro.getYaw();
+//		boolean touchedWall = false;
+//		if (opModeIsActive()) {
+//			int currEnc = getAvgEnc();
+//			int avgEnc = currEnc;
+//			double angDiff = getAngleDiff(startAng,gyro.getYaw());
+//			if (angDiff > angChangeGoal) {
+//				touchedWall = true;
+//			}
+//			if (touchedWall) {
+//				if(speed > 0)
+//					moveForwards(speed * leftMult,speed * rightMult);
+//				else
+//					moveBackwards(speed * leftMult, speed * rightMult);
+//			} else {
+//				if(speed > 0)
+//					moveForwards(speed,speed);
+//				else
+//					moveBackwards(speed, speed);
+//			}
+//
+//			int distMoved = Math.abs(avgEnc - currEnc);
+//			initCurtime();
+//			double startTime = getCurTime();
+//			while (getCurTime()-startTime<maxTime && distMoved < goal && opModeIsActive()) {
+//				avgEnc = getAvgEnc();
+//				telemetry.addData("avg Enc", avgEnc);
+//				telemetry.addData("curr Enc", currEnc);
+//				getCurTime();
+//				distMoved = Math.abs(avgEnc - currEnc);
+//				telemetry.update();
+//				idle();
+//			}
+//			move(0.0,0.0);
+//			try{pause(0.2);}catch(Exception e){}
+//			stopMotors();
+//		}
+//	}
+
+	public void moveWithEncodersCoastWithMaxTimeWithDriftAfterContact(double speed, int goal, double maxTime, double leftMult, double rightMult, int angleChangeGoal) {
+
+		double startTime = getCurTime();
+		double currEncoder = getAvgEnc();
+		double startEncoder = currEncoder;
+		double power = speed;
+		double startAngle = gyro.getYaw();
+		double currentAngle = startAngle;
+		while(opModeIsActive() && currEncoder - startEncoder < goal && getCurTime() - startTime < maxTime &&
+				Math.abs(currentAngle - startAngle) < angleChangeGoal) {
+			currentAngle = gyro.getYaw();
+			currEncoder = getAvgEnc();
+			if(speed > 0)
+				moveForwards(speed,speed);
+			else
+				moveBackwards(speed, speed);
+		}
+
+		while(opModeIsActive() && currEncoder - startEncoder < goal && getCurTime() - startTime < maxTime) {
+			currEncoder = getAvgEnc();
+			if(speed > 0)
+				moveForwards(speed * leftMult,speed * rightMult);
+			else
+				moveBackwards(speed * leftMult, speed * rightMult);
+		}
+		move(0,0);
+		try{pause(0.2);}catch(Exception e){}
+		stopMotors();
+
+	}
+
 	public void moveWithEncodersCoast(double speed, int goal, double leftMult, double rightMult) {
 		if(opModeIsActive()) {
 			int currEnc = getAvgEnc();
