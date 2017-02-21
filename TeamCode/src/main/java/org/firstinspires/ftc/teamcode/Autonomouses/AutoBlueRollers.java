@@ -65,10 +65,10 @@ public class AutoBlueRollers extends MyAutonomous {
 
 
         telemetry.addData("arc turn", "Align with wall");
-        gyroArcTurnRight(0.2, yawDiff - 8);
+        gyroArcTurnRight(0.27, yawDiff - 8);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        moveWithEncodersCoastWithMaxTime(-0.3, 4400, 8.0, 1.0, 0.85);
+        moveWithEncodersCoastWithMaxTime(0.3, 4400, 8.0, 1.0, 0.85);
 
         telemetry.addData("move backwards to 2nd beacon", "");
         driveAlongWallToBeacon(-0.135, true, 1.0, 0.8);
