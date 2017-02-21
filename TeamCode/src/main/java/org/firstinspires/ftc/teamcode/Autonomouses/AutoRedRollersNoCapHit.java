@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Blue Rollers", group="Autonomous")
-public class AutoBlueRollers extends MyAutonomous {
+@Autonomous(name="Auto Red Rollers No Cap Hit", group="Autonomous")
+public class AutoRedRollersNoCapHit extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -47,7 +47,7 @@ public class AutoBlueRollers extends MyAutonomous {
         double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
         runSpinner(curPowerOfMotorSpinner);
         pause(0.1);
-        moveWithEncodersCoast(.3, 2500, 1.0, 1.0);
+        moveWithEncodersCoast(-0.35, 1450, 1.0, 1);
         pause(0.5);
         moveRollersDown();
         pause(rollerMovementTimeDown);
@@ -59,40 +59,44 @@ public class AutoBlueRollers extends MyAutonomous {
         runSpinner(0.0);
         pause(1.0);
 
-
         telemetry.addData("move forwards to wall", "");
-        moveWithEncodersCoast(0.28, 650, 1.0, 1);
 
+        moveWithEncodersCoast(-0.28, 1400, 1.0, 1);
 
-        telemetry.addData("arc turn", "Align with wall");
-        gyroArcTurnRight(0.35, yawDiff - 10);
+        telemetry.addData("arc turn", "Align With Wall");
+        gyroArcTurnRight(-0.35, yawDiff - 8);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        moveWithEncodersCoastWithMaxTime(0.36, 4300, 8.0, 1.0, 0.8);
+        moveWithEncodersCoastWithMaxTime(-0.36, 4400, 8.0,1.0, 0.8);
+        pause(0.5);
 
         telemetry.addData("move backwards to 2nd beacon", "");
-        driveAlongWallToBeacon(-0.15, true, 1.0, 0.7);
+        driveAlongWallToBeacon(.15, false,1.0, 0.7);
+
         pushButtonWithRollers();
+        pause(0.5);
 
         telemetry.addData("driving to beacon", "");
-        driveToNextBeacon(-0.27,true,1500,1.0,0.7);
+        driveToNextBeacon(0.27,false,1600,1.0,0.8);
 
         pushButtonWithRollers();
 
         pause(0.5);
         moveRollersUp();
 
+
         pause(rollerMovementTimeUp);
         holdRollersUp();
+        /*
         double baseAngle = gyro.getYaw();
         double curAngle = baseAngle;
-        while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120) //if runs into pole, doesn't stop; add second check statement with encoder change maybe
+        while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120)
         {
-            moveForwards(0.06,0.4);
+            moveBackwards(0.05,0.4);
             curAngle = gyro.getYaw();
             idle();
         }
         pause(0.5);
-        moveWithEncodersCoast(0.4,1500);
+        moveWithEncodersCoast(-0.4,1500);*/
     }
 }

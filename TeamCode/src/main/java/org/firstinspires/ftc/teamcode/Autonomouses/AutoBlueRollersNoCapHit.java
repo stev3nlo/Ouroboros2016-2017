@@ -13,8 +13,8 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Blue Rollers", group="Autonomous")
-public class AutoBlueRollers extends MyAutonomous {
+@Autonomous(name="Auto Blue Rollers No Cap Hit", group="Autonomous")
+public class AutoBlueRollersNoCapHit extends MyAutonomous {
     //travel 3ft to preferred shooting place
     //shoot
     //travel across the field to far beacon
@@ -84,6 +84,7 @@ public class AutoBlueRollers extends MyAutonomous {
 
         pause(rollerMovementTimeUp);
         holdRollersUp();
+        /* 
         double baseAngle = gyro.getYaw();
         double curAngle = baseAngle;
         while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120) //if runs into pole, doesn't stop; add second check statement with encoder change maybe
@@ -94,5 +95,6 @@ public class AutoBlueRollers extends MyAutonomous {
         }
         pause(0.5);
         moveWithEncodersCoast(0.4,1500);
+        */
     }
 }
