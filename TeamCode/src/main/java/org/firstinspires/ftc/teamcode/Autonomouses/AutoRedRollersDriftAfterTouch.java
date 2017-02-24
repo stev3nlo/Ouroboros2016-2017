@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Red Rollers Drift After Touch", group="Autonomous")
+//@Autonomous(name="Auto Red Rollers Drift After Touch", group="Autonomous")
 public class AutoRedRollersDriftAfterTouch extends MyAutonomous {
 	//travel 3ft to preferred shooting place
 	//shoot
@@ -44,10 +44,10 @@ public class AutoRedRollersDriftAfterTouch extends MyAutonomous {
 		waitForStart();
 		initCurtime();
 		double startTime = getCurTime();
-		double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-		runSpinner(curPowerOfMotorSpinner + .05);
+		double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 1").getVoltage();
+		runSpinner(curPowerOfMotorSpinner + .025);
 		pause(0.1);
-		moveWithEncodersCoast(-0.35, 1100, 1, 1);
+		moveWithEncodersCoast(-0.35, 1300, 1, 1);
 		pause(0.5);
 		moveRollersDown();
 		pause(rollerMovementTimeDown);
@@ -61,23 +61,24 @@ public class AutoRedRollersDriftAfterTouch extends MyAutonomous {
 
 		telemetry.addData("move forwards to wall", "");
 
-		moveWithEncodersCoast(-0.28, 1230, 1.0, 1);
+		moveWithEncodersCoast(-0.28, 1100, 1.0, 1);
 
 		telemetry.addData("arc turn", "Align With Wall");
-		gyroArcTurnRight(-0.35, yawDiff - 15);
+		gyroArcTurnRight(-0.35, yawDiff - 12);
 
 		telemetry.addData("move forward past 2nd beacon", "");
-		moveWithEncodersCoastWithMaxTimeWithDriftAfterContact(-0.36, 4750, 8.0,1.0, 0.8, 6);
+		//moveWithEncodersCoastWithMaxTimeWithDriftAfterContact(-0.36, 4750, 8.0,1.0, 0.8, 6);
+		moveWithEncodersCoastWithMaxTimeWithIncreasingDrift(-0.36, 5250, 7.0, false, 1.0, 0.65);
 		pause(0.5);
 
 		telemetry.addData("move backwards to 2nd beacon", "");
-		driveAlongWallToBeacon(.18, false,1.0, 0.7);
+		driveAlongWallToBeacon(.165, false,1.0, 0.7);
 
 		pushButtonWithRollers();
 		pause(0.5);
 
 		telemetry.addData("driving to beacon", "");
-		driveToNextBeacon(.26,false,1600,1.0,0.8);
+		driveToNextBeacon(.25,false,1600,1.0,0.8);
 
 		pushButtonWithRollers();
 

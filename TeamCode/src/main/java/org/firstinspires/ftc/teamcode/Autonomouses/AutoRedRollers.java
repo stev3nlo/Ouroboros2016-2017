@@ -44,10 +44,10 @@ public class AutoRedRollers extends MyAutonomous {
         waitForStart();
         initCurtime();
         double startTime = getCurTime();
-        double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-        runSpinner(curPowerOfMotorSpinner);
+        double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 1").getVoltage();
+        runSpinner(curPowerOfMotorSpinner + .025);
         pause(0.1);
-        moveWithEncodersCoast(-0.35, 1450, 1.0, 1);
+        moveWithEncodersCoast(-0.35, 1300, 1, 1);
         pause(0.5);
         moveRollersDown();
         pause(rollerMovementTimeDown);
@@ -61,23 +61,24 @@ public class AutoRedRollers extends MyAutonomous {
 
         telemetry.addData("move forwards to wall", "");
 
-        moveWithEncodersCoast(-0.28, 1400, 1.0, 1);
+        moveWithEncodersCoast(-0.28, 1100, 1.0, 1);
 
         telemetry.addData("arc turn", "Align With Wall");
-        gyroArcTurnRight(-0.35, yawDiff - 8);
+        gyroArcTurnRight(-0.35, yawDiff - 12);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        moveWithEncodersCoastWithMaxTime(-0.36, 4400, 8.0,1.0, 0.8);
+        //moveWithEncodersCoastWithMaxTimeWithDriftAfterContact(-0.36, 4750, 8.0,1.0, 0.8, 6);
+        moveWithEncodersCoastWithMaxTimeWithIncreasingDrift(-0.36, 5250, 7.0, false, 1.0, 0.65);
         pause(0.5);
 
         telemetry.addData("move backwards to 2nd beacon", "");
-        driveAlongWallToBeacon(.15, false,1.0, 0.7);
+        driveAlongWallToBeacon(.165, false,1.0, 0.7);
 
         pushButtonWithRollers();
         pause(0.5);
 
         telemetry.addData("driving to beacon", "");
-        driveToNextBeacon(0.27,false,1600,1.0,0.8);
+        driveToNextBeacon(.25,false,1600,1.0,0.8);
 
         pushButtonWithRollers();
 
@@ -88,13 +89,13 @@ public class AutoRedRollers extends MyAutonomous {
         holdRollersUp();
         double baseAngle = gyro.getYaw();
         double curAngle = baseAngle;
-        while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<120)
+        while(opModeIsActive() && getAngleDiff(baseAngle,curAngle)<110)
         {
             moveBackwards(0.05,0.4);
             curAngle = gyro.getYaw();
             idle();
         }
         pause(0.5);
-        moveWithEncodersCoast(-0.4,1500);
+        moveWithEncodersCoast(-0.4,900);
     }
 }

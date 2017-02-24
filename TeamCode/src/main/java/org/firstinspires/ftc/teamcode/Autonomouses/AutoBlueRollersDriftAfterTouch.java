@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Libraries.SensorMRRange;
 /**
  * Created by Steven on 11/14/2016.
  */
-@Autonomous(name="Auto Blue Rollers Drift After Touch", group="Autonomous")
+//@Autonomous(name="Auto Blue Rollers Drift After Touch", group="Autonomous")
 public class AutoBlueRollersDriftAfterTouch extends MyAutonomous {
 	//travel 3ft to preferred shooting place
 	//shoot
@@ -44,7 +44,7 @@ public class AutoBlueRollersDriftAfterTouch extends MyAutonomous {
 		waitForStart();
 		initCurtime();
 		double startTime = getCurTime();
-		double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
+		double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 1").getVoltage();
 		runSpinner(curPowerOfMotorSpinner + .03);
 		pause(0.1);
 		moveWithEncodersCoast(.3, 2750, 1.0, 1.0);
@@ -61,17 +61,18 @@ public class AutoBlueRollersDriftAfterTouch extends MyAutonomous {
 
 
 		telemetry.addData("move forwards to wall", "");
-		moveWithEncodersCoast(0.28, 300, 1.0, 1);
+		moveWithEncodersCoast(0.28, 400, 1.0, 1);
 
 
 		telemetry.addData("arc turn", "Align with wall");
-		gyroArcTurnRight(0.35, yawDiff - 11);
+		gyroArcTurnRight(0.24, yawDiff - 12);
 
 		telemetry.addData("move forward past 2nd beacon", "");
-		moveWithEncodersCoastWithMaxTimeWithDriftAfterContact(0.36, 4300, 8.0, 1.0, 0.8, 6);
+		//moveWithEncodersCoastWithMaxTimeWithDriftAfterContact(0.36, 4300, 8.0, 1.0, 0.8, 6);
+		moveWithEncodersCoastWithMaxTimeWithIncreasingDrift(0.36, 4600, 7.0, true,1.0, 0.65);
 
 		telemetry.addData("move backwards to 2nd beacon", "");
-		driveAlongWallToBeacon(-0.18, true, 1.0, 0.7);
+		driveAlongWallToBeacon(-0.165, true, 1.0, 0.7);
 		pushButtonWithRollers();
 
 		telemetry.addData("driving to beacon", "");

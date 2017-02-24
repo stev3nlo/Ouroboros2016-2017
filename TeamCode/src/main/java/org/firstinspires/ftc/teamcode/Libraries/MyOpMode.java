@@ -1876,6 +1876,71 @@ public abstract class MyOpMode extends LinearOpMode {
 //		}
 //	}
 
+	public void moveWithEncodersCoastWithMaxTimeWithIncreasingDriftOrToBeacon(double speed, int goal, double maxTime, double leftMult, double rightMult, boolean isBlue) {
+
+		double startTime = getCurTime();
+		double currEncoder = getAvgEnc();
+		double startEncoder = currEncoder;
+		double power = speed;
+		while(opModeIsActive() && currEncoder - startEncoder < goal && getCurTime() - startTime < maxTime) {
+			currEncoder = getAvgEnc();
+			double curMult = leftMult - (((((double)(currEncoder*currEncoder))/((double)(goal*goal)))*(((leftMult-rightMult))/(goal*goal))));
+			if(speed > 0)
+				moveForwards(speed,speed*curMult);
+			else
+				moveBackwards(speed, speed*curMult);
+			initCurtime();
+		}
+		if(speed > 0)
+			moveBackwards(0.03);
+		else
+			moveForwards(0.03);
+		try{pause(0.2);}catch(Exception e){}
+		stopMotors();
+
+	}
+
+	public void moveWithEncodersCoastWithMaxTimeWithIncreasingDrift(double speed, int goal, double maxTime, boolean isBlue, double leftMult, double rightMult) {
+
+		double startTime = getCurTime();
+		double currEncoder = getAvgEnc();
+		double startEncoder = currEncoder;
+		double power = speed;
+		String color = "Neither";
+		if (colorB.beaconColor().equals("Blue"))
+		{
+			color = "Blue";
+		}
+		else if (colorB.beaconColor().equals("Red"))
+		{
+			color = "Red";
+		}
+		else
+		{
+			color = "Neither";
+		}
+		while(opModeIsActive() && currEncoder - startEncoder < goal && getCurTime() - startTime < maxTime) {
+			currEncoder = getAvgEnc();
+			double curMult = leftMult - (((((double)currEncoder)/((double)(goal)))*(((leftMult-rightMult))/(goal))));
+			if(speed > 0)
+				moveForwards(speed,speed*curMult);
+			else
+				moveBackwards(speed, speed*curMult);
+			if(color.equals("Blue")&&isBlue)
+			{
+				goal = (int) (currEncoder + 200);
+			}
+			else if(color.equals("Red")&&!isBlue)
+			{
+				goal = (int) (currEncoder + 200);
+			}
+			initCurtime();
+		}
+		try{pause(0.2);}catch(Exception e){}
+		stopMotors();
+
+	}
+
 	public void moveWithEncodersCoastWithMaxTimeWithDriftAfterContact(double speed, int goal, double maxTime, double leftMult, double rightMult, int angleChangeGoal) {
 
 		double startTime = getCurTime();
@@ -1884,6 +1949,19 @@ public abstract class MyOpMode extends LinearOpMode {
 		double power = speed;
 		double startAngle = gyro.getYaw();
 		double currentAngle = startAngle;
+		String color = "Neither";
+		if (colorB.beaconColor().equals("Blue"))
+		{
+			color = "Blue";
+		}
+		else if (colorB.beaconColor().equals("Red"))
+		{
+			color = "Red";
+		}
+		else
+		{
+			color = "Neither";
+		}
 		while(opModeIsActive() && currEncoder - startEncoder < goal && getCurTime() - startTime < maxTime &&
 				Math.abs(currentAngle - startAngle) < angleChangeGoal) {
 			currentAngle = gyro.getYaw();

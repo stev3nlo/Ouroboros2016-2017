@@ -44,10 +44,10 @@ public class AutoBlueRollers extends MyAutonomous {
         waitForStart();
         initCurtime();
         double startTime = getCurTime();
-        double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 2").getVoltage();
-        runSpinner(curPowerOfMotorSpinner);
+        double batteryLevel = hardwareMap.voltageSensor.get("Motor Controller 1").getVoltage();
+        runSpinner(curPowerOfMotorSpinner + .03);
         pause(0.1);
-        moveWithEncodersCoast(.3, 2500, 1.0, 1.0);
+        moveWithEncodersCoast(.3, 2750, 1.0, 1.0);
         pause(0.5);
         moveRollersDown();
         pause(rollerMovementTimeDown);
@@ -61,21 +61,22 @@ public class AutoBlueRollers extends MyAutonomous {
 
 
         telemetry.addData("move forwards to wall", "");
-        moveWithEncodersCoast(0.28, 650, 1.0, 1);
+        moveWithEncodersCoast(0.28, 400, 1.0, 1);
 
 
         telemetry.addData("arc turn", "Align with wall");
-        gyroArcTurnRight(0.35, yawDiff - 10);
+        gyroArcTurnRight(0.24, yawDiff - 12);
 
         telemetry.addData("move forward past 2nd beacon", "");
-        moveWithEncodersCoastWithMaxTime(0.36, 4300, 8.0, 1.0, 0.8);
+        //moveWithEncodersCoastWithMaxTimeWithDriftAfterContact(0.36, 4300, 8.0, 1.0, 0.8, 6);
+        moveWithEncodersCoastWithMaxTimeWithIncreasingDrift(0.36, 4600, 7.0, true, 1.0, 0.65);
 
         telemetry.addData("move backwards to 2nd beacon", "");
-        driveAlongWallToBeacon(-0.15, true, 1.0, 0.7);
+        driveAlongWallToBeacon(-0.165, true, 1.0, 0.7);
         pushButtonWithRollers();
 
         telemetry.addData("driving to beacon", "");
-        driveToNextBeacon(-0.27,true,1500,1.0,0.7);
+        driveToNextBeacon(-0.335,true,1500,1.0,0.7);
 
         pushButtonWithRollers();
 
@@ -93,6 +94,6 @@ public class AutoBlueRollers extends MyAutonomous {
             idle();
         }
         pause(0.5);
-        moveWithEncodersCoast(0.4,1500);
+        moveWithEncodersCoast(0.4,450);
     }
 }
