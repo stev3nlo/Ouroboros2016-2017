@@ -1602,8 +1602,9 @@ public abstract class MyOpMode extends LinearOpMode {
 	public Map.Entry getFirstSetFromHashMap(HashMap<Double,Long> single)
 	{
 		Iterator it = single.entrySet().iterator();
-		while (it.hasNext()) {
+		while (it.hasNext() && opModeIsActive()) {
 			Map.Entry pair = (Map.Entry)it.next();
+			idle();
 			return pair;
 		}
 		return null;
@@ -1614,7 +1615,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		HashMap<Double,Long> vals = new HashMap<Double,Long>();
 		Iterator it = RPMs.entrySet().iterator();
 		ArrayList<Double> toRemove = new ArrayList<Double>();
-		while (it.hasNext()) {
+		while (it.hasNext() && opModeIsActive()) {
 			Map.Entry pair = (Map.Entry)it.next();
 			if((double)pair.getKey()>t)
 			{
@@ -1626,9 +1627,12 @@ public abstract class MyOpMode extends LinearOpMode {
 				toRemove.add((double)pair.getKey());
 			}
 			it.remove(); // avoids a ConcurrentModificationException
+			idle();
 		}
-		while(toRemove.size()>0)
+		while(toRemove.size()>0 && opModeIsActive()) {
 			RPMs.remove(toRemove.remove(0));
+			idle();
+		}
 		return vals;
 	}
 
@@ -1890,6 +1894,7 @@ public abstract class MyOpMode extends LinearOpMode {
 			else
 				moveBackwards(speed, speed*curMult);
 			initCurtime();
+			idle();
 		}
 		if(speed > 0)
 			moveBackwards(0.03);
@@ -1935,6 +1940,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				goal = (int) (currEncoder + 200);
 			}
 			initCurtime();
+			idle();
 		}
 		try{pause(0.2);}catch(Exception e){}
 		stopMotors();
@@ -1970,6 +1976,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				moveForwards(speed,speed);
 			else
 				moveBackwards(speed, speed);
+			idle();
 		}
 
 		while(opModeIsActive() && currEncoder - startEncoder < goal && getCurTime() - startTime < maxTime) {
@@ -1978,6 +1985,7 @@ public abstract class MyOpMode extends LinearOpMode {
 				moveForwards(speed * leftMult,speed * rightMult);
 			else
 				moveBackwards(speed * leftMult, speed * rightMult);
+			idle();
 		}
 		move(0,0);
 		try{pause(0.2);}catch(Exception e){}
@@ -2101,7 +2109,7 @@ public abstract class MyOpMode extends LinearOpMode {
 		boolean goalBMet = false;
 		boolean goalDistMoved = false;
 		int startEnc = getAvgEnc();
-		while(!goalBMet && !goalFMet && !goalDistMoved)
+		while(!goalBMet && !goalFMet && !goalDistMoved && opModeIsActive())
 		{
 			USDB = rangeB.getUltraSonicDistance();
 			USDF = rangeF.getUltraSonicDistance();
