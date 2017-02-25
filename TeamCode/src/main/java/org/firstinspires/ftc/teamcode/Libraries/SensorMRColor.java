@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.Libraries;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.I2cAddr;
 import com.qualcomm.robotcore.util.Hardware;
+import com.qualcomm.robotcore.util.RobotLog;
 
 /**
  * Created by Steven on 9/20/2016.
@@ -144,10 +147,11 @@ public class SensorMRColor {
 
 	//returns whether the color of the beacon is Red or Blue
 	public String beaconColor() {
-		if (getBlue() >= 5)// && getBlue() > getRed()){// && getBlue() > getRed()) {
+		RobotLog.d("info", toString());
+		if (getAlpha() <= 7 && getBlue() >= 5)// && getBlue() > getRed()){// && getBlue() > getRed()) {
 		{
 			return "Blue";
-		} else if (getRed() >= 3 && getRed() > getBlue()) {
+		} else if (getAlpha() <= 7 && getRed() >= 2 && getRed() > getBlue()) {
 			return "Red";
 		} else {
 			return "Neither";

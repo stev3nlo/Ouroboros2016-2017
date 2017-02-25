@@ -18,22 +18,12 @@ public class ShootOnlyAutoRed extends MyAutonomous
 		waitForStart();
 		initCurtime();
 		initTime = getCurTime();
-		simpleStabilizingLoop(1.0);
-		moveWithEncoders(-.8, 3700,.93,1);
-		simpleStabilizingLoop(1.0);
+		pause(10.0);
+		runSpinner(curPowerOfMotorSpinner + .03);
+		moveWithEncodersCoast(0.4, 3100, 1.0, 1.0);
+		pause(1.5);
 		openServoDropper();
-		initTime = getCurTime();
-		simpleStabilizingLoop(1.5);
+		pause(5.0);
 		closeServoDropper();
-		/*
-		moveWithEncoders(-.8, 2800);
-		double degreesToTurn = getDegreesToTurnFromDistances(rangeB.getDistance(DistanceUnit.CM),rangeF.getDistance(DistanceUnit.CM));
-		if(degreesToTurn > 0)
-			gyroTurnRightCorrection(0.6,degreesToTurn);
-		else
-			gyroTurnLeftCorrection(0.6,degreesToTurn);
-		moveAlongWallToBeacon(0.7, 4.0, true);
-		pushButton();
-		*/
 	}
 }
