@@ -16,6 +16,9 @@ public class OpModeTeleOp extends OpMode
     public boolean shooterIsRunning = false;
     //Controller values
 
+    boolean areRollersDropping = false;
+    boolean areRollersRaising = false;
+
     public double g1y1;    //left drive
     public double g1y2;    //right drive
     public double g1x1;
@@ -183,8 +186,7 @@ public class OpModeTeleOp extends OpMode
 
     public void openServoDropper()
     {
-        //if(opModeIsActive())
-        setServoDropperPosition(0.45);
+            setServoDropperPosition(0.45);
     }
 
     public void closeServoDropper()
@@ -249,6 +251,10 @@ public class OpModeTeleOp extends OpMode
         moveBackRollerDown(); //for some reason needs to be down, movebackrollerup made it in down position
         curPowerOfMotorSpinner = 0.61;
         motorSpinner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorL1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorL2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorR1.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorR2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     public void moveManip(double speed)
@@ -610,6 +616,40 @@ public class OpModeTeleOp extends OpMode
                     areRollersRaising = true;
                 }
             }*/
+            if(g2Ltrig > 0.6) //drop rollers
+            {
+                if(!areRollersDropping)
+                {
+                    if(areRollersRaising)
+                    {
+                        //startTimeOfDroppingRollers = getCurTime() + getCurTime() - rollerMovementTimeDown - startTimeOfRaisingRollers;
+                        areRollersRaising = false;
+                    }
+                    else
+                    {
+                        //startTimeOfDroppingRollers = getCurTime();
+                    }
+                    //moveRollersDown();
+                    areRollersDropping = true;
+                }
+            }
+            else if(g2Lbump) //raise rollers
+            {
+                if(!areRollersRaising)
+                {
+                    if(areRollersDropping)
+                    {
+                        //startTimeOfRaisingRollers = getCurTime() + getCurTime() - rollerMovementTimeUp - startTimeOfDroppingRollers;
+                        areRollersDropping = false;
+                    }
+                    else
+                    {
+                        //startTimeOfRaisingRollers = getCurTime();
+                    }
+                    //moveRollersUp();
+                    areRollersRaising = true;
+                }
+            }
             if(g2Rtrig > 0.6)
             {
                 moveBeaconPusherOut();
