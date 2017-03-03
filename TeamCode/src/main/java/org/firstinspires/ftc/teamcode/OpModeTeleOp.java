@@ -183,8 +183,8 @@ public class OpModeTeleOp extends OpMode
 
     public void openServoDropper()
     {
-        if(opModeIsActive())
-            setServoDropperPosition(0.45);
+        //if(opModeIsActive())
+        setServoDropperPosition(0.45);
     }
 
     public void closeServoDropper()

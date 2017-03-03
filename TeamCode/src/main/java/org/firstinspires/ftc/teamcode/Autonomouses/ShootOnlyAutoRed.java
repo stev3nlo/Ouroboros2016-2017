@@ -19,8 +19,8 @@ public class ShootOnlyAutoRed extends MyAutonomous
 		initCurtime();
 		initTime = getCurTime();
 		pause(10.0);
-		runSpinner(curPowerOfMotorSpinner + .03);
-		moveWithEncodersCoast(0.4, 3100, 1.0, 1.0);
+		runSpinner(curPowerOfMotorSpinner + .04);
+		moveWithEncodersCoast(0.4, 3550, 1.0, 1.0);
 		pause(1.5);
 		openServoDropper();
 		pause(5.0);
